@@ -1,0 +1,31 @@
+import { defineAsyncComponent } from 'vue'
+
+import createGlobalContext from './context/globalContext/index'
+import createAppContext from './context/appContext/index'
+import createContext from './context/pageContext/index'
+import useComponentRepository from './componentRepository/index'
+
+import lcPageRender from './PageRender/index.vue'
+import lcDeployed from './deployed/index.vue'
+import lcDeployedNoRouter from './deployed/deployedNoRouter.vue'
+import lcLayout from './layout/index.vue'
+import lcPanel from  './components/panel/index.vue'
+//import Wrap from './components/wrap/index.vue'
+//install
+const install=app=>{
+    app.component('lcPageRender',lcPageRender)
+    app.component('lcDeployed',lcDeployed)
+    app.component('lcDeployedNoRouter',lcDeployedNoRouter)
+   // app.component('lc-wrap',Wrap)
+    app.component('lcPanel',lcPanel)
+    app.component('lcLayout',lcLayout)
+    //
+    app.component('lcEditableList', defineAsyncComponent(() => import('@/pageDesign/propsEditor/editableList.vue')))
+    app.component('lcIconPicker', defineAsyncComponent(() => import('@/components/iconPicker/index.vue')))
+    //console.log('INSTALLER IS CALLED 7')
+}
+//
+const installer={install}
+//
+export {installer,lcPageRender,createGlobalContext,createAppContext,createContext,useComponentRepository,lcDeployed,lcDeployedNoRouter,lcLayout}
+

@@ -1,0 +1,81 @@
+@import './base.css';
+
+html,body,#app {
+  height: 100%;
+  width:100%;
+  margin:0;
+  padding:0;
+}
+body{
+  font-family:Microsoft YaHei,PingFang SC, Hiragino Sans GB, Arial, sans-serif,
+  Helvetica Neue, Helvetica;
+}
+/*Height fullfill the available full area with no margin*/
+.height-full{
+  height: 100%;
+  margin:0;
+}
+
+
+
+/*Change form select and input number to 100% width*/
+.el-form-item .el-select {
+  width: 100%;
+}
+.el-form-item .el-input-number {
+  width: 100%;
+}
+/*Remove the border of the menu*/
+.el-menu--horizontal{
+  border-bottom:solid 0px var(--el-menu-border-color);
+}
+/*Report editor*/
+
+/*Pallet item*/
+.pallet-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+
+  .icon {
+    font-size: 1.2em;
+  }
+
+  .text {
+    font-size: 1.0em;
+  }
+}
+
+/*Common toolbar with left/middle/right areas*/
+.lc-common-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 32px;
+  padding: 4px;
+  background-color: var(--el-fill-color-dark);
+  border-radius: 8px;
+
+  .left {
+    min-width: 20%;
+    padding-left: 10px;
+    padding-left:10px;
+   
+  }
+
+  .middle {
+    max-width: 30%;
+  }
+
+  .right {
+    padding-right: 6px;
+  }
+}
+
+.lc-main-title{
+  font-size:1.2em;
+  font-weight:700;
+}

@@ -1,0 +1,82 @@
+<template>
+  <el-row>
+    <el-col :span="3">
+      <h3>Draggable 1</h3>
+      <draggable
+        class="dragArea list-group"
+        :list="list1"
+        :group="{ name: 'people', pull: 'clone', put: false }"
+        :clone="cloneDog"
+        @change="log"
+        item-key="id"
+      >
+        <template #item="{ element }">
+          <div class="list-group-item">
+            {{ element.name }}
+          </div>
+        </template>
+      </draggable>
+    </el-col>
+
+    <el-col :span="3">
+      <h3>Draggable 2</h3>
+      <draggable
+        class="dragArea list-group"
+        :list="list2"
+        group="people"
+        @change="log"
+        item-key="id"
+      >
+        <template #item="{ element }">
+          <div class="list-group-item">
+            {{ element.name }}
+          </div>
+        </template>
+      </draggable>
+    </el-col>
+
+    <rawDisplayer class="col-3" :value="list1" title="List 1" />
+
+    <rawDisplayer class="col-3" :value="list2" title="List 2" />
+  </el-row>
+</template>
+
+<script>
+import draggable from "vuedraggable";
+let idGlobal = 8;
+export default {
+  name: "custom-clone",
+  display: "Custom Clone",
+  order: 3,
+  components: {
+    draggable
+  },
+  data() {
+    return {
+      list1: [
+        { name: "dog 1", id: 1 },
+        { name: "dog 2", id: 2 },
+        { name: "dog 3", id: 3 },
+        { name: "dog 4", id: 4 }
+      ],
+      list2: [
+        { name: "cat 5", id: 5 },
+        { name: "cat 6", id: 6 },
+        { name: "cat 7", id: 7 }
+      ]
+    };
+  },
+  methods: {
+    log: function(evt) {
+      window.console.log(evt);
+    },
+    cloneDog({ id }) {
+      return {
+        id: idGlobal++,
+        name: `cat ${id}`
+      };
+    }
+  }
+};
+</script>
+<style scoped></style>
