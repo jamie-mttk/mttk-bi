@@ -70,3 +70,8 @@ Compile from source code
    ~~~
 
 7. 
+
+
+## License
+
+MIT
