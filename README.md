@@ -10,7 +10,11 @@ The documentation/ User manual /Development manul is not ready yet,I will try my
 ## Screen captures
 
 ![Main screen](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/main.png)
-
+![Page widget](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/pageWidget.png)
+![Page widget wizard](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/pageWidget_wizard.png)
+![App](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/app.png)
+![Designer](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/designer.png)
+![Larunch](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/launch.png)
 
 ## Design concept
 
@@ -73,11 +77,11 @@ Compile from source code
    ~~~sh
    npm run install  //Download and install required libraries
    npm run dev      //Run in developmet mode
-   npm run build    //Compile to CSS/JS
+   npm run build    //Compile to CSS/JS(package only, normally use to publish to repository)
+   npm run build-test    //Compile to CSS/JS, include index.html
    ~~~
 
-7. 
-
+7. You can copy the compile result of npm run build-test to the resource/static folder of backend project
 
 ## License
 
