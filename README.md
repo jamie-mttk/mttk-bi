@@ -3,7 +3,9 @@
 ## What is it
 
 This project provides a graphical interface to quickly develop a graphical front-end interface and assist with a small amount of code. Most of the open source low code systems are form desgined based, I do NOT think it is valuable for a real project implementation.
-Here is a [demo] () ,the data will be reset every day.
+Here is a [demo] (http://139.129.210.30:8721/index.html) ,the data will be reset every day. I am sorry for the slow access since the performance of my server is pool.
+
+The documentation/ User manual /Development manul is not ready yet,I will try my best to finish then ASAP.
 
 ## Design concept
 
