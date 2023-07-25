@@ -7,6 +7,10 @@
     ".": {
       "import": "./dist//mttk-lowcode.mjs",
       "require": "./dist//mttk-lowcode.umd.js"
+    },
+    "./dist/index.css": {
+      "import": "./dist/index.css",
+      "require": "./dist/index.css"
     }
   },
   "files": [
@@ -19,25 +23,24 @@
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
+  "style": "dist/index.css",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
+    "build-test": "vite build -c vite.config.test.ts",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.1.0",
-    "@fortawesome/fontawesome-svg-core": "^6.4.0",
-    "@fortawesome/free-regular-svg-icons": "^6.4.0",
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@mdi/js": "^7.2.96",
     "@vueuse/core": "^10.1.0",
     "animate.css": "^4.1.1",
     "axios": "^0.21.4",
     "bin-editor-next": "^1.1.0",
+    "echarts": "^5.4.2",
     "element-plus": "^2.3.1",
     "js-cookie": "^3.0.1",
     "mitt": "^3.0.0",
@@ -48,10 +51,11 @@
     "screenfull": "^6.0.2",
     "sortablejs": "^1.15.0",
     "vue": "^3.2.47",
+    "vue-echarts": "^6.6.0",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
     "vuedraggable": "^4.1.0",
-    "vuewrapper": "^0.4.3"
+    "vuewrapper": "^0.4.5"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

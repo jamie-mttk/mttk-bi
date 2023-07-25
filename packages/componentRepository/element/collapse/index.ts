@@ -1,10 +1,12 @@
 import { collapseTransform } from './transform'
+import * as uiUtil from '../../util/uiUtil'
 //
-export const collapseConfig = {
+const collapseConfig = {
   key: '_collapse',
   name: 'Collapse',
   description: 'Basic collapse',
-  icon: 'Reading',
+  icon: 'mdiArrowCollapseVertical',
+  sequence:12,
   transform: collapseTransform,
   editor: [
 //If accordion is true,the modelValue is a String
@@ -20,16 +22,8 @@ export const collapseConfig = {
       '~prop': '_container',
       labelColumn: 'title',
       editConfig: [
-		 {
-          '~component': 'el-input',
-          '~label': 'Title',
-          '~prop': 'title'
-        },
-		{
-          '~component': 'el-switch',
-          '~label': 'Disabled',
-          '~prop': 'disabled'
-        },
+        uiUtil.createInput('title'),
+        uiUtil.createSwitch('disabled'),
       ]
     }
   ],
@@ -60,3 +54,5 @@ export const collapseConfig = {
     margin:'4px 0 4px 0'
   }
 }
+//
+export default collapseConfig 

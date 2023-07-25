@@ -1,37 +1,51 @@
 <template>
-  <div>
-    <el-button @click="callTest">TEST</el-button>
-    <Parent data="hello"  @test="test"></Parent>
-    <Parent data="world"></Parent>
-  </div>
+  {{ configStd }}
+  <el-button type="primary" @click="callTest">TEST</el-button>
+  <CompWrap :config="config" :key="mykey"></CompWrap>
 </template>
 
-<script setup lang="ts">
-import Parent from './Parent.vue'
-import useFunctionRepository from '@/functionRepository/index'
+<script lang="ts" setup>
+import { ref,computed } from 'vue'
+import { formValue, config1, config2, configCard, myClasses,configTransform } from './data'
+const config = ref(configCard)
+const mykey = ref('11')
 
-function test(){
- console.log(arguments) 
-}
-function callTest(){
-  //const str="{'name':'Jamie','age':123}"
-//   const str='[{"result":true,"count":42},{"result":false,"count":142}]';
-//   const obj=JSON.parse(str,(k,v) => {
-//   //   console.log('@@@@@@@')
-//   // console.log(k);
-//   // console.log(v);
-//   return v ;
-// })
-//   console.log(obj)
-  const repo=useTestRepository()
-  const a1=repo.get('a1')
-  if(typeof a1=='function'){
-  a1()
-}else{
-  console.log('a1 is not available')
-}
+const ctx={props:{config:config}}
+
+var configStd = computed(() => standardizedConfig(), 
+// {
+//     onTrack(e) {
+//       //debugger;
+//       console.log('@@@onTrack',e)
+//     },
+//     onTrigger(e) {
+//       console.log('@@@onTrigger',e)
+//     },
+//   }
+  );
+
+function callTest() {
+  // mykey.value="22"
+  // config.value=config2
+  //myClasses.value = 'class-yellow'
+  configCard.props.header='CHANGE ME'
+  //
+  console.log(configCard)
 }
 
+function standardizedConfig(){
+  return ctx.props.config;
+}
 </script>
 
-<style scoped></style>
+<style>
+.class-pink{
+  color:pink
+}
+.class-red{
+  color:red 
+}
+.class-yellow{
+  color:yellow
+}
+</style>

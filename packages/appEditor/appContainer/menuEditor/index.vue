@@ -1,33 +1,24 @@
 <template>
-  <div class="lc-common-toolbar" style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
+  <div class="lc-common-toolbar"
+    style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
     <div class="left" style="font-weight: bold;">Menus</div>
 
     <el-button-group class="right">
-      <el-button icon="Refresh" @click="load">Refresh</el-button>
-      <el-button icon="Plus" @click="handleAdd">Add menu</el-button>
+      <el-button @click="load"> <template #icon>
+          <lc-icon icon="mdiRefresh"></lc-icon>
+        </template>Refresh</el-button>
+      <el-button @click="handleAdd"> <template #icon>
+          <lc-icon icon="mdiPlus"></lc-icon>
+        </template>Add menu</el-button>
     </el-button-group>
 
   </div>
-  <el-table :data="tableData" :show-header="false" :highlight-current-row="true"
-    @row-click="handleRowClick" style="height: calc(100% - 42px);border: 1px solid var(--el-color-primary);">
-    <!--
-    <el-table-column label="icon" width="32">
-      <template #default="sp">
-        <el-icon class="icon">
-          <el-tooltip effect="light" placement="bottom-start"
-            :content="((sp.row.visible) ? 'Visible' : 'Invisible') + ' - Click to toggle'">
-            <component :is="(sp.row.visible)?'Select':'CloseBold'" />
-          </el-tooltip>
-        </el-icon>
-      </template>
-    </el-table-column>
-    -->
+  <el-table :data="tableData" :show-header="false" :highlight-current-row="true" @row-click="handleRowClick"
+    style="height: calc(100% - 42px);border: 1px solid var(--el-color-primary);">
+
     <el-table-column prop="name" label="Name">
       <template #default="sp">
-
-        <el-icon>
-          <component :is="sp.row.icon||''"></component>
-        </el-icon>
+        <lc-icon :icon="sp.row.icon || ''" size="medium" style="margin-right: 16px;"></lc-icon>
         {{ sp.row.name }}
 
       </template>
@@ -36,8 +27,16 @@
     <el-table-column label="Operations" width="116">
       <template #default="sp">
         <el-button-group v-if="sp.row['_id']">
-          <el-button icon="Edit" @click="handleEdit(sp)" />
-          <el-button icon="Delete" @click="handleDelete(sp)" />
+          <el-button  @click="handleEdit(sp)" >
+		  <template #icon>
+          <lc-icon icon="mdiSquareEditOutline"></lc-icon>
+		  </template>
+		  </el-button>
+          <el-button  @click="handleDelete(sp)" >
+		   <template #icon>
+          <lc-icon icon="mdiTrashCanOutline"></lc-icon>
+		  </template>
+		  </el-button>
         </el-button-group>
 
       </template>
@@ -59,7 +58,7 @@ const emit = defineEmits<{
 }>()
 
 //
-const globalContext=inject('globalContext')
+const globalContext = inject('globalContext')
 const appContext = inject('appContext')
 //
 const tableData = ref([])
@@ -87,7 +86,7 @@ function load() {
   }).then(function (response) {
     tableData.value = response.list || []
     //Use to display show all pages
-    tableData.value.push({ '_id': '', name: 'Show all pages on the right ' })
+    tableData.value.push({ '_id': '', name: 'Show all pages' })
   });
 }
 //
@@ -160,6 +159,4 @@ const handleDelete = (sp) => {
 </script>
 
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

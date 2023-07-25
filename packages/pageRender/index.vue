@@ -1,14 +1,17 @@
 <template>
- 
+  <div>
+    <!--Add a DIV so the attribute for example styles can work-->
+    <!--Please note the key is set to contextThis.key to avoid vnode to be reused
+    refer to : https://vuejs.org/api/built-in-special-attributes.html-->
     <CompWrap v-for="(contextThis, index) in props.contextStack" :config="pageConfig(contextThis)"
-      v-show="index == props.contextStack.length - 1" :key="index"></CompWrap>
-  
+      v-show="index == props.contextStack.length - 1" :key="contextThis.key"></CompWrap>
+    </div>
 </template>
 
 <script setup lang="ts">
 import Panel from '@/components/panel/index.vue'
 
-import { computed, inject, onUnmounted } from 'vue'
+import { computed, inject, onUnmounted,watch } from 'vue'
 import createContext from '../context/pageContext/index'
 
 //
@@ -23,6 +26,10 @@ const props = defineProps({
 })
 //
 const appContext = inject('appContext')
+// console.log('PAGE RENDER IS STARTED~~~~~~~~~~~~~~')
+// watch(()=>props.contextStack,
+// ()=>{console.log('PROPS IS CHANGED@@@@@@@@@@@')},
+// {immediate:true})
 //provide('context', props.context)
 //
 // console.log('provide')
@@ -52,20 +59,22 @@ const appContext = inject('appContext')
 //   },
 //   { immediate: true }
 // )
-const pageConfig = computed(() => (contextThis) => {
 
+const pageConfig =function(contextThis)  {
   if (!contextThis.codeManager) {
     // console.log('CAN NOT calculate with')
     return { '~component': 'div', '#': 'Empty' }
   }
   //console.log('calculate with'+contextThis.codeManager.getCode().name)
-  return {
+
+  const config= {
     sys: {
       'component': Panel,
       'modelValue': contextThis.codeManager.getCode().ui
     },
     props: {
       pageContext: contextThis,
+     // jamie:'I am '+contextThis.test
     },
     lifecycle: computed(() => {
       const lifecycle = contextThis.codeManager.getCode().lifecycle
@@ -90,12 +99,14 @@ const pageConfig = computed(() => (contextThis) => {
           throw new Error('Unsuported lifecyle mode:' + lc.mode)
         }
       }
- 
+
       //
       return result
     })
   }
-})
+
+  return config;
+}
 //
 if (appContext) {
   //appContext may be undefined if the page is opened by dialog
@@ -120,6 +131,15 @@ function handlePageChange(e) {
 
 //
 //defineExpose(popup)
+
+// onMounted(()=>{
+//   console.log('+++++++++++++PGE RENDER ONMOUNTED IS CALLED')
+//   console.log(props.contextStack)
+// })
+// onUnmounted(()=>{
+//   console.log('------------PGE RENDER ONUNMOUNTED IS CALLED')
+//   console.log(props.contextStack)
+// })
 </script>
 <style lang="scss"></style>
 

@@ -1,36 +1,18 @@
-import { computed,inject } from 'vue'
-import Panel from '@/components/panel/index.vue'
 
-export function tableTransform(config: any, value: any) {
-  //console.log('data:'+JSON.stringify(value))
-  const pageContext=inject('context')
-  //
-  const result = {
-    sys: {
-      component: 'el-table'
-    },
-    props: {
-      //use model value to set
-       data: value,
-    },
-    slots: { default: { type: 'wrap',value:[]} }
-  }
-  //
-  for (const k of Object.keys(config) || []) {
-    if (k != 'items') {
-      result.props[k] = config[k]
-    }
-  }
-  //build default
-  result.slots.default.value =buildColumns(config,pageContext)
-  //
+import * as transformUtil from '../../util/transformUtil'
+
+export function tableTransform(config: any, value: any,pageContext) {
+
+  const result=transformUtil.buildWidget('el-table',config)
+  result.props.data=value
+  result.slots.default =buildColumns(config,pageContext)
   return result
 }
 
 function buildColumns(config: any,pageContext) {
-  const columns = []
+  const columns = [] as object[]
   //
-  for (let c of config.columns || []) {
+  for (const c of config._columns || []) {
     columns.push(buildColumn(c,pageContext))
   }
   
@@ -38,19 +20,7 @@ function buildColumns(config: any,pageContext) {
   return columns
 }
 function buildColumn(c: any,pageContext) {
-  let column = {
-    sys: {
-      component: 'el-table-column'
-    },
-    props: {}
-  }
-  //props
-  for (let k of Object.keys(c)) {
-    if (k.startsWith('_')) {
-      continue
-    }
-    column.props[k] = c[k]
-  }
+  const column = transformUtil.buildWidget('el-table-column',c)
   if(!c.type && c['_formatter']){
     //use slot can render HTML,but first it is hard to get the required parameters;second,the slot does not support function which returns array
     column.props.formatter=function(){
@@ -64,7 +34,7 @@ function buildColumn(c: any,pageContext) {
     // column.slots.default=pageContext.methodManager.methodCall({method:c['_formatter']})
   }else if(c.type=='container'){
     column.slots = {}
-    column.slots.default=buildSlotContainer(c)
+    column.slots.default=transformUtil.buildPanel(c)
   }
   // if ('address' == c.prop) {
   //   column.slots = {}
@@ -83,31 +53,7 @@ function buildColumn(c: any,pageContext) {
   return column
 }
 
-function buildSlotContainer(c) {
-  const col = {
-    sys: {
-      component: Panel,
-      modelValue: computed({
-        get() {
-          return c['_children'] || []
-        },
-        set(value) {
-          c['_children'] = value
-        }
-      })
-    },
-    // props: {},
-    // events: {
-    //   // click: function () {
-    //   //   console.log('TEST TO SHOW')
-    //   //   console.log(arguments)
-    //   //   //arguments[0].emit('click',...arguments)
-    //   // }
-    // }
-  }
-  //
-  return col
-}
+
 // function buildSlotFormatter(pageContext,formatter,...args) {
 //   console.log(args)
 //   //

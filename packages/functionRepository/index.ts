@@ -1,4 +1,5 @@
 import * as elementFunctions from './element/index'
+import * as chartsFunctions from './charts/index'
 
 const functions = {}
 export default function useFunctionRepository() {
@@ -22,6 +23,7 @@ export default function useFunctionRepository() {
   function useBuitin(){
    
   registBatch(elementFunctions)
+	registBatch(chartsFunctions)
   }
   //
   return { regist,registBatch, get, list,useBuitin }

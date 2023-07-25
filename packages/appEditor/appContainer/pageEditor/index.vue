@@ -1,34 +1,41 @@
 <template>
-  <div class="lc-common-toolbar" style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
-    <div class="left"  style="font-weight: bold;">Pages</div>
+  <div class="lc-common-toolbar"
+    style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
+    <div class="left" style="font-weight: bold;">Pages</div>
     <el-input v-model="filter" placeholder="Input to filter" class="middle" clearable></el-input>
 
     <el-button-group class="right">
-        <el-button icon="Refresh" @click="load">Refresh</el-button>
-        <el-button  icon="Plus" @click="handleAdd">Add page</el-button>
-  </el-button-group>
+      <el-button @click="load">
+        <template #icon>
+          <lc-icon icon="mdiRefresh"></lc-icon>
+        </template>
+        Refresh</el-button>
+      <el-button @click="handleAdd"> <template #icon>
+          <lc-icon icon="mdiPlus"></lc-icon>
+        </template>Add page</el-button>
+      <el-button @click="handleBatchExport">  <template #icon>
+            <lc-icon icon="mdiExport"></lc-icon>
+          </template>Batch export</el-button>
+      <el-upload style="display:inline-block;margin:0px;" ref="doImportRef" action="page/doImport"
+        :http-request="handleImport" :multiple="false" :show-file-list="false" :limit="1">
+        <el-button>  <template #icon>
+            <lc-icon icon="mdiImport"></lc-icon>
+          </template>Import</el-button>
+      </el-upload>
+    </el-button-group>
   </div>
-  <el-table :data="filteredData"  :highlight-current-row="true" table-layout="fixed" style="height: calc(100% - 42px);border: 1px solid var(--el-color-primary);">
-    <!-- <el-table-column label="" width="32">
-      <template #default="sp">
-        <el-icon class="icon">
-          <el-tooltip effect="light" placement="bottom-start"
-            :content="((sp.row.visible) ? 'Visible' : 'Invisible') + ' - Click to toggle'">
-            <component :is="(sp.row.visible)?'Select':'CloseBold'" />
-          </el-tooltip>
-        </el-icon>
-      </template>
-    </el-table-column> -->
+  <el-table :data="filteredData" :highlight-current-row="true" table-layout="fixed"
+    style="height: calc(100% - 42px);border: 1px solid var(--el-color-primary);" ref="pageEditorTableRef">
+
+    <el-table-column type="selection" width="55" />
     <el-table-column prop="name" label="Name">
       <template #default="sp">
-        <el-icon>
-          <component :is="sp.row.icon||''"></component>
-        </el-icon>
+        <lc-icon :icon="sp.row.icon||''" size="medium" style="margin-right: 16px;"></lc-icon>
         {{ sp.row.name }}
       </template>
     </el-table-column>
     <el-table-column prop="menu_NAME" label="Menu" />
-    <el-table-column prop="_updateTime" label="Last update" >
+    <el-table-column prop="_updateTime" label="Last update">
       <template #default="sp">
         {{ formatMongoDate(sp.row['_updateTime']) }}
       </template>
@@ -54,7 +61,8 @@ import { deepCopy } from '@/utils/tools'
 import { ref, onMounted, computed, reactive, watch, inject } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import PageEditorDialog from './PageEditorDialog.vue'
-import {formatMongoDate} from '@/utils/tools'
+import { formatMongoDate } from '@/utils/tools'
+import download from "@/utils/download";
 //
 const props = defineProps({
   menuFilter: {
@@ -67,7 +75,7 @@ const emit = defineEmits<{
   (e: 'pageDesign', page: string): void
 }>()
 
-const globalContext=inject('globalContext')
+const globalContext = inject('globalContext')
 
 //
 
@@ -81,7 +89,7 @@ watch(
   () => {
     load();
   },
-  {immediate:true}
+  { immediate: true }
 )
 
 
@@ -128,20 +136,20 @@ const pageEditorDialogRef = ref()
 //
 function handleAdd() {
   //
-  const ui=[{
-  key: '_root',
-  type: '_container',
-  label:'ROOT',
-  data: {},
-  event: [],
-  styles: {diaplay:'block',width:'100%','min-height': '128px', margin: '10px' },
-  config: {
-    props: {
-      _children: []
+  const ui = [{
+    key: '_root',
+    type: '_container',
+    label: 'ROOT',
+    data: {},
+    event: [],
+    styles: { diaplay: 'block', 'min-height': '128px', margin: '10px' },
+    config: {
+      props: {
+        _children: []
+      }
     }
-  }
-}]
-  let dataAdd={app: appContext.key.value, sequence: 0, "apis": [],"computed": [],"data": [],"lifecycle": [],"methods": [],"ui": ui}
+  }]
+  let dataAdd = { app: appContext.key.value, sequence: 0, "apis": [], "computed": [], "data": [], "lifecycle": [], "methods": [], "ui": ui }
   //console.log(JSON.stringify(dataAdd))
   //
   pageEditorDialogRef.value.show(dataAdd, callback)
@@ -154,7 +162,7 @@ function handleEdit(sp) {
 }
 
 const callback = (dataNew: Object) => {
- // console.log('CALLBACK:'+JSON.stringify(dataNew))
+  // console.log('CALLBACK:'+JSON.stringify(dataNew))
   //
   globalContext.request({
     method: "POST",
@@ -234,9 +242,74 @@ const handleCopy = (sp) => {
 function handleDesign(sp) {
   emit('pageDesign', sp.row['_id'])
 }
+
+//
+const pageEditorTableRef = ref()
+//
+function handleBatchExport() {
+  const rows = pageEditorTableRef.value.getSelectionRows()
+  if (!rows || rows.length == 0) {
+    //
+    ElMessage.error('Please select rows first')
+    return
+  }
+  //
+  const ids = rows.map(item => item['_id'])
+  //
+  ElMessageBox.confirm(
+    'Do you want to export the select pages?',
+    'Warning',
+    {
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      //
+      globalContext.request({
+        method: "POST",
+        url: 'page/doExport',
+        responseType: "blob",
+        timeout: 180000,
+        fullResponse: true,
+        data: ids
+      }).then(function (response) {
+        console.log(response)
+        download(response, "pages.zip");
+        //
+        // ElMessage.success('Download done!')
+      });
+    })
+}
+
+//
+const doImportRef = ref()
+//upload
+function handleImport(params) {
+  let formData = new FormData();
+  formData.append("file", params.file);
+  formData.append("app", appContext.key.value);
+  console.log(params)
+  console.log(formData)
+  globalContext.request({
+    method: "post",
+    url: 'page/doImport',
+    headers: { "Content-Type": "multipart/form-data" },
+    data: formData
+  })
+    .then(function () {
+      //
+      load()
+      //
+      ElMessage.success('Import done')
+    })
+    .finally(function () {
+      doImportRef.value.clearFiles();
+      //
+    });
+}
 </script>
 
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

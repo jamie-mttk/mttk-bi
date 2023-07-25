@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from 'node:url'
+// import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -13,7 +13,7 @@ export default defineConfig({
     }
   },
   server: {
-    port: 1974,
+    port: 2008,
   },
   build: {
     outDir: "dist",
@@ -22,6 +22,9 @@ export default defineConfig({
       name: "mttk-lowcode",
       fileName: "mttk-lowcode",
     },
-    rollupOptions: { external: ["vue",'vuedraggable'], output: { globals: { vue: "Vue" } } },
+    rollupOptions: { external: ["vue",'vuedraggable'], output: { 
+      globals: { vue: "Vue",vuedraggable:"vuedraggable" },
+      assetFileNames: 'index.css', },
+   },
   },
 })

@@ -54,7 +54,7 @@ function buildTreeNodes(vv) {
       //
       for (const c of v.config.props['_container']) {
         //Please note the data is set to v,so once tree node clicked the layout/tabs will be choosed
-        const container = { label: c.label || c.span || '##', data: v, key: c.key, icon: 'Folder',nodeType:'container' }
+        const container = { label: c.label || c.span || '##', data: v, key: c.key, icon: 'mdiFolderOutline',nodeType:'container' }
         node.children.push(container)
         //
         const children = buildTreeNodes(c['_children']);
@@ -84,7 +84,7 @@ function buildTreeNode(v) {
 //
 function findComponentIcon(type: string) {  
   const component = context.repositoryManager.componentByKey(type)
-  return component?.icon || 'Handbag'
+  return component?.icon || 'mdiHelpBoxMultipleOutline'
 }
 //
 function handleNodeClick(node) {
@@ -121,11 +121,7 @@ const allowDrag = (draggingNode: Node) => {
     @node-click="handleNodeClick" @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
     <template #default="{ node, data }">
       <span>
-
-
-        <span> <el-icon class="icon">
-            <component :is="node.data.icon" />
-          </el-icon></span>
+        <lc-icon :icon="node.data.icon"></lc-icon>
         <span style="margin-left:16px;">{{ node.label }}</span>
       </span>
     </template>

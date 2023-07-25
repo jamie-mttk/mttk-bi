@@ -26,17 +26,17 @@ const isChoosed = computed(() => {    //
 })
 //Build from props
 const tableData = ref([])
-const {  pause, resume } = watchPausable(
-    ()=>props.modelValue,
+const { pause, resume } = watchPausable(
+    () => props.modelValue,
     () => {
         const result = []
         for (const k of Object.keys(props.modelValue)) {
             result.push({ name: k, value: props.modelValue[k] })
         }
         tableData.value = result
-    },{
-        immediate:true
-    })
+    }, {
+    immediate: true
+})
 
 //Once click,save current row
 function handleRowClick(row) {
@@ -56,9 +56,9 @@ function deleteRow(sp) {
 }
 //
 function updateBack() {
-    pause() 
+    pause()
     //Delete later,the keys which has been changed or deleted
-        for (const k of Object.keys(props.modelValue)) {
+    for (const k of Object.keys(props.modelValue)) {
         if (!styleExist(k)) {
             delete props.modelValue[k]
         }
@@ -107,11 +107,19 @@ function styleExist(name: string) {
             </el-table-column>
             <el-table-column prop="operation" label="Operation" width="60px">
                 <template #default="sp">
-                    <el-button icon="Delete" @click="deleteRow(sp)" />
+                    <el-button @click="deleteRow(sp)">
+                        <template #icon>
+                            <lc-icon icon="mdiTrashCanOutline"></lc-icon>
+                        </template>
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-button icon="Plus" @click="addNewStyle" style="margin-top:6px;">Add a new style</el-button>
+        <el-button @click="addNewStyle" style="margin-top:6px;">
+            <template #icon>
+                <lc-icon icon="mdiPlus"></lc-icon>
+            </template>
+            Add a new style</el-button>
     </div>
     <div v-show="!isChoosed">
         No component is choosed

@@ -6,9 +6,7 @@
       >
 
     <span class="pallet-item">
-      <el-icon class="icon">
-        <component :is="config.icon"/>
-      </el-icon>
+      <lc-icon :icon="config.icon" size="x-large"></lc-icon>
       <span class="text">{{ config.name }}</span>
     </span>
   </el-tooltip>

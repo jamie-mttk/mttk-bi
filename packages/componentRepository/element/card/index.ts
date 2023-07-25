@@ -1,25 +1,16 @@
-import { cardTransform } from './transform'
+import * as uiUtil from '../../util/uiUtil'
+import {buildWidgetWithSlotChildrenFunc} from  '../../util/transformUtil'
 //card config
-export const cardConfig = {
+ const cardConfig = {
   key: '_card',
   name: 'Card',
   description: 'Basic card',
-  icon: 'Postcard',
-  transform: cardTransform,
+  icon: 'mdiCardBulletedOutline',
+  sequence:11,
+  transform: buildWidgetWithSlotChildrenFunc('el-card'),
   editor: [
-    {
-      '~component': 'el-input',
-      '~label': 'Header',
-      '~prop': 'header',
-      clearable: true
-    },
-    {
-      '~component': 'el-select',
-      '~label': 'Shadow',
-      '~prop': 'shadow',
-      clearable: true,
-      '~options': ['always','never','hover']
-    },
+    uiUtil.createInput('header'),
+    uiUtil.createSelect('shadow',['always','never','hover'])
   ],
   initConfig: {
     props: {
@@ -31,3 +22,5 @@ export const cardConfig = {
     margin: '4px 0 4px 0'
   }
 }
+//
+export default cardConfig

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 //import type { throwError } from 'element-plus/es/utils';
-import { ref, computed, inject, unref } from 'vue'
+import { ref, computed, inject, unref, isReactive, reactive, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-//import { useMouseInElement } from '@vueuse/core'
+
+import { convertFlatConfig } from 'vuewrapper'
+import {tryEval} from '@/utils/expression'
+import { tryConvertDataType } from '@/utils/dataTransform'
 
 //
 const props = defineProps({
@@ -39,7 +42,8 @@ const componentConfig = computed(() => {
     if (c) {
       return c
     } else {
-      throw new Error("No component is found from :" + JSON.stringify(props.data));
+      ElMessage.error("No component is found from :" + JSON.stringify(props.data))
+      return {}
     }
   } else {
     return {};
@@ -47,7 +51,7 @@ const componentConfig = computed(() => {
 }
 )
 
-function myDataGet() {
+function myDataGet(wrapperContext) {
   if (!componentConfig.value.dataConfig) {
     //No data config is set in component configuration, it should not come here,so just return undefined
     return undefined;
@@ -70,17 +74,17 @@ function myDataGet() {
         const sp = unref(props.slotParaStack[props.slotParaStack.length - 1])
         valueIntersted = sp?.slotValue
       }
-      //undefined is the wrapperContext
-      result = context.methodManager.methodCall({ method: props.data.data.methodKey }, undefined, valueIntersted, props.slotParaStack)
+      //
+      result = context.methodManager.methodCall({ method: props.data.data.methodKey }, wrapperContext, valueIntersted, props.slotParaStack)
     } else if (props.data.data.mode == 'fixed' && props.data.data.dataContent) {
 
       try {
-        result = tryConvertDataType(dataType, props.data.data.dataContent)
+        result = tryConvertDataType(props.data.key, dataType, props.data.data.dataContent)
       } catch (e) {
         ElMessage({
           type: 'error',
           dangerouslyUseHTMLString: true,
-          message:  'The data content of ' + props.data.key +' can not be translate into required data type:'+dataType+',error:'+e,
+          message: 'The data content of ' + props.data.key + ' can not be translate into required data type:' + dataType + ',error:' + e,
         })
         console.log(e)
         return undefined
@@ -110,32 +114,7 @@ function myDataGet() {
   return context.dataManager.defaultValueByType(dataType)
 }
 
-//Try to conver dataContent to the required dataType
-function tryConvertDataType(dataType: string, dataContent: string) {
-  if (dataType == 'Array') {
-    const result = JSON.parse(dataContent)
-    if (Array.isArray(result)) {
-      return result;
-    }
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the data content can not be translate into an array'
-  } else if (dataType == 'Object') {
-    const result = JSON.parse(dataContent)
-    if (typeof result == 'object' && !Array.isArray(result)) {
-      return result;
-    }
-    //
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the data content can not be translate into an object or it is array'
-  } else if (dataType == 'String') {
-    return dataContent
-  } else if (dataType == 'Number') {
-    return Number(dataContent)
-  } else if (dataType == 'Boolean') {
-    return Boolean(dataContent)
-  } else {
-    return undefined;
 
-  }
-}
 
 //Check whether the result match the required dataType
 //return undefined if matched,otherwise return error information
@@ -174,8 +153,38 @@ function checkDataType(dataType: string, result: any) {
 
   }
 }
+//Calculate props
+function calProps(propsRaw) {
+  const propsCal = {}
+  // 
+  for (const k of Object.keys(propsRaw)) {
+
+    const v = propsRaw[k]
+
+    propsCal[k] = tryEval(v, context)
+  }
+  //
+  return propsCal;
+}
+
 //Build comp wrap config
-const realConfig = computed(() => {
+const realConfig = function (wrapperContext) {
+  //console.log('realconfig is called!!!')
+  try {
+    return buildRealConfigInternal(wrapperContext)
+  } catch (e) {
+    console.log(e)
+    const error = 'Build component config failed<br>' + e
+    ElMessage({
+      type: 'error',
+      dangerouslyUseHTMLString: true,
+      message: error,
+    })
+    //Return a div to describe error
+    return { '~component': 'div', '#': { type: 'html', value: error } }
+  }
+}
+function buildRealConfigInternal(wrapperContext) {
   //
   const myData = computed({
     get: () => {
@@ -184,12 +193,12 @@ const realConfig = computed(() => {
       // console.log(JSON.stringify(myData))
       // return myData
       //
-      return myDataGet()
+      return myDataGet(wrapperContext)
     },
     set: (val) => {
-      //It seems this code will not be called?
+      //
       if (props.data.data.mode == 'data') {
-        context.dataManager.setData(props.data.data.dataKey, val)
+        context.dataManager.setData(props.data.data.dataKey, val, props.data.data.dataPath)
       } else if (props.data.data.mode == 'computed' && props.data.data.computedKey) {
         context.computedManager.set(props.data.data.computedKey, val)
       } else {
@@ -201,24 +210,45 @@ const realConfig = computed(() => {
   //console.log('@@@@@@@@@'+ props.data.key)
   let result;
   if (!componentConfig.value.transform) {
+
     //no transform,get from config directly 
     result = {
       sys: {
         //
         component: componentConfig.value.component,
       },
-      props: props.data?.config?.props || {},
+      props: calProps(props.data?.config?.props || {}),
       slots: props.data?.config?.slots || {},
       events: {}
     }
   } else {
-    const p = props.data?.config?.props
+    let p = props.data?.config?.props
     if (!p) {
       //If no props is set,return empty JSON
       return {}
     }
-    result = componentConfig.value.transform(p, myData, context)
+    //Here we should add reactive since the original p is reactived
+    //We should eval props here since the props may be used in target slot, for example the lable of input
+     const propsNew =reactive(calProps(p))
+   watch(propsNew,()=>{
+    // console.log('props New is changed!')
+    // console.log(JSON.stringify(propsNew['_children']))
+    // console.log(JSON.stringify(p['_children']))
+    //Here we should set value manually, it seem the _children of p and propsNew is different
+    //I really do not know why
+    if(propsNew['_children']){
+      p['_children']=propsNew['_children']
+    }
+   })
+
+    //
+    result = componentConfig.value.transform(propsNew, myData, context, wrapperContext)
+    //Convert from flat structure to standard structure if needed
+    result = convertFlatConfig(result)
+
+
   }
+
   //Set instance key as component key
   if (!result.sys) {
     result.sys = {}
@@ -258,15 +288,39 @@ const realConfig = computed(() => {
       }
     }
   }
+  //
+
   //styles
-  //if(context.mode.value != 'edit'){
-  //If it is not under edit mode, set the style directly to final component
-  result.styles = props.data.styles || {}
+  if (result.styles) {
+    //If result already has syles, append all from props.data
+    //otherwise,set directly in else
+    for (const k of Object.keys(props.data.styles || {})) {
+      result.styles[k] = props.data.styles[k]
+    }
+  } else {
+    result.styles = props.data.styles || {}
+  }
   //}
+
+  //classes
+  if (props.data.classes) {
+    let classes = props.data.classes.split(' ')
+    if (result.classes) {
+      for(const c of classes){
+        result.classes.push(c)
+      }
+    } else {
+      result.classes=classes
+    }
+  }
+  //Visisble
+  if(props.data?.config?.props['~hideComponent']!=undefined){
+    result.sys.show=!tryEval(props.data?.config?.props['~hideComponent'],context)
+  }
 
   //
   return result;
-})
+}
 //Handle event if type is API
 function handleEventAPI(event: Object) {
   //
@@ -280,6 +334,7 @@ function handleEventScript(event: Object) {
   return function () {
     // console.log(context.methodManager)
     // console.log(context.methodManager.scriptCall)
+
     //
     return context.methodManager.scriptCall(event, ...arguments)
   }
@@ -305,9 +360,25 @@ function handleEventOpenPage(event: Object) {
 
 //Once use select this component
 function componentChoosed(e: any) {
-  e.stopPropagation();
+  if (context.mode.value == 'view') {
+    //under view mode ,it is not necessary to set choosed
+    //and return here will make page widget can be choosed
+    return
+  }
+  if (e && e.stopPropagation) {
+    try {
+      //console.log('stopPropagation is called')
+      e.stopPropagation()
+    } catch (error) {
+      console.log(e)
+      //console.log(e.event.event.stopPropagation())
+      //console.log(e.event.stop())
+      //ignore
+    }
+  }
   //
   context.choosedManager.setChoosed(props.data)
+
 }
 
 //Is current component active
@@ -327,23 +398,21 @@ const isActive = computed(() => {
 //   return props.data.styles || {}
 // })
 
-//
-const target = ref(null)
-//useMouseInElement will cause dialog display error:getBoundingClientRect is not a funciton,so remove it here
-//const { isOutside } = true;//useMouseInElement(target)
+
 
 
 </script>
 
 <template>
   <CompWrap ref="target" :config="realConfig" :class="{ active: isActive }" @mousedown="componentChoosed"
-    :slotParaStack="slotParaStack"></CompWrap>
+    @componentChoosed="componentChoosed" :slotParaStack="slotParaStack">
+  </CompWrap>
 </template>
 
 
 <style lang="scss" scoped>
 .active {
-  outline: 4px outset var(--el-color-primary);
+  outline: 2px outset var(--el-color-primary);
   outline-offset: 2px;
   user-select: none;
   z-index: 2000;
@@ -356,5 +425,15 @@ const target = ref(null)
 //   user-select: none;
 //   z-index:10000;
 //   //margin-top: 32px;
+// }
+
+// .active-widget {
+//   position: absolute;
+//   height: 32px;
+//   left: 0;
+//   top: -2px;
+//   line-height: 28px;
+//    background: #409eff;
+//   z-index: 10;
 // }
 </style>

@@ -1,38 +1,38 @@
-<template>
-	<el-button text @click="dialogVisible = true">
-	  click to open the Dialog
-	</el-button>
-  
-	<el-dialog
-	  v-model="dialogVisible"
-	  title="Tips"
-	  width="30%"
-	  :before-close="handleClose"
-	>
-	  <span>This is a message</span>
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useDebounceFn,computedAsync  } from '@vueuse/core'
 
-	</el-dialog>
-  </template>
-  
-  <script lang="ts" setup>
-  import { ref } from 'vue'
-  import { ElMessageBox } from 'element-plus'
-  
-  const dialogVisible = ref(false)
-  
-  const handleClose = (done: () => void) => {
-	ElMessageBox.confirm('Are you sure to close this dialog?')
-	  .then(() => {
-		done()
-	  })
-	  .catch(() => {
-		// catch error
-	  })
-  }
-  </script>
-  <style scoped>
-  .dialog-footer button:first-child {
-	margin-right: 10px;
-  }
-  </style>
-  
+const updated = ref(0)
+const clicked = ref(0)
+const debouncedFn = useDebounceFn(() => {
+	updated.value += 1
+}, 1000, { maxWait: 5000 })
+
+//
+const com = computedAsync(async () => {
+	console.log('hello')
+	return await useDebounceFn(() => {
+		console.log('come here'+clicked.value)
+		return clicked
+	}, 1000, { maxWait: 5000 })()
+})
+
+function clickedFn() {
+	clicked.value += 1
+	debouncedFn()
+}
+
+
+
+</script>
+
+<template>
+	<button @click="clickedFn">
+		Smash me!
+	</button>
+	<note>Delay is set to 1000ms and maxWait is set to 5000ms for this demo.</note>
+
+	<p>Button clicked: {{ clicked }}</p>
+	<p>Event handler called: {{ updated }}</p>
+	<p>computed: {{ com }}</p>
+</template>

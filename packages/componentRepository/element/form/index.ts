@@ -1,118 +1,39 @@
-import { computed,isReactive,isRef } from 'vue'
-import { formTransform } from './transform'
-
+import { computed,unref,isRef } from 'vue'
+import { elementFormTransform } from './transform'
+import * as uiUtil from '../../util/uiUtil'
 //table config
-export const formConfig = {
+const formConfig = {
   key: '_form',
   name: 'Form',
   description: 'Basic form',
-  icon: 'SetUp',
-  transform: formTransform,
-  editor: function (data: any) {
-    return [
-      {
-        '~component': 'el-switch',
-        '~label': 'Inline',
-        '~prop': 'inline',
-        '~description':'If checked, the label and controller is at the same line',
-      },
-      {
-        '~component': 'el-select',
-        '~label': 'Label position',
-        '~prop': 'label-position',
-        clearable: true,
-        '~options': [
-            { value: 'left', label: 'Left' },
-            { value: 'right', label: 'Right' },
-            { value: 'top', label: 'Top' }
-          ]
-        
-      },
-      {
-        '~component': 'el-input',
-        '~label': 'Label width',
-        '~prop': 'label-width',
-        // '~show': computed(() => {
-        //   return data['inline']}),
-      },
+  icon: 'mdiFormatColumns',
+  sequence:3,
+  transform: elementFormTransform,
+  editor: [
+    uiUtil.createSwitch('inline'),
+    uiUtil.createSelect('label-position',['left','right','top']),
+    uiUtil.createInput('label-width'),
       {
         '~component': 'lc-editable-list',
         '~label': 'Items',
-        '~prop': 'items',
+        '~prop': '_items',
         labelColumn: 'label',
         editConfig:function(d){return  [
-          {
-            '~component': 'el-input',
-            '~label': 'Label',
-            '~prop': 'label'
-          },
-          {
-            '~component': 'el-input',
-            '~label': 'Prop',
-            '~prop': 'prop'
-          },
-          {
-            '~component': 'el-select',
-            '~label': 'Controller Type',
-            '~prop': '~controllerType',
-            '~options':  [
-                { value: 'input', label: 'Input' },
-                { value: 'select', label: 'Select' },
-                { value: 'switch', label: 'Switch' },
-                { value: 'container', label: 'Container' }
-              ]
-            
-          },
-          {
-            '~component': 'el-select',
-            '~label': 'Input Type',
-            '~prop': '_type',
-            '~show': computed(() =>  (isRef(d)?d.value['~controllerType']:d['~controllerType'])=='input'),
-            '~options': [
-                { value: 'text', label: 'Text' },
-                { value: 'textarea', label: 'Text area' }
-              ]
-            
-          },
-          {
-            '~component': 'el-input',
-            '~label': 'Placeholder',
-            '~prop': '_placeholder',
-            '~show': computed(() =>  (isRef(d)?d.value['~controllerType']:d['~controllerType'])!='switch'),
-          },
-          {
-            '~component': 'el-switch',
-            '~label': 'Clearable',
-            '~prop': '_clearable',
-            '~show': computed(() =>  (isRef(d)?d.value['~controllerType']:d['~controllerType'])!='switch'),
-          },
-          {
-            '~component': 'el-input',
-            '~label': 'Active text',
-            '~prop': '_active-text',
-            '~show': computed(() =>  (isRef(d)?d.value['~controllerType']:d['~controllerType'])=='switch'),
-          },
-          {
-            '~component': 'el-input',
-            '~label': 'Inactive text',
-            '~prop': '_inactive-text',
-            '~show': computed(() =>  (isRef(d)?d.value['~controllerType']:d['~controllerType'])=='switch'),
-          },
-          {
-            '~component': 'el-switch',
-            '~label': 'Required',
-            '~prop': 'required',
-          },
-          // {
-          //   '~component': 'el-switch',
-          //   '~label': 'Multiple',
-          //   '~prop': '_multiple',
-          //   '~show': computed(() =>  (isRef(d)?d.value['~controllerType']:d['~controllerType'])=='select'),
-          // },
+          uiUtil.createInput('label'),
+          uiUtil.createInput('prop'),
+          uiUtil.createSwitch('required'),
+          uiUtil.createSelect('~controllerType',['input','select','switch','container']),
+          uiUtil.createSelect('_type',['text','textarea'],undefined,{'~show': computed(() =>  (unref(d)['~controllerType'])=='input')}),
+          uiUtil.createInput('_placeholder',undefined,{'~show': computed(() =>  (unref(d)['~controllerType'])!='switch')}),
+          uiUtil.createSwitch('_clearable',undefined,{'~show': computed(() =>  (unref(d)['~controllerType'])!='switch')}),
+          uiUtil.createInput('_active-text',undefined,{'~show': computed(() =>  (unref(d)['~controllerType'])=='switch')}),
+          uiUtil.createInput('_inactive-text',undefined,{'~show': computed(() =>  (unref(d)['~controllerType'])=='switch')}),
+          uiUtil.createInput('~options',undefined,{'~show': computed(() =>  (unref(d)['~controllerType'])=='select')}),
+
         ]}
       }
     ]
-  },
+  ,
   dataConfig:{
     modelValueName:'model',
     //readonly:true,
@@ -123,7 +44,7 @@ export const formConfig = {
       inline: true,
       'label-position': 'left',
       'label-width': '50px',
-      items: [
+      _items: [
         { label: 'Name', prop: 'name', type: 'input' },
         { label: 'Address', prop: 'address', type: 'input' }
       ]
@@ -135,3 +56,5 @@ export const formConfig = {
     margin: '4px 0 4px 0'
   }
 }
+//
+export default formConfig 

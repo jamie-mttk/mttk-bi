@@ -4,30 +4,31 @@
       <draggable tag="ul" :list="modelValue" class="list-group" handle=".handle" item-key="name">
         <template #item="{ element, index }">
           <li class="list-group-item">
-            <div class="list-group-item-inside">
-              <el-icon :size="24" class="handle">
-                <Paperclip />
-              </el-icon>
+            <div class="list-group-item-inside">       
+              <lc-icon  class="handle" icon="mdiDialpad" style="height:32px;padding-top:2px;margin-right:8px;"></lc-icon>
               <span class="content">{{ evalLabelColumn(element) }} </span>
-              <el-button class="operation" icon="" text @click="edit(index)">
-                <template #icon><el-icon :size="20">
-                    <Edit />
-                  </el-icon></template>
+              <el-button   @click="edit(index)">
+                <template #icon><lc-icon class="operation" icon="mdiNoteEditOutline"></lc-icon></template>
               </el-button>
-              <el-button class="operation" text @click="remove(index)">
-                <template #icon><el-icon :size="24">
-                    <Close />
-                  </el-icon></template>
+              <el-button text @click="remove(index)">
+                <template #icon>   <lc-icon class="operation" icon="mdiCloseCircleOutline"></lc-icon></template>
               </el-button>
 
             </div>
           </li>
         </template>
       </draggable>
-      <el-button icon="Plus" style="margin-left:24px;margin-top:6px;" @click="add">Add a new row</el-button>
+      <el-button  style="margin-left:24px;margin-top:6px;" @click="add">
+        <template #icon>
+            <lc-icon icon="mdiPlus"></lc-icon>
+          </template>
+        Add a new row</el-button>
     </div>
     <div v-if="mode != 'list'">
       <el-page-header title="back" @back="goBack" style="padding:10px;background-color: var(--el-fill-color-extra-light);">
+        <template #icon>
+            <lc-icon icon="mdiArrowLeft"></lc-icon>
+          </template>
         <CompWrap :config="editorConfigTranformed" style="margin:4px;" ref="tableEditor"></CompWrap>
       </el-page-header>
     </div>
@@ -164,10 +165,14 @@ function goBack() {
 .handle {
   flex: 0 0 48px;
   cursor: move;
+  height:24px;
+  margin-right:8px;
+  padding-top:20px;
 }
 
 .operation {
   flex: 0 0 48px;
+  height:20px;
 }
 
 .content {

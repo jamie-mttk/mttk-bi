@@ -10,15 +10,12 @@
           <el-menu :router="true" active-text-color="#ffd04b" background-color="#545c64" text-color="#fff">
             <el-sub-menu v-for="menu in menus" :index="'/' + menu['_id']" :key="menu['_id']">
               <template #title>
-                <el-icon>
-                  <component :is="menu.icon||''"></component>
-                </el-icon>
+      
+                <lc-icon :icon="menu.icon" size="large" style="margin-right:12px;"></lc-icon>
                 <span>{{ menu.name }}</span>
               </template>
               <el-menu-item v-for="page in menu.pages || []" :index="'/deploy/'+app+'/' + page['_id']" :key="page['_id']">
-                <el-icon>
-                  <component :is="page.icon||''"></component>
-                </el-icon>
+                <lc-icon :icon="page.icon" size="large" style="margin-right:12px;"></lc-icon>
               {{
                 page.name
               }}</el-menu-item>

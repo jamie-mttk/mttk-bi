@@ -4,7 +4,7 @@ export const imgConfig = {
   key: '_img',
   name: 'Image',
   description: '',
-  icon: 'Picture',
+  icon: 'mdiImageArea',
   transform: imgTransform,
   editor: [
     {

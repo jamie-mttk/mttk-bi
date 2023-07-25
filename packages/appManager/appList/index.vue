@@ -1,28 +1,21 @@
 <template>
-    <el-container style="height:100%;">
-    <el-header class="lc-common-toolbar">
-      <span class="left lc-main-title">Application List </span>
-      <span class="right">
-        <el-button icon="Plus" type="primary" @click="handleAdd">Add application</el-button>
-      </span>
-    </el-header>
-    <el-main class="app-list-area">
-      <el-row>
-        <el-col :span="6" v-for="app in apps" :key="app['_id']">
-          <AppSingle :modelValue="app" @action="handleAction"></AppSingle>
+  <el-row>
+    <el-col :span="6" v-for="app in apps" :key="app['_id']">
+      <AppSingle :modelValue="app" @action="handleAction"></AppSingle>
+    </el-col>
+    <el-col :span="6">
+      <el-row style="padding:16px;">
+        <el-col :span="24" style="height:160px;width:100%;border-radius: 6px; padding:16px;background-color:#137372;">         
+          <el-button type="success" link  style="margin-top:48px;margin-left:96px;" @click="handleAdd">
+            <lc-icon icon="mdiPlus" size="x-large"></lc-icon>
+            <h3>Add a new application</h3></el-button>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="24" v-if="apps.length==0">
-          <el-empty description="">
-            <template #description>
-            <h2>No application is available.</h2><br>Please add a new one by click add application button at right corner
-          </template>
-          </el-empty>
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+
+    </el-col>
+  </el-row>
+
+
   <AppDialog ref="appDialogRef"></AppDialog>
 </template>
 
@@ -58,7 +51,7 @@ function load() {
 function handleAction(type: string, app: object) {
   if ('edit' == type) {
     handleEdit(app)
-  }else  if ('delete' == type) {
+  } else if ('delete' == type) {
     handleDelete(app)
   } else {
     emit('action', type, app)
@@ -129,7 +122,7 @@ const callback = (dataNew: Object) => {
   margin-top: 10px;
   background-color: var(--el-fill-color-dark);
   border-radius: 8px;
-  height:100%;
+  height: 100%;
   /* .app-list-area-item{
     background-color: var(--el-fill-color-light);
   } */

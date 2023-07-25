@@ -1,82 +1,32 @@
 import {computed,unref} from 'vue'
 import { tableTransform } from './transform'
-
+import * as uiUtil from '../../util/uiUtil'
 //table config
-export const tableConfig = {
+const tableConfig = {
   key: '_table',
   name: 'Table',
   description: 'Basic table',
-  icon: 'Document',
+  icon: 'mdiTable',
+  sequence:4,
   transform: tableTransform,
   editor: [
-    {
-      '~component': 'el-switch',
-      '~label': 'Stripe',
-      '~prop': 'stripe'
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Border',
-      '~prop': 'border'
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Empty text',
-      '~prop': 'empty-text'
-    },
+    uiUtil.createSwitch('stripe'),
+    uiUtil.createSwitch('border'),
+    uiUtil.createInput('empty-text'),
+
     {
       '~component': 'lc-editable-list',
       '~label': 'Columns',
-      '~prop': 'columns',
+      '~prop': '_columns',
       labelColumn: 'label',
       editConfig: function (d) {
         return [
-          {
-            '~component': 'el-input',
-            '~label': 'Label',
-            '~prop': 'label'
-          },
-          {
-            '~component': 'el-input',
-            '~label': 'Prop',
-            '~prop': 'prop'
-          },
-          {
-            '~component': 'el-input',
-            '~label': 'Width',
-            '~prop': 'width'
-          },
-          {
-            '~component': 'el-select',
-            '~label': 'Align',
-            '~prop': 'align',
-            clearable: true,
-            '~options': [
-              { code: 'left', label: 'Left' },
-              { value: 'center', label: 'Center' },
-              { value: 'right', label: 'Right' }
-            ]
-          },
-          {
-            '~component': 'el-select',
-            '~label': 'Type',
-            '~prop': 'type',
-            clearable: true,
-            '~options': [
-              { value: 'selection', label: 'Selection' },
-              { value: 'index', label: 'Index' },
-              { value: 'container', label: 'Container' }
-            ]
-          },
-          //formatter can no be used since it is a standard element ui table item property
-          {
-            '~component': 'el-select',
-            '~label': 'Formatter',
-            '~prop': '_formatter',
-            clearable: true,
-            '~options': '#method',
-            '~show': computed(() =>  !unref(d)['type']),
-          },
+          uiUtil.createInput('label'),
+          uiUtil.createInput('prop'),
+          uiUtil.createInput('width'),
+          uiUtil.createSelect('align',['left','center','right',]),
+          uiUtil.createSelect('type',['selection','index','container',]),
+          uiUtil.createSelect('_formatter','#method',undefined,{ '~show': computed(() =>  !unref(d)['type']),}),
         ]
       }
     }
@@ -90,7 +40,7 @@ export const tableConfig = {
     props: {
       border: true,
       'empty-text': 'No data is found!',
-      columns: [
+      _columns: [
         {
           type: 'selection'
         },
@@ -117,5 +67,8 @@ export const tableConfig = {
     display: 'block',
     width: '100%',
     margin: '4px 0 4px 0'
-  }
+  },
+  events:['row-click','row-dblclick','cell-click','cell-dblclick','select']  
 }
+//
+export default tableConfig 

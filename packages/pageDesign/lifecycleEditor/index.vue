@@ -80,11 +80,5 @@ const tableData=computed(()=>{
   return context.codeManager.getCode().lifecycle
 })
 
-// const  tableData= reactive([
-//  {key:'formData',name:'Search criteria',type:'Object',initValue:{name:'111',type:'222',age:33}},
-//  {key:'tableData',name:'Data to show in table',type:'Array',initValue:[{key:'k1',name:'n1',age:11},{key:'k2',name:'n2',age:122}]},
-//  {key:'simpleBoolean',name:'Simple boolean',type:'Boolean',initValue:false},
-//  {key:'simpleString',name:'Simple string',type:'String',initValue:'hello'},
-//  {key:'simpleNumber',name:'Simple number',type:'Number',initValue:1234},
-// ])
+
 </script>

@@ -1,46 +1,72 @@
-# jamie_reporter
+# MTTK low code
 
-This template should help get you started developing with Vue 3 in Vite.
+## What is it
 
-## Recommended IDE Setup
+This project provides a graphical interface to quickly develop a graphical front-end interface and assist with a small amount of code. Most of the open source low code systems are form desgined based, I do NOT think it is valuable for a real project implementation.
+Here is a [demo] () ,the data will be reset every day.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Design concept
 
-## Type Support for `.vue` Imports in TS
+### Front-end only
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+This project focuses on front-end only, the back-end logic,for example how to retrieve/save business data from/into database is not covered.  That means you need to write your backend logic and use this tool to present data.
+This project has a simple [backend](https://github.com/jamie-mttk/mttk_lowcode_api) which is used to store application, pages, etc.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+### Flexible
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+First it is easy to add new component and JS functions into project to extend more functionalities.
+Secind refer to deploy chapter the deployed pages can be shown in low code system directly or to be shown in your own project.
+Finally the page design component can also be used in your project instead of using in low code system directly.
 
-## Customize configuration
+### Page widget
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Build a page and then convert it as a configurable component, is it cool?
 
-## Project Setup
+## Quick start
 
-```sh
-npm install
-```
+### Projects
 
-### Compile and Hot-Reload for Development
+The low code system has several projects as listed below.
 
-```sh
-npm run dev
-```
+|Project|Description|
+|---|---|
+|[Backend](https://github.com/jamie-mttk/mttk_lowcode_api)|Java/Spring boot based project to to provide the APIs used by low code system. The APIs are used to create / Modify / Delete / Query applications / pages / widgets / etc. |
+|[UI](https://github.com/jamie-mttk/mttk_lowcode_ui)|Vue3 based project. It is the core of mttk low code system includes page designer and page render components.|
+|[Demo]()|Demo how to use deployed pages in your own project with customized layout and menus |
+|[Designer demo]()|Demo how to use page designer in your own project|
 
-### Type-Check, Compile and Minify for Production
+Tt is recommened to use Eclipse or intelliJ IDEA to edit the first project  and use Visual Studio Code to edit the other projects.
+The backend project is compiled into a executable jar and other projects can be compiled into JS/CSS files. JS/CSS files can be deployed into web container,such as Tomcat, or embedded into backend project as static resource directly.
 
-```sh
-npm run build
-```
+### Deploy
 
-### Lint with [ESLint](https://eslint.org/)
+Following the below steps to install
 
-```sh
-npm run lint
-```
+1. Install last mongodb with authorization disabled
+   If mongodb is installed on a remote machine or authorization is enabled, you can config in your own application.properties. Refer to spring boot to learn how to do it.
+2. Install JRE 1.8
+3. Download compiled jar lowcode.jar (low code UI is already inserted as static resources) from [github]()
+4. Run 
+
+   ~~~sh
+   java -jar lowcode.jar
+   ~~~
+
+5. Access at http://localhost:8721/
+
+Compile from source code
+
+1. Clone backend project and open it in Eclipse (Or other IDE)
+2. You can modify application.properties if needed (It is recommaned to use a external application.properties instead of modify source code directly)
+3. Compile Run as/ Maven Install, backend-xxx-SNAPSHOT.jar will be generated under target folder
+4. Run java -jar your_jar_file
+5. Clone UI project and open it with Visual Studio Code (Assume you know how to prepare enviroment)
+6. Run  command in command console
+
+   ~~~sh
+   npm run install  //Download and install required libraries
+   npm run dev      //Run in developmet mode
+   npm run build    //Compile to CSS/JS
+   ~~~
+
+7. 

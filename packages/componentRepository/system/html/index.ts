@@ -4,7 +4,7 @@ export const htmlConfig = {
   key: '_html',
   name: 'HTML',
   description: 'HTML',
-  icon: 'Postcard',
+  icon: 'mdiLanguageHtml5',
   transform: htmlTransform,
   editor: [
     {
@@ -21,6 +21,7 @@ export const htmlConfig = {
       '~component': 'el-input',
       '~label': 'HTML',
       '~prop': 'html',
+      '~description':'Input HTML fragment here to render directly',
       'type':'textarea',
       rows:6,
     },

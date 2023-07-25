@@ -16,5 +16,5 @@ export default function choosedManager(context){
         choosed.value=choosedNew;
     }
     //
-    return {getChoosed,setChoosed}
+    return {getChoosed,setChoosed,choosed}
 }

@@ -1,10 +1,10 @@
 <template>
-    <el-dialog v-model="dialogVisible" title="Method parameter editor">
+    <el-dialog v-model="dialogVisible" title="Method parameter editor" :close-on-click-modal="false" :close-on-press-escape="false">
         <el-form ref="dataEditorFormRef" :model="formData" label-width="120px">
             <el-form-item label="Key" prop="key" required>
                 <el-input v-model="formData.key" />
             </el-form-item>
-            <el-form-item label="Description" prop="description" required>
+            <el-form-item label="Description" prop="description" >
                 <el-input v-model="formData.description" />
             </el-form-item>
             <el-form-item label="Data type" prop="type" required>

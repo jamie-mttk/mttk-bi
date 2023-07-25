@@ -1,13 +1,12 @@
 <template>
       <div class="icon-holder" @click="emit('iconChoosed', props.icon)">
-        <component :is="props.icon" class="icon"></component>
+        <lc-icon size="3em" :icon="props.icon"></lc-icon>
         <span class="name"> {{ icon }}</span>
       </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import lcIcon from '@/components/icon/index.vue'
 
 //
 let props = defineProps({
@@ -22,25 +21,7 @@ const emit = defineEmits<{
   (e: 'iconChoosed', value: string): void
 }>()
 
-//Store all the icons, so no need to load frequently
-const iconsAll = ref([] as string[])
-onMounted(() => {
-  let result = []
-  for (const [key] of Object.entries(ElementPlusIconsVue)) {
-    result.push(key)
-  }
-  iconsAll.value = result
-})
-const icons = computed(() => {
-  return iconsAll.value.filter(icon => {
-    if (!filter.value) {
-      return true
-    }
-    //
-    return icon.indexOf(filter.value) >= 0
-  })
-})
-const filter = ref('')
+
 </script>
 <style scoped lang="scss">
   .icon-holder {
@@ -59,6 +40,7 @@ const filter = ref('')
 
     .name {
       margin-top: 8px;
+      font-size: 1em;
     }
   }
 </style>

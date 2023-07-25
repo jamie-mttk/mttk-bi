@@ -1,36 +1,19 @@
 import {computed} from 'vue'
 import Panel from '@/components/panel/index.vue'
-
-export function formTransform(config: any, value: any) {
-
-  const result = {
-    sys: {
-      component: 'el-form'
-    },
-    props: {
-      //
-      model: value
-    },
-    slots: { default: { type: 'wrap', value: [] } }
-  }
-  //
-  for (const k of Object.keys(config) || []) {
-    if (k != 'items') {
-      result.props[k] = config[k]
-    }
-  }
+import * as transformUtil from '../../util/transformUtil'
+export function elementFormTransform(config: any, value: any) {
+ 
+  const result=transformUtil.buildWidget('el-form',config,value)
   //build default
-  result.slots.default.value = buildItems(config,value)
-  //
-  //console.log(JSON.stringify(result,null,2))
+  result.slots.default = buildItems(config,value)
   //
   return  result
 }
 
 function buildItems(config: any,value: any) {
-  let items = []
+  const items = [] as object[]
   //
-  for (let c of config.items || []) {
+  for (const c of config._items || []) {
     items.push(buildItem(c,value))
   }
   //
@@ -38,24 +21,11 @@ function buildItems(config: any,value: any) {
 }
 function buildItem(c: any,value: any) { 
   //
-  const item = {
-    sys: {
-      component: 'el-form-item'
-    },
-    props: {},
-    slots: { default: { type: 'wrap', value: [buildController(c,value)] } }
-  }
-  //props
-  for (const k of Object.keys(c)) {
-    if (k.startsWith('_')||k.startsWith('~')) {
-      continue
-    }
-    item.props[k] = c[k]
-  }
-  //
-  //item.slots.default.value.push(buildController(c,value)) 
+  const item =transformUtil.buildWidget('el-form-item',c)
+  item.slots.default=buildController(c,value)
   //
   return item
+
 }
 function buildController(c:any,value:any){
   const controllerType = c['~controllerType'] || 'input'
@@ -90,45 +60,34 @@ function buildController(c:any,value:any){
 function buildInput(c:any,slot:any){
   //
   slot.sys.component="el-input"
+  transformUtil.copyPropWithUL(c,slot)
   //
-  for (const k of Object.keys(c)) {
-    if (!k.startsWith('_')) {
-      continue
-    }
-    slot.props[k.substring(1)] = c[k]
-  }
+
 }
 function buildSwitch(c:any,slot:any){
   slot.sys.component="el-switch"
-  //
-  for (const k of Object.keys(c)) {
-    if (!k.startsWith('_')) {
-      continue
-    }
-    slot.props[k.substring(1)] = c[k]
-  }
+  transformUtil.copyPropWithUL(c,slot)
 }
 function buildSelect(c:any,slot:any){
   slot.sys.component="el-select"
-  //
-  for (const k of Object.keys(c)) {
-    if (!k.startsWith('_')||k.startsWith('__')) {
-      continue
-    }
-    slot.props[k.substring(1)] = c[k]
-  }
+  transformUtil.copyPropWithUL(c,slot)
   //Select options
  buildSelectOptions(c,slot)
 }
 function buildSelectOptions(c:any,slot:any){
-  const options =[]
+  const options =[] as object[]
   //
-  for (const v of c['__options']||[]) {
+  const raw=c['~options']||''
+  //Assume ~options is seperated by , and may have : to sperate value and label
+  const items=raw.split(',');
+  //
+  for (const item of items) {
+    const split=item.split(':')
     options.push({
         sys: { component: "el-option" },
         props: {
-          label: v['label'],
-          value: v['value'],
+          label: split.length>1?split[1]:split[0],
+          value: split[0],
         }
       }
    );

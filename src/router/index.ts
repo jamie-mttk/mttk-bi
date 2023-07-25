@@ -1,14 +1,33 @@
-import { createRouter, createWebHistory } from 'vue-router'
-
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/home/index.vue')
-    },
+    // {
+    //   path: '/',
+    //   name: 'home',
+    //   component: () => import('@/workspaceManager/index.vue')
+    // },
+    // {
+    //   path: '/design/:app?',
+    //   name: 'App design',
+    //   component: () => import('@/appEditor/appEditorWithRouter.vue')
+    // },
+    // {
+    //   path: '/deploy',
+    //   name: 'deploy',
+    //   component: () => import('@/layout/index.vue'),
+    //   children: [
+    //     {
+    //       path: ':app?/:page?',
+    //       name: 'Page deployed',
+    //       component: () => import('@/deployed/index.vue'),
+    //       meta: {
+    //         showBreadcrumb: false
+    //       }
+    //     }
+    //   ]
+    // },
     {
       path: '/test1',
       name: 'test1',
@@ -38,26 +57,6 @@ const router = createRouter({
       path: '/test6',
       name: 'test6',
       component: () => import('../views/test6/index.vue')
-    },
-    {
-      path: '/design/:app?',
-      name: 'App design',
-      component: () => import('@/appEditor/appEditorWithRouter.vue'),
-    },
-    {
-      path: '/deploy',
-      name: 'deploy',
-      component: () => import('@/layout/index.vue'),
-      children: [
-        {
-          path: ':app?/:page?',
-          name: 'Page deployed',
-          component: () => import('@/deployed/index.vue'),
-          meta:{
-            showBreadcrumb:false,
-          }
-        }
-      ]
     }
   ]
 })

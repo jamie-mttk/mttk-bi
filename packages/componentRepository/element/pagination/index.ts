@@ -1,107 +1,32 @@
-import { computed, unref } from 'vue'
+
 import { paginationTransform } from './transform'
+import * as uiUtil from '../../util/uiUtil'
+
 //pagination config
-export const paginationConfig = {
+const paginationConfig = {
   key: '_pagination',
   name: 'Pagination',
   description: 'Basic pagination',
-  icon: 'DocumentCopy',
+  icon: 'mdiBookOpenPageVariantOutline',
+  sequence:5,
   transform: paginationTransform,
   editor: [
-    {
-      '~component': 'el-input',
-      '~label': 'Layout',
-      '~prop': 'layout',
-      clearable: true
-    },
-
-    {
-      '~component': 'el-input-number',
-      '~label': 'Pager count',
-      '~prop': 'pager-count',
-      clearable: true
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Small',
-      '~prop': 'small'
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Background',
-      '~prop': 'background'
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Page sizes',
-      '~prop': 'page-sizes',
-      clearable: true
-    },
-    // {
-    //   '~component': 'el-input-number',
-    //   '~label': 'Default page size',
-    //   '~prop': 'default-page-size',
-    //   clearable: true
-    // },
-    {
-      '~component': 'el-input',
-      '~label': 'Previous text',
-      '~prop': 'prev-text',
-      clearable: true
-    },
-    {
-      '~component': 'lc-icon-picker',
-      '~label': 'Previous icon',
-      '~prop': 'prev-icon',
-      clearable: true
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Next text',
-      '~prop': 'next-text',
-      clearable: true
-    },
-    {
-      '~component': 'lc-icon-picker',
-      '~label': 'Next icon',
-      '~prop': 'next-icon',
-      clearable: true
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Disabled',
-      '~prop': 'disabled'
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Hide on single page',
-      '~prop': 'hide-on-single-page'
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Synchronize currrent page and page size to data',
-      '~prop': '_sync_to_data'
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Field name of current page in model value',
-      '~prop': '_key-current-page'
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Field name of total elements in model value',
-      '~prop': '_key-total'
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Field name of page count in model value',
-      '~prop': '_key-page-count'
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Field name of page size in model value',
-      '~prop': '_key-page-size'
-    },
+    uiUtil.createInput('layout'),
+    uiUtil.createInputNumber('pager-count'),
+    uiUtil.createSwitch('small'),
+    uiUtil.createSwitch('background'),
+    uiUtil.createInput('page-sizes'),
+    uiUtil.createInput('prev-text'),
+    uiUtil.createIconPicker('prev-icon'),
+    uiUtil.createInput('next-text'),
+    uiUtil.createIconPicker('next-icon'),
+    uiUtil.createSwitch('disabled'),
+    uiUtil.createSwitch('hide-on-single-page'),
+    uiUtil.createSwitch('_sync_to_data','Synchronize currrent page and page size to data'),
+    uiUtil.createInput('_key-current-page','Field name of current page in model value'),
+    uiUtil.createInput('_key-total','Field name of total elements in model value'),
+    uiUtil.createInput('_key-page-count','Field name of page count in model value'),
+    uiUtil.createInput('_key-page-size','Field name of page size in model value'),
   ],
   dataConfig: {
     //readonly:true,
@@ -127,3 +52,5 @@ export const paginationConfig = {
     margin: '6px 0'
   }
 }
+//
+export default paginationConfig 

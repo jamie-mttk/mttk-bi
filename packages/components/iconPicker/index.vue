@@ -1,23 +1,23 @@
 <template>
-    <el-popover :visible="visiblePopover" placement="bottom" width="40%" >
+    <el-popover :visible="visiblePopover" placement="bottom" width="40%" :teleported="true">
         <template #reference>
-            <div class="icon" @click="visiblePopover=true"> 
-            <el-icon size="large" >
-                <component :is="props.modelValue"></component>
-            </el-icon>
+            <div class="icon"  :class="{ icon_empty: !props.modelValue }" @click="visiblePopover=true" v-click-outside="onClickOutside"> 
+            <lc-icon size="large" :icon="props.modelValue" >
+            </lc-icon>
         </div>
         </template>
         <template #default>
-            {{ visiblePopover }}
-            <PickerList @icon-choosed="handleIconChoosed" style="width:512x;"></PickerList>
+            <PickerList @icon-choosed="handleIconChoosed"></PickerList>
         </template>
     </el-popover>
+    
 </template>
   
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref,unref } from 'vue'
+import { ClickOutside as vClickOutside } from 'element-plus'
 import PickerList from './pickerList.vue'
-
+import lcIcon from '@/components/icon/index.vue'
 //
 let props = defineProps({
     modelValue: {
@@ -40,14 +40,21 @@ function handleIconChoosed(icon:string){
     //
     visiblePopover.value=false
 }
+//
+const onClickOutside = () => {
+ // unref(popoverRef).popperRef?.delayHide?.()
+ //alert('CLick out')
+ visiblePopover.value=false
+}
 </script>
 <style scoped lang="scss">
-.icon {
-    border: 1px solid var(--el-border-color);
-    border-radius: 2px;
-    padding:4px;
+.icon {   
     width:2em;
     height:2em;
+}
+.icon_empty{
+    border: 1px solid var(--el-border-color);
+    border-radius: 2px;
 }
 </style>
   

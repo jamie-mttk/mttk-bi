@@ -1,50 +1,24 @@
 import { tabsTransform } from './transform'
+import * as uiUtil from '../../util/uiUtil'
 //
-export const tabsConfig = {
+const tabsConfig = {
   key: '_tabs',
   name: 'Tabs',
   description: 'Basic tabs',
-  icon: 'Operation',
+  icon: 'mdiTab',
+  sequence:14,
   transform: tabsTransform,
   editor: [
-    {
-      '~component': 'el-select',
-      '~label': 'Type',
-      '~prop': 'type',
-      '~options': [
-          { value: 'card', label: 'Card' },
-          { value: 'border-card', label: 'Border Card' }
-        ]
-      
-    },
-    {
-      '~component': 'el-select',
-      '~label': 'Tab position',
-      '~prop': 'tab-position',
-      '~options':  [
-          { value: 'top', label: 'Top' },
-          { value: 'right', label: 'Right' },
-          { value: 'bottom', label: 'Bottom' },
-          { value: 'left', label: 'Left' }
-        ]
-      
-    },
-    {
-      '~component': 'el-switch',
-      '~label': 'Stretch',
-      '~prop': 'stretch'
-    },
+    uiUtil.createSelect('type',['card','border-card']),
+    uiUtil.createSelect('tab-position',['top','right','bottom','left']),
+    uiUtil.createSwitch('stretch'),
     {
       '~component': 'lc-editable-list',
       '~label': 'Tabs',
       '~prop': '_container',
       labelColumn: 'label',
       editConfig: [
-        {
-          '~component': 'el-input',
-          '~label': 'Label',
-          '~prop': 'label'
-        }
+        uiUtil.createInput('label'),
       ]
     }
   ],
@@ -77,3 +51,5 @@ export const tabsConfig = {
     margin:'4px 0 4px 0'
   }
 }
+//
+export default tabsConfig 

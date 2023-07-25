@@ -29,6 +29,7 @@ export default function codeManager() {
     code.value = codeNew
     //wait watch to to called
     nextTick(() => {
+      
       dirty.value = false
     })
   }
@@ -155,7 +156,7 @@ export default function codeManager() {
   //try to duplicate controller
   //key is the controller key to duplciate,controllers is the controllers to match the key
   //if controller has children, try to duplicated in the children
-  function duplicateController(key: string, controllers: array) {
+  function duplicateController(key: string, controllers: Array) {
     if (!controllers) {
       return undefined
     }

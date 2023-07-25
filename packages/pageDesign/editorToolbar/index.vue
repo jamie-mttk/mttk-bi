@@ -9,7 +9,7 @@
         <el-button type="default" @click="emit('action', 'return')">Return to list</el-button>
         <el-button type="primary"  @click="emit('action', 'save')">Save</el-button>
         <el-button  type="success" @click="switchMode">{{ previewEditLabel }}</el-button>
-        <!-- <el-button  @click="emit('action','deploy')">Deploy</el-button> -->
+        <!-- <el-button type="warning"  @click="testTempoary">Test</el-button> -->
       </el-button-group>
     </div>
   </div>
@@ -18,12 +18,19 @@
 <script lang="ts" setup>
 import { ref, computed, inject } from 'vue'
 import { ElMessage } from 'element-plus'
+// import {registerTest} from './test/test'
 const emit = defineEmits<{
   (e: 'action', type: string): void
 }>()
-
 //
 const context = inject('context')
+// function testTempoary(){
+
+//   registerTest(context)
+// }
+
+
+
 //Report title
 const title = computed(() => {
   let pageTitle = context.codeManager.getCode().name

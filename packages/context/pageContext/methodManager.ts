@@ -1,4 +1,4 @@
-import methodOpenPage from './util/methodOpenPage'
+import methodOpenPage from '@/functionRepository/element/util/methodOpenPage'
 import { ElMessage } from 'element-plus'
 //Create method manager
 export default function methodManager(context: object) {

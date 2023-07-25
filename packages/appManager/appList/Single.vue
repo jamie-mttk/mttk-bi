@@ -13,10 +13,9 @@
       </div>
    
     </el-col>
-    <div style="position:absolute;top:40px;right:40px;">
-      <el-icon :size="48" >
-        <component :is="modelValue.icon"  />
-    </el-icon>
+    <div style="position:absolute;top:40px;right:80px;">
+      <lcIcon :icon="modelValue.icon" size="4em" >
+    </lcIcon>
     </div>
   </el-row>
 </template>
@@ -25,6 +24,7 @@
 import { ref, computed } from 'vue'
 import { useMouseInElement } from '@vueuse/core'
 import { generateRandomColor } from '@/utils/tools'
+import lcIcon from '@/components/icon/index.vue'
 //
 const target = ref(null)
 const { isOutside } = useMouseInElement(target)

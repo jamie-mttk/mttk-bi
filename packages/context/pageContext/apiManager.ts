@@ -1,5 +1,4 @@
-import request from '@/utils/request'
-
+import {tryEval} from '@/utils/expression'
 //Create method manager
 export default function apiManager(context: object) {
   function invoke(apiKey: object|string) {
@@ -18,8 +17,11 @@ export default function apiManager(context: object) {
       }
     }
     //
+    const url=tryEval(apiConfig.url,context)
+    const request=context.getAppContext().getGlobalContext().request
+    //
     request({
-      url: apiConfig.url,
+      url: url,
       method: apiConfig.method,
       params: params
     }).then((res) => {

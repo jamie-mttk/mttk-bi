@@ -30,9 +30,15 @@ export default function createRequest(baseUrl: string = '') {
       //
       NProgress.done()
       //
-      const res = response.data
-      //
-      return res
+      if (response.config.fullResponse) {
+        console.log(response)
+        //fullResponse means return all reponse with headers and more
+        return response
+      } else {
+        const res = response.data
+        //
+        return res
+      }
     },
     (error) => {
       //

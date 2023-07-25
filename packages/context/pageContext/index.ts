@@ -8,14 +8,16 @@ import apiManager from './apiManager'
 import useComponentRepository from '@/componentRepository/index'
 import useFunctionRepository from '@/functionRepository/index'
 import mitt from 'mitt'
-// import {createUniqueString} from '@/utils/tools'
+ import {createUniqueString} from '@/utils/tools'
 export default function createContext(modeInit: string,appContext:object,contextParentInit:object) {
   const contextParentSave=ref(contextParentInit)
   //
   const context = {
-    // test:createUniqueString(),
+    //A unique key to distinguish context 
+    key:createUniqueString(),
     //Below are used internaly,so maybe they will be removed from context later
     mode: ref(modeInit),
+
     codeManager: codeManager(),
     contextParent:contextParentSave,
     cp:contextParentSave,//shortcut

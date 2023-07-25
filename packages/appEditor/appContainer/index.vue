@@ -4,8 +4,16 @@
         <span class="left lc-main-title">{{ appContext?.app?.value?.name||'Applicaiton name is not set' }} </span>
       <span class="right">
         <el-button-group>
-        <el-button icon="Back" type="primary" @click="emit('return')">Return</el-button>
-        <el-button icon="DocumentCopy" type="success" @click="handleDeploy">Deploy</el-button>
+        <el-button type="primary" @click="emit('return')">
+          <template #icon>
+            <lc-icon icon="mdi-step-backward-2"></lc-icon>
+          </template>
+          Return</el-button>
+        <el-button type="success" @click="handleDeploy">
+          <template #icon>
+            <lc-icon icon="mdiGestureDoubleTap"></lc-icon>
+          </template>
+          Deploy</el-button>
       </el-button-group>
       </span>
 
