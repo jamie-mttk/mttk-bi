@@ -7,6 +7,11 @@ Here is a [demo] (http://139.129.210.30:8721/index.html) ,the data will be reset
 
 The documentation/ User manual /Development manul is not ready yet,I will try my best to finish then ASAP.
 
+## Screen captures
+
+![Main screen](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/main.png)
+
+
 ## Design concept
 
 ### Front-end only
