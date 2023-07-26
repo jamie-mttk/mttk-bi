@@ -83,6 +83,16 @@ Compile from source code
 
 7. You can copy the compile result of npm run build-test to the resource/static folder of backend project
 
+## Others
+
+### Security
+
+So far there is no build-in security control.  Security control may be considered later.
+
+### Backend API
+
+Backend API development may be implemented later.
+
 ## License
 
 MIT
