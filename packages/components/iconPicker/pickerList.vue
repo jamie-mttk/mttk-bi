@@ -1,7 +1,11 @@
 <template>
   <el-input v-model="filter" clearable placeholder="You should input something to filter icons so the infinite scroll works. This is a BUG.">
     <template #append>
-      <el-button @click="emit('iconChoosed', undefined)">Clear Icon</el-button></template>
+      <el-button-group>
+      <el-button @click="emit('iconChoosed', undefined)">Clear</el-button>
+      <el-button @click="emit('closePopover')">Cose</el-button>
+    </el-button-group>
+    </template>
   </el-input>
   <!-- <el-scrollbar height="720px">
     <ul class="icon-list">
@@ -30,6 +34,7 @@ import {toLine} from '../icon/iconUtil'
 //const emit = defineEmits(["update:modelValue"])
 const emit = defineEmits<{
   (e: 'iconChoosed', value: string): void
+  (e: 'closePopover'): void
 }>()
 
 //Store all the icons, so no need to load frequently

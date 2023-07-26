@@ -100,7 +100,7 @@ const menuEditorDialogRef = ref()
 //
 function handleAdd() {
   //
-  menuEditorDialogRef.value.show({ app: appContext.key.value, sequence: 999 }, callback)
+  menuEditorDialogRef.value.show({ app: appContext.key.value, sequence: 0 }, callback)
 }
 function handleEdit(sp) {
   //Deep copy to avoid form to change the table data directly

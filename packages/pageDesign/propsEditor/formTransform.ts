@@ -63,8 +63,9 @@ function formDefault(data) {
     '~component': 'ElForm',
     //props
     labelPosition: 'top',
+    size:'default',
     model: data,
-    '#': []
+    '#': [],
   }
 }
 //Get form item default
@@ -103,6 +104,7 @@ function calFormItem(data, itemConfig, pageContext?: object) {
     '~instanceKeyAsKey':true,
     //
     '~modelValue': data,
+
     config: itemConfig,
     pageContext: pageContext
     // id:createUniqueString(),

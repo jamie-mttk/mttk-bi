@@ -1,21 +1,20 @@
 <template>
     <el-popover :visible="visiblePopover" placement="bottom" width="40%" :teleported="true">
         <template #reference>
-            <div class="icon"  :class="{ icon_empty: !props.modelValue }" @click="visiblePopover=true" v-click-outside="onClickOutside"> 
-            <lc-icon size="large" :icon="props.modelValue" >
-            </lc-icon>
-        </div>
+            <div class="icon" :class="{ icon_empty: !props.modelValue }" @click="showPickerList">
+                <lc-icon size="large" :icon="props.modelValue" >
+                </lc-icon>
+            </div>
         </template>
         <template #default>
-            <PickerList @icon-choosed="handleIconChoosed"></PickerList>
+            <PickerList @icon-choosed="handleIconChoosed"  @closePopover="hidePopover"></PickerList>
         </template>
     </el-popover>
-    
 </template>
   
 <script lang="ts" setup>
-import { ref,unref } from 'vue'
-import { ClickOutside as vClickOutside } from 'element-plus'
+import { ref } from 'vue'
+
 import PickerList from './pickerList.vue'
 import lcIcon from '@/components/icon/index.vue'
 //
@@ -31,28 +30,34 @@ const emit = defineEmits<{
     (e: 'update:modelValue', value: string): void
 }>()
 //
-const visiblePopover=ref(false)
-
+const visiblePopover = ref(false)
+//
+function showPickerList(){
+    visiblePopover.value = true
+}
 
 //
-function handleIconChoosed(icon:string){
-    emit('update:modelValue',icon)
+function handleIconChoosed(icon: string) {
+
+    emit('update:modelValue', icon)
     //
-    visiblePopover.value=false
+    visiblePopover.value = false
 }
 //
-const onClickOutside = () => {
- // unref(popoverRef).popperRef?.delayHide?.()
- //alert('CLick out')
- visiblePopover.value=false
+const hidePopover = () => {
+
+    // unref(popoverRef).popperRef?.delayHide?.()
+    //alert('CLick out')
+    visiblePopover.value = false
 }
 </script>
 <style scoped lang="scss">
-.icon {   
-    width:2em;
-    height:2em;
+.icon {
+    width: 2em;
+    height: 2em;
 }
-.icon_empty{
+
+.icon_empty {
     border: 1px solid var(--el-border-color);
     border-radius: 2px;
 }

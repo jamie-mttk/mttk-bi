@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, inject, isRef, isReactive, toRaw } from 'vue'
+import { ref,  inject} from 'vue'
 import { ElMessageBox } from 'element-plus'
 import propesEditorData from './dataUtil'
 import StyleEdior from './styleEditor.vue'

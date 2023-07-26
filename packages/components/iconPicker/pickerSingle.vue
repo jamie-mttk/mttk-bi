@@ -1,6 +1,6 @@
 <template>
-      <div class="icon-holder" @click="emit('iconChoosed', props.icon)">
-        <lc-icon size="3em" :icon="props.icon"></lc-icon>
+      <div class="icon-holder" @click="iconChoosed">
+        <lc-icon size="3em" :icon="props.icon" @click="iconChoosed"></lc-icon>
         <span class="name"> {{ icon }}</span>
       </div>
 </template>
@@ -20,7 +20,10 @@ let props = defineProps({
 const emit = defineEmits<{
   (e: 'iconChoosed', value: string): void
 }>()
-
+//
+function iconChoosed(){
+  emit('iconChoosed', props.icon)
+}
 
 </script>
 <style scoped lang="scss">

@@ -6,11 +6,13 @@
 
 <script lang="ts" setup>
 import { ref,computed } from 'vue'
-import { formValue, config1, config2, configCard, myClasses,configTransform } from './data'
-const config = ref(configCard)
+import { formValue, config1, config2, configCard, myClasses,configTransform ,configFormItem} from './data'
+const config = ref(configFormItem)
 const mykey = ref('11')
 
-const ctx={props:{config:config}}
+
+
+const ctx={props:{config:configFormItem}}
 
 var configStd = computed(() => standardizedConfig(), 
 // {
@@ -36,6 +38,7 @@ function callTest() {
 function standardizedConfig(){
   return ctx.props.config;
 }
+
 </script>
 
 <style>

@@ -37,9 +37,10 @@ const styleObject = reactive({
 
 //el-tooltip will override the click event,so we raise event here
 function handleClick(event){
+
     emit('click',event)
-    event.preventDefault();
-      event.stopPropagation();
+    // event.preventDefault();
+    //   event.stopPropagation();
 }   
 </script>
 

@@ -328,7 +328,7 @@ export const configCard = reactive({
         //Set modelValue with computed,demo only since here it is not necessary
       },
       props: {
-        type:'primary',
+        type: 'primary'
       },
       slots: {
         default: 'HELLO'
@@ -337,8 +337,8 @@ export const configCard = reactive({
         // color:myColor
       },
       classes: myClasses,
-      events:{
-        click:function(){
+      events: {
+        click: function () {
           console.log('i am clicked')
         }
       }
@@ -372,15 +372,41 @@ export const configCard = reactive({
   }
 })
 
-
 export const configTransform = {
-  '~transform':function(config){
+  '~transform': function (config) {
     console.log(config)
     // console.log(ctx)
-   // console.log(ctx.emit('click'))
-    return {  '~component':'el-button',
-    'type':'primary',
-    '#':config.content}
+    // console.log(ctx.emit('click'))
+    return { '~component': 'el-button', type: 'primary', '#': config.content }
   },
-  content:'HAHAHAHA'
+  content: 'HAHAHAHA'
+}
+const selValue=ref('success')
+
+export const configFormItem = {
+  '~component': 'el-select',
+  '~modelValue': selValue,
+  clearable: true,
+  '#': [
+    {
+      sys: { component: 'el-option', instanceKey: 'wt2k6306l5rlkjhtrf8' },
+      props: { label: 'primary', value: 'primary' }
+    },
+    {
+      sys: { component: 'el-option', instanceKey: 'h2tyherj96lkjhtrf9' },
+      props: { label: 'success', value: 'success' }
+    },
+    {
+      sys: { component: 'el-option', instanceKey: 'r0pzfafpq9clkjhtrfa' },
+      props: { label: 'warning', value: 'warning' }
+    },
+    {
+      sys: { component: 'el-option', instanceKey: 'y2cdtzzik98lkjhtrfa' },
+      props: { label: 'danger', value: 'danger' }
+    },
+    {
+      sys: { component: 'el-option', instanceKey: 'ga2c3aax6u8lkjhtrfa' },
+      props: { label: 'info', value: 'info' }
+    }
+  ]
 }

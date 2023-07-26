@@ -24,7 +24,7 @@
                     <el-option  label="Para" value="para" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="Request content type"  prop="requestContentType" required>
+            <el-form-item label="Request content mode"  prop="requestContentMode" required>
                 <el-select v-model="formData.requestContentMode" >
                     <el-option  label="Data" value="data" />
                     <el-option  label="Computed" value="computed" />
@@ -40,8 +40,8 @@
                     <el-option  v-for="d in computedList" :key="d.key" :label="d.description" :value="d.key" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="Response type"  prop="responseType" required>
-                <el-select v-model="formData.responseType" >
+            <el-form-item label="Response mode"  prop="responseMode" required>
+                <el-select v-model="formData.responseMode" >
                     <el-option  label="None" value="none" />
                     <el-option  label="Data" value="data" />
                 </el-select>

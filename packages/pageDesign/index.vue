@@ -27,7 +27,7 @@
                   <PageRender :contextStack="contextStack"></PageRender>
                 </el-col>
                 <el-col :span="6">
-                  <PropsEditor class="height-full"></PropsEditor>
+                  <PropsEditor class="height-full" style="z-index: 999;"></PropsEditor>
                 </el-col>
               </el-row>
             </el-tab-pane>

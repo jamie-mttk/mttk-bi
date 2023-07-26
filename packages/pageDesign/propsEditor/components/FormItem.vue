@@ -1,5 +1,5 @@
 <template>
-    <el-form-item :prop="props.config['~prop']">
+    <el-form-item :prop="props.config['~prop']" style="margin-bottom:0px;">
         <template #label>
             <div class="lc-common-toolbar" style="background-color: transparent;">
                 <div>
@@ -9,9 +9,9 @@
                         v-if="config['~description']"></lc-icon>
                 </div>
                 <div v-show="showSwitchButton">
-                    <lc-icon icon="mdiExponent" tooltip="Expression" v-if="inputMode == 'exp'"
+                    <lc-icon icon="mdiExponent" tooltip="Expression"  color="#A8ABB2" v-if="inputMode == 'exp'" 
                         @click="inputMode = 'raw'"></lc-icon>
-                    <lc-icon icon="mdiFormSelect" tooltip="Raw componnet" v-if="inputMode == 'raw'"
+                    <lc-icon icon="mdiFormSelect" tooltip="Raw componnet" color="#A8ABB2" v-if="inputMode == 'raw'"
                         @click="inputMode = 'exp'"></lc-icon>
                 </div>
             </div>
@@ -80,7 +80,8 @@ const inputMode = ref(initInputMode())
 
 //CompWrap config
 const compConfig = computed(() => {
-    return buildConfig(props.modelValue, props.config, props.pageContext)
+    return  buildConfig(props.modelValue, props.config, props.pageContext)
+
 })
 //Whether to show switch button
 const showSwitchButton = computed(() => {
