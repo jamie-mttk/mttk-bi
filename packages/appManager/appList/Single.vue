@@ -2,7 +2,7 @@
   <el-row style="padding:16px;">
     <el-col :span="24" :style="singleStyles" ref="target">
       <h2 style="margin:16px 0 0 10px;">{{ props.modelValue.name }}</h2>
-      <div  style="margin:0 10px;padding-right:100px;">
+      <div  style="margin:0 10px;padding-right:100px;min-height: 32px;">
         {{ props.modelValue.description }}
       </div>
       <div v-show="!isOutside" style="margin:10px">

@@ -3,6 +3,7 @@
 ## Main screen
 
 ![Main screen](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/main.png)
+
 The first screen show all the applications and page widgets.
 
 ### Application management 
@@ -17,7 +18,7 @@ Move the cursor to the proper application area to show the below operations:
 
 ### Launch
 
-[Larunch](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/launch.png)
+![Larunch](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/launch.png)
 
 Click lauch button to display the deployed application.
 
