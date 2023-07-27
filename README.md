@@ -5,8 +5,6 @@
 This project can easily and quickly to build a vue 3 based UI and assist with a small amount of code.  The target of this project is to quickly develop a data presentation project ,such as report, daigram, etc. although it can build a really complex system.
 Here is a [demo](http://139.129.210.30:8721/index.html)  ,the data will be reset every day. I am sorry for the slow access since the performance of my server is pool.
 
-The documentation/ User manual /Development manul is not ready yet,I will try my best to finish then ASAP.
-
 ## Screen captures
 
 ![Main screen](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/main.png)
@@ -15,6 +13,14 @@ The documentation/ User manual /Development manul is not ready yet,I will try my
 ![App](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/app.png)
 ![Designer](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/designer.png)
 ![Larunch](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/src/screenCaptures/launch.png)
+
+## Manuals
+
+The documentation/ User manual /Development manul is not ready yet,I will try my best to finish then ASAP.
+|Document|Description|
+|---|---|
+|[User manual](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/UserManual.md)|Basic usage manual, no coding included|
+|[Developer manual](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/DeveloperManual.md)|Describe coding skills|
 
 ## Design concept
 
