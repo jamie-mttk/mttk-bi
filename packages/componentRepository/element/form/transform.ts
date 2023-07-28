@@ -44,6 +44,8 @@ function buildController(c:any,value:any){
 //
   if (controllerType == 'input') {
    buildInput(c,slot)
+  }else  if (controllerType == 'input-number') {
+    buildInputNumber(c,slot)
   }else if (controllerType == 'switch') {
     buildSwitch(c,slot)
   }else if (controllerType == 'select') {
@@ -60,6 +62,14 @@ function buildController(c:any,value:any){
 function buildInput(c:any,slot:any){
   //
   slot.sys.component="el-input"
+  transformUtil.copyPropWithUL(c,slot)
+  //
+
+}
+
+function buildInputNumber(c:any,slot:any){
+  //
+  slot.sys.component="el-input-number"
   transformUtil.copyPropWithUL(c,slot)
   //
 

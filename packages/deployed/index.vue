@@ -63,13 +63,21 @@ function qualifydPageId(appIdNew, pageIdNew) {
   }).then(function (response) {
     if (response.list && Array.isArray(response.list) && response.list.length > 0) {
       //
-      pageId.value = response.list[0]['_id']
-    } else {
-      ElMessage({
-        message: 'The app has no page, launch failed.app:'+appIdNew+',page:'+pageIdNew,
-        type: 'error',
-      })
+      for(const page of response.list){
+        //Try to find one with menu linked
+        if(!page.menu){
+          continue;
+        }
+        pageId.value =page['_id']
+        return
+      }     
     }
+    //
+    ElMessage({
+      message: 'The app has no page, launch failed.app:' + appIdNew + ',page:' + pageIdNew,
+      type: 'error',
+    })
+
   });
 }
 
@@ -83,7 +91,7 @@ const showBreadcrumb = computed(() => {
 </script>
 
 <template>
-  <DeployedNoRouter :modelValue="pageId" :showBreadcrumb="showBreadcrumb" ></DeployedNoRouter>
+  <DeployedNoRouter :modelValue="pageId" :showBreadcrumb="showBreadcrumb"></DeployedNoRouter>
 </template>
 
 <style></style>

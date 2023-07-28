@@ -65,7 +65,7 @@ function showPopup(appContext, pageContext, options, content) {
     config: popupConfig
   })
   //
-  dialogNode.appContext = appContext.getGlobalContext().getVueApp()._context
+  dialogNode.appContext = appContext.getGlobalContext().vueApp._context
   //
   render(dialogNode, mountNode)
   document.body.appendChild(mountNode)

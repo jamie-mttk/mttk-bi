@@ -1,6 +1,6 @@
 {
   "name": "mttk-lowcode",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "main": "./dist/mttk-lowcode.umd.js",
   "module": "./dist/mttk-lowcode.mjs",
   "exports": {
@@ -42,13 +42,9 @@
     "bin-editor-next": "^1.1.0",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.1",
-    "js-cookie": "^3.0.1",
     "mitt": "^3.0.0",
-    "moment": "^2.29.4",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.32",
-    "qs": "^6.11.1",
-    "screenfull": "^6.0.2",
     "sortablejs": "^1.15.0",
     "vue": "^3.2.47",
     "vue-echarts": "^6.6.0",

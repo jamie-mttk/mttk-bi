@@ -1,6 +1,9 @@
 <template>
     <el-dialog v-model="dialogVisible" title="Application editor" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false">
         <el-form ref="appEditorFormRef" :model="formData"  label-width="120px">
+            <el-form-item label="ID"  prop="_id" >
+                <el-input v-model="formData['_id']" :disabled="true"/>
+            </el-form-item>
             <el-form-item label="Name"  prop="name" required>
                 <el-input v-model="formData.name" />
             </el-form-item>

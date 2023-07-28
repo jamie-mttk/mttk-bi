@@ -4,6 +4,7 @@ import createGlobalContext from './context/globalContext/index'
 import createAppContext from './context/appContext/index'
 import createContext from './context/pageContext/index'
 import useComponentRepository from './componentRepository/index'
+import useFunctionRepository from './functionRepository/index'
 
 import lcPageRender from './PageRender/index.vue'
 import lcDeployed from './deployed/index.vue'
@@ -36,7 +37,7 @@ const install=app=>{
 //
 const installer={install}
 //
-export {installer,lcPageRender,createGlobalContext,createAppContext,createContext,useComponentRepository,lcDeployed,lcDeployedNoRouter,lcLayout,lcPanel,lcIcon,
+export {installer,lcPageRender,createGlobalContext,createAppContext,createContext,useComponentRepository,useFunctionRepository,lcDeployed,lcDeployedNoRouter,lcLayout,lcPanel,lcIcon,
 	//Below are for designer
 	installDesigner,installRouter,lcWorkspaceManager,lcAppEditorWithRouter,widgetUtil,widgetTransformUtil,
 	}

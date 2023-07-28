@@ -241,10 +241,196 @@ console.log(arguments)
 
 Notice: wrapperContext.props.slotParaStack can get the slotParaStack
 
-## Present pages in your own project
+### Icons
+
+[Material Design Icons](https://pictogrammers.com/library/mdi/) is internally suported, and the icon picker fullly supoort mdi icons choose.
+Component 'lcIcon' can display mdi icons.
+
+## Render deployed pages in your own project
+
+Refer to [Demo project](https://github.com/jamie-mttk/mttk-lowcode-demo)
 
 ## Using page desiner in your project
 
-## Build customized component and functions
+Refer to [Designer demo project](https://github.com/jamie-mttk/mttk_lowcode_designer)
+And this project also demostrate how to wirte your own components.
+
+## Build customized component
+
+Customized component is a way to extend the build-in components. It can be a simple component (such as a input) or it can be a complex component. Anyway it is the same way to embed it into low code system.
+
+### Configuration
+
+Refer to the [Element Button as a sample](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/packages/componentRepository/element/button/index.ts)
+A JS object is needed to describe the component, the properties are described below
+|Property|Description|
+|---|---|
+|key|Unickly identify this component|
+|name||
+|description||
+|icon|Icon name,refer to icon chapter|
+|sequence|The sequnce to display in the pallet|
+|transform|Refer to "transform" chapter|
+|editor|Refer to "UI define" chapter|
+|initConfig|Init configuration, normally used to set the init component properties|
+|initStyles|Init styles|
+|events|An string array to define the event list which can be choosed in property editor event form|
+
+### UI definition
+
+The editor vaule can be a function or an array, each item is a property definition of vueWrapper syntax. 
+If it is function ,the paramters are below
+|Paramter|Description|
+|---|---|
+|data|The form data value wrapped with ref|
+
+Normally using funciton as a editor value is to dynamically show/display items. Refer to [el-input](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/packages/componentRepository/element/input/index.ts) ,the property "rows" is only shown if property "type" is area
+
+~~~ sh
+    uiUtil.createInputNumber('rows',undefined,{ '~show': computed(() => unref(data).type == 'textarea')}),
+~~~
+
+The function return should be an array,below is an example
+
+~~~ sh
+[{
+      "~component": "el-input",
+      "~prop": "image",
+      "~label": "Image",
+      "clearable": true
+    },
+    {
+      "~component": "el-select",
+      "~prop": "rounded",
+      "~label": "Rounded",
+      "clearable": true,
+      "~options": [
+        "0",
+        "xs",
+        "sm",
+        "x-large",
+        "lg",
+        "xl"
+      ]
+    },
+    {
+      "~component": "el-switch",
+      "~prop": "border",
+      "~label": "Border",
+    }]
+~~~
+
+|Property|Description|
+|---|---|
+|~component|Normally 'el-input'/'el-input-number'/'el-select'/'el-switch'/'el-color-picker/'lc-icon-picker'/'baceeditor'(JS code editor)|
+|~prop|The key to store the property|
+|~label|Label shown in the property editor|
+|~description|Optional, if provided a quesiton mark icon will shown after label. Move the mouse to the icon will show the description|
+|...|Other properties|
+
+#### widgetUtil
+
+To simplify the UI definition, some utility functions can be used.
+
+First import widgetUtil
+
+~~~ sh
+import {widgetUtil} from 'mttk-lowcode'
+~~~
+
+Then coding as below
+
+~~~ sh
+ widgetUtil.createInput('title'),
+widgetUtil.createSwitch('border'),
+~~~
+
+createInput/createInputNumber/createSwitch/createColorPicker/lc-icon-picker has same parameters.
+|Parameter|Description|
+|---|---|
+|prop|The key to store the property|
+|label|Optional, if empty try to convert prop to proper format|
+|other|Optional,object,other properties|
+
+createSelect has one additional paramter after prop which is the options, it can be a string array or string seperated with ','
+
+createBase is a more common function 
+
+~~~ sh
+ function createBase(component:string,prop: string, label?: string, other?: object)
+~~~
+
+### Transform
+
+Transform is a function to generate the vuewrapper format config. 
+Refer to [Element form transform](https://github.com/jamie-mttk/mttk_lowcode_ui/blob/master/packages/componentRepository/element/form/transform.ts)  to learn more.
+
+The function has following paramters
+
+|Parameter|Description|
+|---|---|
+|props|The object(key/value) user input in the property editor|
+|data|The model value of the component|
+|context|Page context|
+|wrapperContext|Wrapper Context|
+
+#### widgetTransformUtil
+
+To simplify the transform, some useful funcitons are available in widgetTransformUtil
+
+First import  'widgetTransformUtil'
+
+~~~ sh
+import {widgetTransformUtil} from 'mttk-lowcode'
+~~~
+
+Refer to the below functions and comments
+
+~~~ sh 
+//Build  a widget with given widget
+//widget can be a string(name) or imported component
+//value will be set to modelValue
+export function buildWidget(widget: any, config: any, value?: any) 
+
+//Return a function which is a buildWidget
+export function buildWidgetFunc(widget: any,callback?:Function) 
+
+//Has a default slot children
+export function buildWidgetWithSlotChildren(
+  widget: any,  config: any,  value?: any,  option?: object)
+
+//Build a panel under parameter c
+export function buildPanel(c)
+
+~~~
+
+### Registrations
+
+Refer to [Veutify component registration](https://github.com/jamie-mttk/mttk_lowcode_designer/blob/master/src/vuetify/componentRepository/index.ts)
+
+## Build customized function
+
+Customized functions is a way to add new functions into low code system. As we mentioned before, the script are evaluated with function constructor, but it has a restriction that "import" is not supported. For example if you wan to use some functions in [Lodash](https://lodash.com/)
+
+Refer to [Veutify functions](https://github.com/jamie-mttk/mttk_lowcode_designer/blob/master/src/vuetify/functionRepository/index.ts), create function and export them.
+And then register in [main.ts](https://github.com/jamie-mttk/mttk_lowcode_designer/blob/master/src/main.ts)
+
+~~~ sh
+useFunctionRepository().registBatch(veutify_funcs)
+~~~
+
+Call customize function
+
+~~~ sh
+c.f.get('veutify_test1')(111,123)
+~~~
 
 ## Build-in functions
+
+|Category|Function|Description|
+|---|---|---|
+|Element Plus|ElMessage|Elemenet plus ElMessage function|
+|Element Plus|ElMessageBox|Elemenet plus ElMessageBox function|
+|Element Plus|methodOpenPage|Same as openPage in methodManager|
+|Echarts|registerTheme|Echarts registerTheme, the default theme is 'light', so changing the them of 'light' will change the default display|
+

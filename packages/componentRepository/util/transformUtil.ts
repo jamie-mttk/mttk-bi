@@ -18,6 +18,8 @@ export function buildWidgetFunc(widget: any,callback?:Function) {
     return result
   }
 }
+
+//Has a default slot children
 export function buildWidgetWithSlotChildren(
   widget: any,
   config: any,
@@ -62,6 +64,7 @@ export function copyPropWithUL(config: object, result: object) {
   }
 }
 
+//Build a panel under parameter c
 export function buildPanel(c) {
   const panel = {
     sys: {
