@@ -15,6 +15,7 @@ const buttonConfig = {
   editor: [
     uiUtil.createInput('_label'),
     uiUtil.createSelect('type', ['primary', 'success', 'warning', 'danger', 'info']),
+    uiUtil.createSelect('size',['large', 'default', 'small']),
     uiUtil.createSwitch('disabled'),
     uiUtil.createColorPicker('color', undefined, {
       predefine: ['#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#1e90ff', '#c71585']

@@ -408,5 +408,27 @@ export const configFormItem = {
       sys: { component: 'el-option', instanceKey: 'ga2c3aax6u8lkjhtrfa' },
       props: { label: 'info', value: 'info' }
     }
-  ]
+  ],
+  '^onMounted':[function(){
+    console.log('I AM MOUNTED 1')
+  },
+  function(){
+    console.log('I AM MOUNTED2')
+  }
+]
+}
+
+
+//
+const sourceCode=reactive({code:'console.log("456")'})
+export const codeEditorConfig=
+{
+"~component": "b-ace-editor",
+"~modelValue": sourceCode,
+"~modelValuePath": "code",
+"lang": "javascript",
+"width": "100%",
+"height": "20vh",
+"readonly": false,
+"font-size": 14
 }

@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue'
+import { ref,  watch } from 'vue'
 import mitt from 'mitt'
 
 export default function createAppContext(globalContext: object) {

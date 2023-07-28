@@ -3,7 +3,7 @@
 ## What is it
 
 This project can easily and quickly to build a vue 3 based UI and assist with a small amount of code.  The target of this project is to quickly develop a data presentation project ,such as report, daigram, etc. although it can build a really complex system.
-Here is a [demo](http://139.129.210.30:8721/index.html)  ,the data will be reset every day. I am sorry for the slow access since the performance of my server is pool.
+Here is a [demo](http://139.129.210.30:8721/index.html)  ,the data will be reset every day. I am sorry for the slow access since the performance of my server is pool. Please try to refresh if load failed.
 
 ## Screen captures
 

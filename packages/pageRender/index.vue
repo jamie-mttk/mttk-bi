@@ -88,13 +88,13 @@ const pageConfig =function(contextThis)  {
         const mode = lc.mode || 'script'
        
         if (mode == 'script') {
-          result[lc.key] = function () {
+		appendLifeCycle(result,lc.key,function () {
             return contextThis.methodManager.scriptCall({code:lc.code})
-          }
+          })
         } else if (mode == 'method') {
-          result[lc.key] = function () {
+          appendLifeCycle(result,lc.key, function () {
             return contextThis.methodManager.methodCall({method:lc.method})
-          }
+          })
         } else {
           throw new Error('Unsuported lifecyle mode:' + lc.mode)
         }
@@ -106,6 +106,13 @@ const pageConfig =function(contextThis)  {
   }
 
   return config;
+}
+//append to lifecyle list 
+function appendLifeCycle(result,key,func){
+  if(!result[key]){
+    result[key]=[]
+  }
+	result[key].push(func)
 }
 //
 if (appContext) {

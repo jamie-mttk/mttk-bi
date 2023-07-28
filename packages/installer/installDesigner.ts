@@ -63,7 +63,8 @@ export function installDesigner (app, option) {
   componentRepository.resetPageWidget(globalContext)
   //
   if(option.router){
-    globalContext.setRouter(option.router)
+   // globalContext.setRouter(option.router)
+   globalContext.router=option.router
   }
   //
   return {globalContext}

@@ -79,10 +79,18 @@ const formItemData = computed({
 const inputMode = ref(initInputMode())
 
 //CompWrap config
-const compConfig = computed(() => {
-    return  buildConfig(props.modelValue, props.config, props.pageContext)
+// const compConfig = computed(() => {
+//     return  buildConfig(props.modelValue, props.config, props.pageContext)
+// },{
+//   onTrack(e) {
+//     console.log('track',e)
+//   },
+//   onTrigger(e) {
+//     console.log('trigger',e)
+//   }})
+//
 
-})
+const compConfig = buildConfig(props.modelValue, props.config, props.pageContext)
 //Whether to show switch button
 const showSwitchButton = computed(() => {
     const compName = stdComponent(props.config['~component'])

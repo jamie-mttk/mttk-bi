@@ -35,7 +35,7 @@ export default function methodManager(context: object) {
   function scriptCall(event: object|string, ...args) {
     const code=(typeof event=='string')?event:event.code
     const argNames = buildArgNames([], ...args)
-    // console.log(argsName)
+    // console.log(argNames)
     // console.log(args)
     try {
       return new Function('c', ...argNames, code)(context, ...args)

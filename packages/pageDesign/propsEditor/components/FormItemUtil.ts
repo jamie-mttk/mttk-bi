@@ -5,6 +5,9 @@ import { mergeJson } from '../formTransform'
 import lcMyInput from './MyInput.vue'
 
 export function buildConfig(modelValue: Object, itemConfig: Object, pageContext) {
+  //
+ // console.log('buildConfig',itemConfig)
+  //
   const c = {
     '~component': mapComponent(itemConfig['~component']),
     '~modelValue': modelValue,

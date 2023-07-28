@@ -21,9 +21,9 @@ export default function createContext(modeInit: string,appContext:object,context
     codeManager: codeManager(),
     contextParent:contextParentSave,
     cp:contextParentSave,//shortcut
-    getContextParent:function(){
-      return contextParentSave
-    },
+    // getContextParent:function(){
+    //   return contextParentSave
+    // },
     repositoryManager:useComponentRepository(),
     functionManager:useFunctionRepository(),
     f:useFunctionRepository(),

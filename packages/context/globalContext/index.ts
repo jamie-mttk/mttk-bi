@@ -10,21 +10,21 @@ export default function createGlobalContext(baseUrl: string = '', vueApp: App,ro
     router: routerInit||useRouter()
   }
   //
-  globalContext.setRouter = function (routerNew:Router) {
-    globalContext.router = routerNew
-  }
+  // globalContext.setRouter = function (routerNew:Router) {
+  //   globalContext.router = routerNew
+  // }
   //
-  globalContext.setBaseUrl = function (baseUrl: string) {
-    globalContext.request({ baseUrl: baseUrl })
-  }
+  // globalContext.setBaseUrl = function (baseUrl: string) {
+  //   globalContext.request({ baseUrl: baseUrl })
+  // }
   //
-  globalContext.getVueApp = function () {
-    return globalContext.vueApp
-  }
-  //
-  globalContext.setVueApp = function (vueAppNew: App) {
-    globalContext.vueApp = vueAppNew
-  }
+  // globalContext.getVueApp = function () {
+  //   return globalContext.vueApp
+  // }
+  // //
+  // globalContext.setVueApp = function (vueAppNew: App) {
+  //   globalContext.vueApp = vueAppNew
+  // }
   //
   return globalContext
 }

@@ -97,9 +97,10 @@ function evalLabelColumn(element) {
   }
 }
 //editor config tranformed
-const editorConfigTranformed = computed(() => {
-  return formTransform(props.editConfig, editingData)
-})
+// const editorConfigTranformed = computed(() => {
+//   return formTransform(props.editConfig, editingData)
+// })
+const editorConfigTranformed = formTransform(props.editConfig, editingData)
 //
 function add() {
   editingData.value = {key:createUniqueString()}

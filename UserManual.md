@@ -89,11 +89,4 @@ Choose the proper component to edit at right.
 Normally properties can be set by raw mode, for example, the Type property of el-input is a select, you can choose primary/success/... directly.
 But if you want to set this property by program, expression mode is necessary. Bind the property to a expression, for example, a data, and then change the data value by program.
 
-### Expression
-
-Expression is a string with a special prefix, and the remainder string will be explained accordingly as described in the below table
-|Prefix|Remainder string|
-|---|---|
-|___data:|Explained as the data key|
-|___computed:|Explained as the computed ke|
-|___script:|Explained as a script, the script eval value will be set to the property|
+The description of expression  can be found in developer manual

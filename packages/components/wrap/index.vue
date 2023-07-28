@@ -332,8 +332,9 @@ function handleEventAPI(event: Object) {
 //Handle event if type is script
 function handleEventScript(event: Object) {
   return function () {
-    // console.log(context.methodManager)
-    // console.log(context.methodManager.scriptCall)
+    // console.log('SHOW IN ')
+    // console.log(arguments)
+    // console.log(event)
 
     //
     return context.methodManager.scriptCall(event, ...arguments)
@@ -342,9 +343,8 @@ function handleEventScript(event: Object) {
 //Handle event if type is method
 function handleEventMethod(event: Object) {
   return function () {
-    // console.log('SHOW IN handleEventMethod')
-    // console.log(arguments)
-    // console.log(JSON.stringify(arguments[0].props))
+
+    //console.log(JSON.stringify(arguments[0].props))
     //
     return context.methodManager.methodCall(event, ...arguments)
   }

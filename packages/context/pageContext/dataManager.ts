@@ -7,7 +7,7 @@ export default function dataManager(context: any) {
   const dataCache = reactive({})
 
   //Get cached data,return undefined is neither cached nor initValue
-  function getData(key: string, path: string) {
+  function getData(key: string, path?: string) {
 
     //
     let d = dataCache[key]
@@ -26,7 +26,6 @@ export default function dataManager(context: any) {
       dataCache[key] = d
       //Get back it neccessary, the returned data is reactived
       d = dataCache[key]
-
     }
     //
     return getByPath(d, path)

@@ -5,6 +5,8 @@ import lcFormItem from './components/FormItem.vue'
 //Convert raw config to standard form config
 //the pageContext is optional
 export function formTransform(rawConfig, data, pageContext?: object, hideComponent = false) {
+  //
+
   if (!pageContext) {
     pageContext = inject('context')
   }
