@@ -1,27 +1,24 @@
-import { createApp } from 'vue'
-// import { createPinia } from 'pinia'
-
+import { createApp,inject } from 'vue'
+//
 import App from './App.vue'
- import router from './router'
+import router from './router'
+//
+import {installDesigner,installRouter,installPlugin,installBuiltIn} from '@/installer/index'
 
+//
+import installBI from './components/bi/index'
 
-import {installDesigner,installRouter} from '@/installer/index'
 
 //
 const app = createApp(App)
-
-// app.use(createPinia())
-// app.use(router)
-
-
-
 //
-// const {router}=installRouter(app)
 installRouter(app,router)
-
-
-installDesigner(app,{url:import.meta.env.VITE_APP_API_BASE,router})
-
+const {globalContext}=installDesigner(app,{url:import.meta.env.VITE_APP_API_BASE,router})
+installPlugin(globalContext)
+installBuiltIn(globalContext);
+//
+//
+installBI(globalContext);
 //
 app.mount('#app')
 //

@@ -1,30 +1,26 @@
 import type { App } from 'vue'
-import type {Router} from 'vue-router'
+import type { Router } from 'vue-router'
 import { useRouter } from 'vue-router'
+import pluginManager from './pluginManager'
 import createRequest from '@/utils/requestCreator'
-export default function createGlobalContext(baseUrl: string = '', vueApp: App,routerInit:Router) {
+import useComponentRepository from './componentRepository/index'
+import useFunctionRepository from './functionRepository/index'
+
+export default function createGlobalContext(baseUrl: string = '', vueApp: App, routerInit: Router) {
   //
   const globalContext = {
+    //Http request ,axios to server which provide low code engine APIs
     request: createRequest(baseUrl),
+    //vue app
     vueApp: vueApp,
-    router: routerInit||useRouter()
+    //Vue router
+    router: routerInit || useRouter()
   }
   //
-  // globalContext.setRouter = function (routerNew:Router) {
-  //   globalContext.router = routerNew
-  // }
-  //
-  // globalContext.setBaseUrl = function (baseUrl: string) {
-  //   globalContext.request({ baseUrl: baseUrl })
-  // }
-  //
-  // globalContext.getVueApp = function () {
-  //   return globalContext.vueApp
-  // }
-  // //
-  // globalContext.setVueApp = function (vueAppNew: App) {
-  //   globalContext.vueApp = vueAppNew
-  // }
+  globalContext.componentRepository = useComponentRepository(globalContext)
+  globalContext.functionRepository = useFunctionRepository(globalContext)
+  globalContext.pluginManager = pluginManager(globalContext)
+
   //
   return globalContext
 }

@@ -1,26 +1,20 @@
 <script setup lang="ts">
 //import type { throwError } from 'element-plus/es/utils';
-import { ref, computed, inject, unref, isReactive, reactive, watch } from 'vue'
+import { computed, inject, unref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { deepCopy,isPromise } from '@/utils/tools'
 
-import { convertFlatConfig } from 'vuewrapper'
-import {tryEval} from '@/utils/expression'
+// import { convertFlatConfig } from 'vuewrapper'
+import { tryEval } from '@/utils/expression'
 import { tryConvertDataType } from '@/utils/dataTransform'
-
+import lcPanel from '@/components/panel/index.vue'
 //
 const props = defineProps({
-  data: {
+  modelValue: {
     type: Object,
     required: true,
     default() {
       return {}
-    }
-  },
-  slotParaStack: {
-    type: Array,
-    required: true,
-    default() {
-      return []
     }
   },
 })
@@ -28,21 +22,24 @@ const props = defineProps({
 // const emit = defineEmits<{
 //   (e: 'deleteMe', data: Object): void
 // }>()
-
+// console.log('*****************',inject('wrapContext'))
 //
 //
+const globalContext=inject('globalContext')
 const context = inject('context')
+//
+const contextParent = inject('contextWrap')
 
-
+//
 //Get the component full config from component repository
 const componentConfig = computed(() => {
 
-  if (props.data.type) {
-    let c = context.repositoryManager.componentByKey(props.data.type)
+  if (props.modelValue.type) {
+    let c = globalContext.componentRepository.componentByKey(props.modelValue.type)
     if (c) {
       return c
     } else {
-      ElMessage.error("No component is found from :" + JSON.stringify(props.data))
+      ElMessage.error("No component is found from :" + JSON.stringify(props.modelValue))
       return {}
     }
   } else {
@@ -51,40 +48,36 @@ const componentConfig = computed(() => {
 }
 )
 
-function myDataGet(wrapperContext) {
-  if (!componentConfig.value.dataConfig) {
+function myDataGet(contextWrap) {
+//
+  if (!componentConfig.value.editor?.data) {
     //No data config is set in component configuration, it should not come here,so just return undefined
     return undefined;
   }
   //
-  const dataType = componentConfig.value.dataConfig.type
+  const dataType = componentConfig.value.editor?.data.type
   //Try to set value is needed    
-  if (props.data.data) {
-    // console.log(JSON.stringify(props.data.data))
-    //console.log(props.data.data.dataKey+'GET DATA OK'+context.dataManager.getData(props.data.data.dataKey))
+  if (props.modelValue.config.data) {
+    // console.log(JSON.stringify(props.modelValue.config.data))
+    //console.log(props.modelValue.config.data.dataKey+'GET DATA OK'+context.dataManager.get(props.modelValue.config.data.dataKey))
     let result = undefined
-    if (props.data.data.mode == 'data') {
-      result = context.dataManager.getData(props.data.data.dataKey, props.data.data.dataPath)
-    } else if (props.data.data.mode == 'computed' && props.data.data.computedKey) {
-      result = context.computedManager.get(props.data.data.computedKey)
-    } else if (props.data.data.mode == 'method' && props.data.data.methodKey) {
-      //try to get the possible interested value
-      let valueIntersted = undefined
-      if (props.slotParaStack && props.slotParaStack.length > 0) {
-        const sp = unref(props.slotParaStack[props.slotParaStack.length - 1])
-        valueIntersted = sp?.slotValue
-      }
-      //
-      result = context.methodManager.methodCall({ method: props.data.data.methodKey }, wrapperContext, valueIntersted, props.slotParaStack)
-    } else if (props.data.data.mode == 'fixed' && props.data.data.dataContent) {
+    if (props.modelValue.config.data.mode == 'data') {
+      result = context.d.g(props.modelValue.config.data.dataKey, props.modelValue.config.data.dataPath)
+
+    } else if (props.modelValue.config.data.mode == 'computed' && props.modelValue.config.data.computedKey) {
+      result = context.c.g(props.modelValue.config.data.computedKey)
+    } else if (props.modelValue.config.data.mode == 'method' && props.modelValue.config.data.methodKey) {
+
+      result = context.m.i({ method: props.modelValue.config.data.methodKey }, contextWrap)
+    } else if (props.modelValue.config.data.mode == 'fixed' && props.modelValue.config.data.dataContent) {
 
       try {
-        result = tryConvertDataType(props.data.key, dataType, props.data.data.dataContent)
+        result = tryConvertDataType(props.modelValue.key, dataType, props.modelValue.config.data.dataContent)
       } catch (e) {
         ElMessage({
           type: 'error',
           dangerouslyUseHTMLString: true,
-          message: 'The data content of ' + props.data.key + ' can not be translate into required data type:' + dataType + ',error:' + e,
+          message: 'The data content of ' + props.modelValue.key + ' can not be translate into required data type:' + dataType + ',error:' + e,
         })
         console.log(e)
         return undefined
@@ -105,13 +98,13 @@ function myDataGet(wrapperContext) {
     }
     else {
       //Show error and continue 
-      //ElMessage.error('The data of ' + props.data.key + ' is undefined')
+      //ElMessage.error('The data of ' + props.modelValue.key + ' is undefined')
     }
   }
   //
   //console.log('GET DATA WOWOWOWOW HERE')
   //No data is set,use default instead
-  return context.dataManager.defaultValueByType(dataType)
+  return context.d.defaultByType(dataType)
 }
 
 
@@ -123,31 +116,31 @@ function checkDataType(dataType: string, result: any) {
     if (Array.isArray(result)) {
       return undefined;
     }
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the result is not an array'
+    return 'The data of ' + props.modelValue.key + ' requires ' + dataType + ',but the result is not an array'
   } else if (dataType == 'Object') {
     if (typeof result == 'object' && !Array.isArray(result)) {
       return undefined;
     }
     //
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the result is not an object or it is array'
+    return 'The data of ' + props.modelValue.key + ' requires ' + dataType + ',but the result is not an object or it is array'
   } else if (dataType == 'String') {
     if (typeof result == 'string') {
       return undefined;
     }
     //
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the result is ' + (typeof result)
+    return 'The data of ' + props.modelValue.key + ' requires ' + dataType + ',but the result is ' + (typeof result)
   } else if (dataType == 'Number') {
     if (typeof result == 'number') {
       return undefined;
     }
     //
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the result is ' + (typeof result)
+    return 'The data of ' + props.modelValue.key + ' requires ' + dataType + ',but the result is ' + (typeof result)
   } else if (dataType == 'Boolean') {
     if (typeof result == 'boolean') {
       return undefined;
     }
     //
-    return 'The data of ' + props.data.key + ' requires ' + dataType + ',but the result is ' + (typeof result)
+    return 'The data of ' + props.modelValue.key + ' requires ' + dataType + ',but the result is ' + (typeof result)
   } else {
     return undefined;
 
@@ -160,18 +153,23 @@ function calProps(propsRaw) {
   for (const k of Object.keys(propsRaw)) {
 
     const v = propsRaw[k]
-
+    //  if(typeof v=='string' && v.startsWith('___computed')){
+    //    propsCal[k] ='WOW'
+    // }else{
     propsCal[k] = tryEval(v, context)
+    //  }
   }
   //
   return propsCal;
 }
 
 //Build comp wrap config
-const realConfig = function (wrapperContext) {
-  //console.log('realconfig is called!!!')
+const realConfig =  function (contextWrap) {
+  // console.log(contextWrap)
+
   try {
-    return buildRealConfigInternal(wrapperContext)
+
+    return  buildRealConfigInternal(contextWrap)
   } catch (e) {
     console.log(e)
     const error = 'Build component config failed<br>' + e
@@ -184,7 +182,7 @@ const realConfig = function (wrapperContext) {
     return { '~component': 'div', '#': { type: 'html', value: error } }
   }
 }
-function buildRealConfigInternal(wrapperContext) {
+ function buildRealConfigInternal(contextWrap) {
   //
   const myData = computed({
     get: () => {
@@ -193,131 +191,176 @@ function buildRealConfigInternal(wrapperContext) {
       // console.log(JSON.stringify(myData))
       // return myData
       //
-      return myDataGet(wrapperContext)
+      return myDataGet(contextWrap)
     },
     set: (val) => {
       //
-      if (props.data.data.mode == 'data') {
-        context.dataManager.setData(props.data.data.dataKey, val, props.data.data.dataPath)
-      } else if (props.data.data.mode == 'computed' && props.data.data.computedKey) {
-        context.computedManager.set(props.data.data.computedKey, val)
+      if (props.modelValue.config.data.mode == 'data') {
+        context.dataManager.set(props.modelValue.config.data.dataKey, val, props.modelValue.config.data.dataPath)
+      } else if (props.modelValue.config.data.mode == 'computed' && props.modelValue.config.data.computedKey) {
+        context.computedManager.set(props.modelValue.config.data.computedKey, val)
       } else {
         //not come here,do nothing
       }
     }
   })
   //
-  //console.log('@@@@@@@@@'+ props.data.key)
   let result;
-  if (!componentConfig.value.transform) {
+  const transform= componentConfig.value.transform
+  if (!transform) {
 
     //no transform,get from config directly 
     result = {
-      sys: {
-        //
-        component: componentConfig.value.component,
-      },
-      props: calProps(props.data?.config?.props || {}),
-      slots: props.data?.config?.slots || {},
-      events: {}
+      '~component': componentConfig.value.component,
+      ...calProps(props.modelValue?.config?.basic || {}),
+
+    }
+    //
+    if (props.modelValue?.config?.slots) {
+      for (const k of Object.keys(props.modelValue?.config?.slots)) {
+        result['#' + k] = props.modelValue?.config?.slots[k]
+      }
     }
   } else {
-    let p = props.data?.config?.props
-    if (!p) {
-      //If no props is set,return empty JSON
-      return {}
-    }
-    //Here we should add reactive since the original p is reactived
-    //We should eval props here since the props may be used in target slot, for example the lable of input
-     const propsNew =reactive(calProps(p))
-   watch(propsNew,()=>{
-    // console.log('props New is changed!')
-    // console.log(JSON.stringify(propsNew['_children']))
-    // console.log(JSON.stringify(p['_children']))
-    //Here we should set value manually, it seem the _children of p and propsNew is different
-    //I really do not know why
-    if(propsNew['_children']){
-      p['_children']=propsNew['_children']
-    }
-   })
+    // console.log('realconfig is called!!!111', componentConfig.value,props.modelValue?.config,result)
+    let p = props.modelValue?.config?.basic || {}
+    // if (!p) {
+    //   //If no props is set,return empty JSON
+    //   return {}
+    // }
+    // //Here we should add reactive since the original p is reactived
+    // //We should eval props here since the props may be used in target slot, for example the lable of input
+    // const propsNew = reactive(calProps(p))
+    // watch(propsNew, () => {
+    //   // console.log('props New is changed!')
+    //   // console.log(JSON.stringify(propsNew['_children']))
+    //   // console.log(JSON.stringify(p['_children']))
+    //   //Here we should set value manually, it seem the _children of p and propsNew is different
+    //   //I really do not know why
+    //   if (propsNew['_children']) {
+    //     p['_children'] = propsNew['_children']
+    //   }
+    // })
 
+    //Here we need to check whether _slot is existed,since the config(calProps(p)) transfered to transform function is deep copied
+    //So add _slot in calProps(p) will not added into p
+    if (!p._slot) {
+      p._slot = {}
+    }
     //
-    result = componentConfig.value.transform(propsNew, myData, context, wrapperContext)
-    //Convert from flat structure to standard structure if needed
-    result = convertFlatConfig(result)
+    const paras={ config: calProps(p), data: myData, componentConfig: componentConfig.value, fullConfig: props.modelValue, key: props.modelValue.key, context, contextWrap }
 
+    if (typeof transform == 'function') {
+      //data is a computed to keep reactive especially to build child components
+      result =transform(paras)
+    // } else if (isPromise(transform)) {
+    //   result = await transform(paras)
+    } else {
+      //error
+      throw Error('Unsupported transform , it should be a funciton or promise')
 
-  }
-
-  //Set instance key as component key
-  if (!result.sys) {
-    result.sys = {}
-  }
-  result.sys.instanceKey = props.data.key
-  //Here we need to set model value if needed
-  if (componentConfig.value.dataConfig) {
-    if (!result.sys.modelValueName) {
-      //Only set modelValueName if it is not present
-      result.sys.modelValueName = componentConfig.value.dataConfig.modelValueName || 'modelValue'
     }
-    result.sys.modelValue = myData
+    //
+    result=unref(result)
+
+  }
+  //
+  // console.log('00001', props.modelValue)
+  //Set instance key as component key
+  result['~instanceKey'] = props.modelValue.key
+  //Here we need to set model value if needed
+  if (componentConfig.value?.editor?.data && !componentConfig.value?.editor.data.skip) {
+    if (!result['~modelValueName']) {
+      //Only set modelValueName if it is not present
+      result['~modelValueName'] = componentConfig.value.editor?.data?.modelValueName || 'modelValue'
+    }
+    result['~modelValue'] = myData
   }
   //
   //Handle events
-  const events = props.data.event
+
+  const events = props.modelValue?.config?.event
   if (events && Array.isArray(events) && events.length > 0) {
-    if (result.events == undefined) {
-      //Only set to {} if there is no original events
-      result.events = {}
-    }
     for (const event of events) {
       //
       if (!event.mode) {
         continue;
       }
       if (event.mode == 'api') {
-        result.events[event.name] = { type: 'function', value: handleEventAPI(event) }
+        result['@' + event.name] = { type: 'function', value: handleEventAPI(event) }
       } else if (event.mode == 'script') {
-        result.events[event.name] = { type: 'function', value: handleEventScript(event) }
+        result['@' + event.name] = { type: 'function', value: handleEventScript(event) }
       } else if (event.mode == 'method') {
-        result.events[event.name] = { type: 'function', value: handleEventMethod(event) }
-      } else if (event.mode == 'openPage') {
-        result.events[event.name] = { type: 'function', value: handleEventOpenPage(event) }
+        result['@' + event.name] = { type: 'function', value: handleEventMethod(event) }
+
       } else {
         throw new Error('Unsuported event type:' + event.mode)
       }
     }
   }
   //
+  //here we add event inherit,otherwise component can not be choosed
+  // console.log('111111111',result['@mousedown'] )
+  // if (context.componentManager.renderMode.value == 'flex') {
+    // result['@mousedown.capture'] = { 'type': 'function', 'value': componentChoosed, 'paraMode': 'contextFirst' }
+  // }
 
-  //styles
-  if (result.styles) {
-    //If result already has syles, append all from props.data
-    //otherwise,set directly in else
-    for (const k of Object.keys(props.data.styles || {})) {
-      result.styles[k] = props.data.styles[k]
+  //style
+  if (props.modelValue.config?.display?.style) {
+    if (result.style) {
+      //If result already has syles, append all from props.modelValue
+      //otherwise,set directly in else
+      for (const k of Object.keys(props.modelValue.config.display?.style || {})) {
+        result.style[k] = props.modelValue.config.display?.style[k]
+      }
+    } else {
+      result.style = props.modelValue.config.display?.style || {}
     }
-  } else {
-    result.styles = props.data.styles || {}
   }
   //}
 
   //classes
-  if (props.data.classes) {
-    let classes = props.data.classes.split(' ')
-    if (result.classes) {
-      for(const c of classes){
-        result.classes.push(c)
+  if (props.modelValue.config?.display?.class) {
+
+    let classes = props.modelValue.config.display?.class
+    if (typeof classes == 'string') {
+      classes = classes.split(' ')
+    } else {
+      classes = deepCopy(classes)
+    }
+    if (result.class) {
+      for (const c of classes) {
+        result.classe.push(c)
       }
     } else {
-      result.classes=classes
+      result.class = classes
     }
+  }else{
+    result.class=[]
+  }
+  //Do not set this class to panel, so the hovor style will not affect pane
+  if(result['~']||result['~component']!=lcPanel){
+  result.class.push('mttk-warp')
+}
+  //
+
+  //Add choosed classed if needed
+  if (isActive.value) {
+    if (!result.class) {
+      result.class = []
+    }
+    result.class.push('active')
+    // console.log('actived',result)
   }
   //Visisble
-  if(props.data?.config?.props['~hideComponent']!=undefined){
-    result.sys.show=!tryEval(props.data?.config?.props['~hideComponent'],context)
-  }
+  if (props.modelValue?.config?.basic && props.modelValue?.config?.basic['~hideComponent'] != undefined) {
+    result['~if'] = !tryEval(props.modelValue?.config?.basic['~hideComponent'], context)
+    // console.log(props.modelValue?.config?.basic['~hideComponent'],typeof result['~show'],result['~show'].value)
 
+  }
+  //
+  // console.log('realconfig is called!!!333',result['~show'],result)
+  // console.log('wrap real config',result)
   //
   return result;
 }
@@ -349,53 +392,57 @@ function handleEventMethod(event: Object) {
     return context.methodManager.methodCall(event, ...arguments)
   }
 }
-//Handle event if type is open page
-function handleEventOpenPage(event: Object) {
-  return function () {
-    //So far no parameters are handled
-    return context.methodManager.openPage(event)
-  }
-}
+
 
 
 //Once use select this component
-function componentChoosed(e: any) {
+function componentChoosed(event: any) {
+    // console.log(arguments)
+    // if(!event){
+    //   try{
+    //     throw Error('AABVV')
+    //   }catch(error){
+    //     console.log(error)
+    //   }
+    // }
   if (context.mode.value == 'view') {
     //under view mode ,it is not necessary to set choosed
     //and return here will make page widget can be choosed
     return
   }
-  if (e && e.stopPropagation) {
-    try {
-      //console.log('stopPropagation is called')
-      e.stopPropagation()
-    } catch (error) {
-      console.log(e)
-      //console.log(e.event.event.stopPropagation())
-      //console.log(e.event.stop())
-      //ignore
-    }
-  }
+  // console.log(e)
+  // if (e && e.stopPropagation) {
+  //   try {
+  //     //console.log('stopPropagation is called')
+  //     e.stopPropagation()
+  //   } catch (error) {
+  //     console.log(error)
+  //     //console.log(e.event.event.stopPropagation())
+  //     //console.log(e.event.stop())
+  //     //ignore
+  //   }
+  // }
   //
-  context.choosedManager.setChoosed(props.data)
+  // console.log('COMPONENT CHOOSED IS CALLED',props.modelValue)
+  context.choosedManager.set(props.modelValue,event.timeStamp)
 
 }
 
 //Is current component active
 const isActive = computed(() => {
-  const choosed = context.choosedManager.getChoosed();
+  const choosed = context.choosedManager.get();
   // console.log(context)
   // console.log(context.mode)
   return (
     context.mode.value == 'edit' &&
     choosed &&
     choosed.key &&
-    choosed.key == props.data?.key
+    choosed.key == props.modelValue?.key
   );
 })
 // // //The style of current component
 // const componentStyles = computed(() => {
-//   return props.data.styles || {}
+//   return props.modelValue.styles || {}
 // })
 
 
@@ -404,19 +451,24 @@ const isActive = computed(() => {
 </script>
 
 <template>
-  <CompWrap ref="target" :config="realConfig" :class="{ active: isActive }" @mousedown="componentChoosed"
-    @componentChoosed="componentChoosed" :slotParaStack="slotParaStack">
-  </CompWrap>
+   <!-- @mousedown="componentChoosed"    @componentChoosed="componentChoosed" -->
+  <MttkWrapComp ref="target" :config="realConfig" :contextParent="contextParent" @mousedown="componentChoosed">
+  </MttkWrapComp>
 </template>
 
 
 <style lang="scss" scoped>
 .active {
-  outline: 2px outset var(--el-color-primary);
+  outline: 2px outset var(--el-color-primary) !important;
   outline-offset: 2px;
   user-select: none;
   z-index: 2000;
   //margin-top: 32px;
+}
+
+.mttk-warp:hover{
+  //
+  outline: 1px dashed var(--el-color-info);
 }
 
 // .focused {

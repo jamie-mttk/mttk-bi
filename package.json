@@ -1,12 +1,12 @@
 {
-  "name": "mttk-lowcode",
+  "name": "mttk-lowcode-engine",
   "version": "0.0.8",
-  "main": "./dist/mttk-lowcode.umd.js",
-  "module": "./dist/mttk-lowcode.mjs",
+  "main": "./dist/mttk-lowcode-engine.umd.js",
+  "module": "./dist/mttk-lowcode-engine.mjs",
   "exports": {
     ".": {
-      "import": "./dist//mttk-lowcode.mjs",
-      "require": "./dist//mttk-lowcode.umd.js"
+      "import": "./dist//mttk-lowcode-engine.mjs",
+      "require": "./dist//mttk-lowcode-engine.umd.js"
     },
     "./dist/index.css": {
       "import": "./dist/index.css",
@@ -40,18 +40,22 @@
     "animate.css": "^4.1.1",
     "axios": "^0.21.4",
     "bin-editor-next": "^1.1.0",
+    "devextreme": "23.2.3",
+    "devextreme-vue": "23.2.3",
     "echarts": "^5.4.2",
-    "element-plus": "^2.3.1",
+    "element-plus": "^2.4.3",
+    "jsplumb": "^2.15.6",
     "mitt": "^3.0.0",
+    "mttk-lowcode-engine": "^0.0.8",
+    "mttk-vue-wrap": "^0.2.4",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.32",
     "sortablejs": "^1.15.0",
     "vue": "^3.2.47",
+    "vue-draggable-plus": "^0.3.5",
     "vue-echarts": "^6.6.0",
     "vue-i18n": "^9.2.2",
-    "vue-router": "^4.1.6",
-    "vuedraggable": "^4.1.0",
-    "vuewrapper": "^0.4.6"
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
@@ -65,6 +69,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
     "sass": "^1.60.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "~4.8.4",
     "vite": "^4.1.4",
     "vue-tsc": "^1.2.0"

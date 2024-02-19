@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import {ref} from 'vue'
-import PageRender from '@/pageRender/index.vue'
+import PageRender from '@/components/pageRender/index.vue'
 import {code1,code2} from '../test4/data'
 //Dialog visibility
 const dialogVisible=ref(true)

@@ -35,7 +35,7 @@ function tryEvalData(dataExpression,context){
 
   
 
-      return context.dataManager.getData(dataKey,datapath)
+      return context.dataManager.get(dataKey,datapath)
     
     } catch (e) {
       ElMessage({
@@ -49,9 +49,10 @@ function tryEvalData(dataExpression,context){
 }
 function tryEvalComputed(computedExpression,context){       
     try {
-    
-      return context.computedManager.get(computedExpression)
-    
+      //TBD: It has very interesting effeact which cause computed does not changed!!
+      //  context.computedManager.get(computedExpression).value
+      // return 'COMP'
+      return  context.computedManager.get(computedExpression)
     } catch (e) {
       ElMessage({
         type: 'error',

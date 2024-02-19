@@ -21,7 +21,7 @@ import lcIcon from '@/components/icon/index.vue'
 let props = defineProps({
     modelValue: {
         type: String,
-        required: true,
+        required: false,
         default: ''
     },
 })

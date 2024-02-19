@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-el-drag-dialog v-model="dialogVisible" :close-on-click-modal="false" :destroy-on-close="true" v-bind="$attrs"
+    <el-dialog  v-model="dialogVisible" :close-on-click-modal="false" :destroy-on-close="true" :draggable="true" v-bind="$attrs"
         :before-close="handleClose">
         <el-steps :active="active" simple style="padding:8px 8%;">
             <el-step v-for="step in steps" :key="step.key" :title="step.name">

@@ -31,7 +31,7 @@ export function deepCopy(obj) {
  */
 export function createUniqueString() {
   const timestamp = +new Date() + ''
-  const randomNum = parseInt((1 + Math.random()) * 65536) + ''
+  const randomNum = parseInt((1 + Math.random()) * 65536 + '')
   return (+(randomNum + timestamp)).toString(32)
 }
 
@@ -58,4 +58,10 @@ export function generateRandomColor() {
 //This function support JS script like JSON parse
 export function smartJsonParse(str: string) {
   return new Function('return ' + str)()
+}
+
+
+//Check whether the input is a Promise
+export function isPromise(value: any) {
+  return typeof value.then == "function" && typeof value.catch == "function";
 }

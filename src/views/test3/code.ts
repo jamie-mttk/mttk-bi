@@ -16,12 +16,12 @@ export const codeConfig=[
         <el-divider></el-divider>
         <h3>Here the input is configured with a JS with same funcionalities as above.<br>
         And setting modelValue with computed is also demotrated.</h3>
-        <CompWrap :config="configInput1"></CompWrap>
+        <MttkWrapComp :config="configInput1"></MttkWrapComp>
         <el-divider></el-divider>
         <h3>It is also configured with JS to demostrate props,slots,events.</h3>
-        <CompWrap :config="configInput2">
+        <MttkWrapComp :config="configInput2">
           <template #mysuffix>Suffix to demostrate inherit</template>
-        </CompWrap>
+        </MttkWrapComp>
         <el-divider></el-divider>
         <CodeView :config="codeConfig"></CodeView>
       </div>

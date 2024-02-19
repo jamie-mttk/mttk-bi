@@ -16,7 +16,7 @@ const router = createRouter({
     // {
     //   path: '/deploy',
     //   name: 'deploy',
-    //   component: () => import('@/layout/index.vue'),
+    //   component: () => import('@/components/layout/index.vue'),
     //   children: [
     //     {
     //       path: ':app?/:page?',

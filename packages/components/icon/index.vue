@@ -20,10 +20,10 @@ import {toHump} from './iconUtil'
 
 const predefinedSize={'x-small':'1em',small:'1.25em',medium:'1.5em',large:'1.75em','x-large':'2em'}
 const props = defineProps<{
-    icon: string
-    color?: string,
-    size?: string,
-    tooltip?:string,
+    icon?: String,
+    color?: String,
+    size?: String,
+    tooltip?:String,
 }>()
 
 const emit = defineEmits<{

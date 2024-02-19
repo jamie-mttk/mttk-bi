@@ -51,7 +51,7 @@ The only parameter is GlobalContext
 |app|Vue 3 app instance, wrapped by ref|
 |key|A unique string,, wrapped by ref|
 |getGlobalContext()|return GlobalContext|
-|emitter|[mitt instance](https://github.com/developit/mitt) used to mitt or listen events|
+|mitt|[mitt instance](https://github.com/developit/mitt) used to mitt or listen events|
 |queryPages()|Return a promise with all the pages of this application|
 |loadPage(id)|Load page souce by page id|
 |loadPageByName(name)|Load page source by page name|
@@ -82,7 +82,7 @@ function createContext(modeInit: string,appContext:object,contextParentInit:obje
 |functionManager|Refer to proper chapter below|
 |f|Shortcut of functionManager|
 |getAppContext()|Returnn app context|
-|emitter| Mitt instance to mitt/subsribe events among page|
+|mitt| Mitt instance to mitt/subsribe events among page|
 |dataManager|Refer to proper chapter below|
 |d|Shortchut of dataManager|
 |computedManager|Refer to proper chapter below|

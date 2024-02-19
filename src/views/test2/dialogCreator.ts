@@ -1,5 +1,5 @@
 import { ref,inject } from 'vue'
-import PageRender from '@/pageRender/index.vue'
+import PageRender from '@/components/pageRender/index.vue'
 
 //Create a dialog configuration
 export default function (content: object,options:object={},closeCallback:Function) {

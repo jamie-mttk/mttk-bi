@@ -19,8 +19,8 @@ export default defineConfig({
     outDir: "dist",
     lib: {
       entry: "./packages/index.ts",
-      name: "mttk-lowcode",
-      fileName: "mttk-lowcode",
+      name: "mttk-lowcode-engine",
+      fileName: "mttk-lowcode-engine",
     },
     rollupOptions: { external: ["vue",'vuedraggable'], output: { 
       globals: { vue: "Vue",vuedraggable:"vuedraggable" },

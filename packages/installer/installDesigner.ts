@@ -14,39 +14,27 @@ import 'brace/theme/chrome'
 //Element PLUS
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-
-//icons
-
-// import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 //
 import 'animate.css'
 //
-import WRAPPER from 'vuewrapper'
-//
-import useComponentRepository from '@/componentRepository/index'
-import useFunctionRepository from '@/functionRepository/index'
+import MttkVueWrap from 'mttk-vue-wrap'
+
 //
 import createGlobalContext from '@/context/globalContext/index'
 
-export function installDesigner (app, option) {
-  const componentRepository = useComponentRepository()
-  componentRepository.useBuitin()
 
-  useFunctionRepository().useBuitin()
+export function installDesigner(app, option) {
 
-  //
+  //Install bin-editor
   app.component(Editor.name, Editor)
-  //
+  //Element plus install
   app.use(ElementPlus)
-  // for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  //   app.component(key, component)
-  // }
-
-  app.use(WRAPPER)
-  //
+  //MttkVueWrap install
+  app.use(MttkVueWrap)
+  //Some components
   app.component(
     'lc-editable-list',
-    defineAsyncComponent(() => import('@/pageDesign/propsEditor/editableList.vue'))
+    defineAsyncComponent(() => import('@/components/pageDesign/propsEditor/editableList.vue'))
   )
   app.component(
     'lc-icon',
@@ -58,16 +46,10 @@ export function installDesigner (app, option) {
   )
   //
   //Create global context
-  const globalContext = createGlobalContext(option.url||'', app)
+  const globalContext = createGlobalContext(option.url || '', app,option.router)
   app.provide('globalContext', globalContext)
-  componentRepository.resetPageWidget(globalContext)
-  //
-  if(option.router){
-   // globalContext.setRouter(option.router)
-   globalContext.router=option.router
-  }
-  //
-  return {globalContext}
-}
 
+  //
+  return { globalContext }
+}
 

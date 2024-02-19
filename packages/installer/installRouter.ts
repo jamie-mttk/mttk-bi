@@ -1,14 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { type RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
 
 //Create a router and set default
-export  function installRouter(app, router?) {
+export function installRouter(app, router?) {
   //Add all routers
   const routes = buildRoutes()
   //
   if (!router) {
     router = createRouter({
       history: createWebHistory(),
-      routes: routes
+      routes: routes || []
     })
     //
     app.use(router)
@@ -26,26 +26,26 @@ export  function installRouter(app, router?) {
 }
 
 function buildRoutes() {
-  return [
+  const defaultRoutes: Array<RouteRecordRaw> = [
     {
       path: '/',
       name: 'home',
-      component: () => import('@/workspaceManager/index.vue')
+      component: () => import('@/components/workspaceManager/index.vue')
     },
     {
       path: '/design/:app?',
       name: 'App design',
-      component: () => import('@/appEditor/appEditorWithRouter.vue')
+      component: () => import('@/components/appEditor/appEditorWithRouter.vue')
     },
     {
       path: '/deploy',
       name: 'deploy',
-      component: () => import('@/layout/index.vue'),
+      component: () => import('@/components/layout/index.vue'),
       children: [
         {
           path: ':app?/:page?',
           name: 'Page deployed',
-          component: () => import('@/deployed/index.vue'),
+          component: () => import('@/components/deployed/index.vue'),
           meta: {
             showBreadcrumb: false
           }
@@ -53,4 +53,6 @@ function buildRoutes() {
       ]
     }
   ]
+  //
+  return defaultRoutes
 }

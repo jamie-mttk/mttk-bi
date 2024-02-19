@@ -22,7 +22,9 @@ export function tryConvertDataType(dataKey:string,dataType: string, dataContent:
     } else if (dataType == 'Number') {
       return Number(dataContent)
     } else if (dataType == 'Boolean') {
-      return Boolean(dataContent)
+      //
+      // console.log(typeof dataContent,dataContent,Boolean(dataContent))
+      return dataContent!=undefined  && dataContent!='false'
     } else {
       return undefined;
   

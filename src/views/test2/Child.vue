@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import { inject, ref, createVNode, render } from 'vue'
-import { CompWrap } from 'vuewrapper'
+import {MttkWrapComp} from 'mttk-vue-wrap'
 import { app } from '../../main'
 import Pop from './Pop.vue'
 //
@@ -31,7 +31,7 @@ function showDialog1() {
     }
     //
     const { popupVisible, popupConfig } = dialogCreator(closeCallback)
-    const dialogNode = createVNode(CompWrap, {
+    const dialogNode = createVNode(MttkWrapComp, {
         config: popupConfig
     })
     //'

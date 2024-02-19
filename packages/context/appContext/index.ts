@@ -2,41 +2,45 @@ import { ref,  watch } from 'vue'
 import mitt from 'mitt'
 
 export default function createAppContext(globalContext: object) {
+  //APP key
+  let keySaved=ref('')
+  //
+  let codeSaved=ref({})
   //
   const appContext = {
     //
-    app: ref({}),
-    key: ref(''),
-    getGlobalContext: () => globalContext,
-    emitter: mitt()
+    globalContext:globalContext,
+    mitt: mitt(),
+
   }
   //
-  watch(appContext.key, (keyNew) => {
+  appContext.load=function(key:string) {
+    //Save first since request is async
+    keySaved.value=key
     //
     globalContext
       .request({
         method: 'GET',
         url: 'app/load',
         params: {
-          id: keyNew
+          id: key
         }
       })
       .then(function (response) {
-        appContext.app.value = response
+        codeSaved.value = response
+        //
+        // console.log('load done:'+key)
       })
-  })
-
-  //
-  // appContext.key = computed(() => {
-  //   if (appContext.app) {
-  //     // console.log('111'+JSON.stringify(context.app.value))
-  //     //console.log('000'+JSON.stringify(context.app.value['_id']))
-  //     return appContext.app.value['_id']
-  //   } else {
-  //     //console.log('222')
-  //     return undefined
-  //   }
-  // })
+  }
+  appContext.getKey=function(){
+    return keySaved.value
+  }
+  appContext.getCode=function(){
+    return codeSaved.value
+  }
+  // appContext.getCodeRef=function(){
+  //   return codeSaved
+  // }
   //Load all the pages of this app - not full information
   //the return value is a Promise
   appContext.queryPages = function () {
@@ -44,7 +48,7 @@ export default function createAppContext(globalContext: object) {
       method: 'GET',
       url: 'page/query',
       params: {
-        app: appContext.key.value
+        app: keySaved.value
       }
     })
   }
@@ -54,6 +58,7 @@ export default function createAppContext(globalContext: object) {
       method: 'GET',
       url: 'page/load',
       params: {
+        app: keySaved.value,
         id: pageId
       }
     })
@@ -64,7 +69,7 @@ export default function createAppContext(globalContext: object) {
       method: 'GET',
       url: 'page/loadByName',
       params: {
-        app: appContext.key.value,
+        app: keySaved.value,
         name: pageName
       }
     })
@@ -76,10 +81,11 @@ export default function createAppContext(globalContext: object) {
       method: 'GET',
       url: 'deployed/menus',
       params: {
-        id: appContext.key.value
+        id: keySaved.value
       }
     })
   }
+
   //
   return appContext
 }
