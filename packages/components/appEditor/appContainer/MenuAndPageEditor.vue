@@ -1,12 +1,14 @@
 <template>
-    <el-container style="margin-top:8px;">
-          <el-aside width="360px" style="margin:4px 10px 0 8px;padding:0px;">
+    <div style="display:flex;margin:0 24px 0 8px;">
+          <div style="flex-basis:360px;" v-auth:menu>
             <MenuEditor @selectionChanged="menuChanged"></MenuEditor>
-          </el-aside>
-          <el-main style="margin:4px 10px 0 8px;padding:0px;">
+          </div>
+          <!-- This is a seperator -->
+          <div style="flex-basis:8px;flex-shrink:0;"></div>
+          <div style="flex-grow: 1;" v-auth:page>
             <PageEditor :menuFilter="menuFilter" @pageDesign="handlePageDesign"></PageEditor>
-          </el-main>
-        </el-container>
+          </div>
+        </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'

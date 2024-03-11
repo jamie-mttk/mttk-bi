@@ -49,7 +49,7 @@ load();
 function load() {
   globalContext.request({
     method: "GET",
-    url: 'pageWidget/findAll',
+    url: 'pageWidget/query',
   }).then(function (response) {
     tableData.value = response.list
   });

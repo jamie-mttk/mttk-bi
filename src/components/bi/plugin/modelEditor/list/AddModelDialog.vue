@@ -43,7 +43,7 @@ const data = ref({})
 //refer to form
 const addModelFormRef = ref(null)
 //load connection list
-globalContext.request.get('/jdbcConnection/findAll').then(
+globalContext.request.get('/jdbcConnection/query?app='+appContext.getKey()).then(
     function(response){
         connectionList.value=response.list
     }

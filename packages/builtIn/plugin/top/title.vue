@@ -1,5 +1,8 @@
 <template>
-  <el-link type="default" :underline="false" @click='handleTitleClicked'>
+  <el-link type="default" :underline="false" @click='handleTitleClicked' >
+
+    <lc-icon :icon="context.codeManager.getCode().icon" size="medium" style="color:var(--el-color-white);margin-right:4px;"></lc-icon>
+
     <span class="lc-main-title">{{ title }}</span></el-link>
 </template>
 

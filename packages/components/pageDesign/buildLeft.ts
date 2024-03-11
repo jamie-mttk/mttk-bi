@@ -7,7 +7,7 @@ export function buildLeft(context) {
   const config = {
     '~': 'el-tabs',
     '~modelValue': leftTabActive,
-    type: 'border-card',
+    // type: 'border-card',
     stretch: true,
     '#': []
   }

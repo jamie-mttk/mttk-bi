@@ -87,7 +87,7 @@ const biFilterConfig = {
         widgetUtil.createSwitch('reverse', '坐标切换')
       ]
     },
-    ...buildOtherProp()
+    ...buildOtherProp(false)
   }
 }
 

@@ -6,12 +6,15 @@
                 <NodeEditBasic v-model="dataBasic" ref="nodeEditBasicRef"></NodeEditBasic>
             </el-col>
             <el-col :span=10>
-                <NodeEditJoin v-model="dataJoin" :model="modelSaved" :isEditing="isEditing" :dataBasic="dataBasic" ref="nodeEditJoinRef">
+                <NodeEditJoin v-model="dataJoin" :model="modelSaved" :isEditing="isEditing" :dataBasic="dataBasic"
+                    ref="nodeEditJoinRef">
                 </NodeEditJoin>
             </el-col>
         </el-row>
         <template #footer>
+
             <span class="dialog-footer">
+                <el-switch v-model="useRemarkAsName" style="margin-right:64px" active-text="导入时字段名称使用数据库中字段备注" />
                 <el-button @click="dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="handleConfirm">
                     确认
@@ -21,11 +24,11 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
-import { ref,inject } from 'vue'
+import { ref, inject } from 'vue'
 import NodeEditBasic from './NodeEditBasic.vue'
 import NodeEditJoin from './NodeEditJoin.vue'
 import { tools } from 'mttk-lowcode-engine'
-import { findEntity, findRelation,loadEntityColumnsPromise } from '../../../util/modelUtil'
+import { findEntity, findRelation, loadEntityColumnsPromise, mergeJson } from '../../../util/modelUtil'
 //
 const globalContext = inject('globalContext')
 
@@ -35,7 +38,8 @@ const isEditing = ref(true)
 const dataBasic = ref({})
 //Data of join edit
 const dataJoin = ref({})
-
+//
+const useRemarkAsName = ref(true)
 //
 const dialogVisible = ref(false)
 //Save model data
@@ -48,7 +52,7 @@ function showEdit(node, model) {
     //Just copy entity to edit sicne the structure is same
     dataBasic.value = tools.deepCopy(node.entity)
     //Build join data
-
+    console.log('@@@@@@@@@',node.relation)
     if (!node.relation) {
         //That means it is the first node
         dataJoin.value = {}
@@ -58,12 +62,12 @@ function showEdit(node, model) {
     }
 }
 function showAdd(json, model) {
-    console.log(JSON.stringify(json))
+    // console.log(JSON.stringify(json))
     modelSaved = model;
     isEditing.value = false
     dialogVisible.value = true
     //
-    const entityKey=tools.createUniqueString()
+    const entityKey = tools.createUniqueString()
     //Create default data basic
     if (json.type == 'SQL') {
         dataBasic.value = {
@@ -74,25 +78,25 @@ function showAdd(json, model) {
         dataBasic.value = {
             "key": entityKey,
             "type": json.type,
-            "category": json.category,
+            "catalog": json.catalog,
             "schema": json.schema,
             "table": json.name,
-            name: json.description||json.name,
+            name: json.description || json.name,
             "alias": json.name,
         }
     }
     //Create relation data if needed
-    if(modelSaved && modelSaved.entities && modelSaved.entities.length>0 ){
+    if (modelSaved && modelSaved.entities && modelSaved.entities.length > 0) {
         //Only create relation if it is NOT the first entity
-        dataJoin.value={
-      "target": entityKey,
-      "joinType": "LEFT JOIN",
-      "keys": [{}]}
-    
-               
+        dataJoin.value = {
+            "target": entityKey,
+            "joinType": "LEFT JOIN",
+            "keys": [{}]
+        }
+
+
     }
-    //
-    // console.log('@@##11', json.category, json.schema, json.schema || json.category)
+
 
 
 }
@@ -105,15 +109,16 @@ function handleConfirm() {
     Promise.all([nodeEditBasicRef.value.validateFunc(), nodeEditJoinRef.value.validateFunc()]).then(function () {
         //
         handleUpdate()
-        //
-        dialogVisible.value = false
+
     });
 
 }
 function handleUpdate() {
-    if(isEditing.value){
+    if (isEditing.value) {
         handleUpdateEdit()
-    }else{
+        //
+        dialogVisible.value = false
+    } else {
         handleUpdateAdd()
     }
 
@@ -136,26 +141,25 @@ function handleUpdateAdd() {
     //Add entity
     modelSaved.entities.push(dataBasic.value)
     //Add relation
-    modelSaved.relations.push(dataJoin.value)
+    if(dataJoin.value.target){
+        modelSaved.relations.push(dataJoin.value)
+    }
     //Add all columns
-    loadEntityColumnsPromise(globalContext.request,modelSaved._id,dataBasic.value).then(function(response){
-        for(const item of response.data||[]){
-            modelSaved.columns.push(  {
-            "key" : tools.createUniqueString(),
-            "entity" : dataBasic.value.key,
-            "dataType" : item.dataType,
-            "label" :item.label,
-            "type" : "field",
-            "column" : item.key
-        })
+    loadEntityColumnsPromise(globalContext.request, modelSaved._id, dataBasic.value).then(function (response) {
+        for (const item of response.data || []) {
+            modelSaved.columns.push({
+                "key": tools.createUniqueString(),
+                "entity": dataBasic.value.key,
+                "dataType": item.dataType,
+                "label": useRemarkAsName.value ? item.label : item.key,
+                "type": "field",
+                "column": item.key
+            })
         }
+        //
+        dialogVisible.value = false
     })
 
 }
-//
-function mergeJson(jsonTarget, jsonSource) {
-    for (let k of Object.keys(jsonSource)) {
-        jsonTarget[k] = jsonSource[k]
-    }
-}
+
 </script>

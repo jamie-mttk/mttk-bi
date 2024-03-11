@@ -3,7 +3,8 @@ export function buildTop(context) {
   //
   const config = {
     '~': 'div',
-    class: ['lc-common-toolbar', 'height-full'],
+    class: ['lc-common-toolbar', ],
+    style:{'background-color': 'var(--el-color-primary)','border-radius': '0px','min-height':'32px'},
     '#': [
       { '~': 'div', class: 'left', '#': buildArea('top_left') },
       { '~': 'div', class: 'middle', '#': buildArea('top_middle') },

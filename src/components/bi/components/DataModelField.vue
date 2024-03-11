@@ -14,7 +14,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, inject } from 'vue'
+import {  computed, inject } from 'vue'
 import DataModelFieldEdit from './DataModelFieldEdit.vue'
 import SmartView from './SmartView.vue'
 

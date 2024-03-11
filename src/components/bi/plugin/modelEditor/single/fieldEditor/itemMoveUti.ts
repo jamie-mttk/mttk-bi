@@ -91,8 +91,8 @@ export function smartMove(fromIndex,toIndex,tableData){
             //item has children,that means it is a hierachy; so append to the last of the children
             item.children.push(fromItem)
           }else{
-            //otherwise,append before the toItem
-            items.splice(i, 0, fromItem)
+            //otherwise,append after the toItem
+            items.splice(i+1, 0, fromItem)
           }
           //
           return true

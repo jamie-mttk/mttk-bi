@@ -1,8 +1,8 @@
 <template>
   <el-button-group>
-    <el-button type="default" @click="handleReturn">Return to list</el-button>
-    <el-button type="primary" @click="handleSave">Save</el-button>
-    <el-button type="success" @click="switchMode">{{ previewEditLabel }}</el-button>
+    <el-button  @click="handleReturn">Return to list</el-button>
+    <el-button  @click="handleSave">Save</el-button>
+    <el-button  @click="switchMode">{{ previewEditLabel }}</el-button>
     <!-- <el-button type="warning"  @click="testTempoary">Test</el-button> -->
   </el-button-group>
 </template>

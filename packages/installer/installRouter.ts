@@ -33,6 +33,11 @@ function buildRoutes() {
       component: () => import('@/components/workspaceManager/index.vue')
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/components/login/index.vue')
+    },
+    {
       path: '/design/:app?',
       name: 'App design',
       component: () => import('@/components/appEditor/appEditorWithRouter.vue')

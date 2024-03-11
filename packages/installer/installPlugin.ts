@@ -8,6 +8,19 @@ import componentManager from '@/builtIn/plugin/componentTree/componentManager'
 // import Title from '@/builtIn/plugin/top/title.vue'
 //Install system default plugins
 export function installPlugin(globalContext) {
+  //login
+  globalContext.pluginManager.register({
+    key: '_login',
+    name: 'Login',
+    description: '',
+    icon: '',
+    entry: 'login',
+    sequence: 20,
+    ui: {
+      '~': import('@/builtIn/plugin/login/index.vue')
+    }
+  })
+
   //LEFT
   //pallet
   globalContext.pluginManager.register({

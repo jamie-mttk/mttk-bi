@@ -1,7 +1,8 @@
 import jsplumb from 'jsplumb'
-export default function initJsPlumb(treeNodes) {
-  //
+  //This means only one caller,otherwise it will be conflict
   let jp = undefined
+export default function initJsPlumb(treeNodes) {
+
   //
   initInstance()
   initNodes()

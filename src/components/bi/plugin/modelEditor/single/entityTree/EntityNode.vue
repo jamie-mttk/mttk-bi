@@ -59,6 +59,7 @@ function handleCommand(command) {
         border-right: 1px solid var(--el-border-color);
         padding-left: 4px;
         font-size: 0.9em;
+        overflow:hidden;
     }
 
     .suffix {

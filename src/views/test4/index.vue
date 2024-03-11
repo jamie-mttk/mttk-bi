@@ -1,120 +1,45 @@
 <template>
-  <el-table ref="dragTable" :data="tableData" style="width: 100%" border fit highlight-current-row
-    :row-class-name="activeClass" class="outputTable">
-    <el-table-column label="日期" width="180">
-      <template #default="{ row }">
-        <span>{{ row.date }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="姓名" width="180">
-      <template #default="{ row }">
-        <span>{{ row.name }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="address" label="地址">
-    </el-table-column>
-    <el-table-column label="拖拽">
-      <template #default>
-        <span style="cursor: pointer;" class="el-icon-setting">MOVE</span>
-      </template>
-    </el-table-column>
-  </el-table>
+  flag:{{ flag }}<br />
+  <el-button @click="test11">TEST 1</el-button>
+  <el-button @click="test22">TEST 2</el-button>
+  <MttkWrapComp :config="buildConfig()"></MttkWrapComp>
 </template>
+
 <script lang="ts" setup>
-import { ref,reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, computed } from 'vue'
 
-
-const dragTable = ref(null)
 //
-let newDragIndex=undefined
-let dragIndex=undefined
+const flag = ref(false)
 
-function activeClass({ row, rowIndex }) {
-  // console.log(rowIndex === newDragIndex,rowIndex , newDragIndex)
-  if (rowIndex === newDragIndex) {
-    return 'isDragBox active-drag'
-  }
-  return 'isDragBox'
+function test11() {
+  flag.value = !flag.value
 }
-onMounted(() => {
-  nextTick(() => {
-    const dragBox = document.querySelectorAll('.outputTable .isDragBox')
-    dragBox.forEach((i, idx) => {
-      i.setAttribute('draggable', 'true')
-      i.ondragstart = () => dragStartItem(idx)
-      i.ondragover = (evt) => dragOverItem(idx,evt)
-      i.ondragend = () => dragEndItem()
+
+function buildConfig() {
+  //
+  console.log('I AM BUILD' + new Date())
+  //
+
+  return {
+    '~': 'div',
+    class: computed(() => {
+      const cls = ['hello']
+      if (flag.value) {
+        cls.push('hello-active')
+      }
+      return cls
     })
-  })
-
-})
-function dragStartItem(idx) {
-  console.log('dragStartItem',idx)
-  dragIndex = idx
+  }
 }
-function dragOverItem(index,evt) {
-  console.log('dragOverItem',index,evt)
-  evt.preventDefault();
-
- newDragIndex = index
-}
-function dragEndItem() {
-  console.log('dragEndItem')
-  const data = tableData[dragIndex]
-  tableData.splice(dragIndex, 1)
-  tableData.splice(newDragIndex, 0, data)
-  // newDragIndex=-1
-}
-
-
-
-
-
-
-
-
-
-
-const tableData = reactive([
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-])
 </script>
 
 <style>
-.isDragBox{
-    cursor: move;
-    position: relative;
+.hello {
+  width: 300px;
+  height: 300px;
+  border: 1px solid red;
 }
-.active-drag{
-     position: relative;
-      &::after {
-        content: '';
-        position: absolute;
-        top: -1px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #4B79F3;
-        z-index:99;
-  }
+.hello-active {
+  background-color: blue;
 }
 </style>

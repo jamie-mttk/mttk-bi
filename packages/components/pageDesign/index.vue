@@ -1,42 +1,42 @@
 <template>
- <el-container style="height:100%;">
-  <el-header style="padding:0px;margin:0 0 8px 0;height:48px;">
-    <MttkWrapComp :config="configTop"></MttkWrapComp>
-  </el-header>
-    <Transition mode="out-in" name="custom-classes" enter-active-class=" page_enter" leave-active-class=" page_leave">
-      <div v-if="isEditMode" style="min-height:calc(100% - 58px);display:flex;">
-        <div style="flex-grow:0;">
-            <!-- <MttkWrapComp :config="configLeft"></MttkWrapComp> -->
-            <ToolbarLeft></ToolbarLeft>
+  <el-container style="height: 100%"  class="page-designer-main">
+    <el-header style="padding: 0px; margin: 0 0 8px 0; height: 48px">
+      <MttkWrapComp :config="configTop"></MttkWrapComp>
+    </el-header>
+    <Transition
+      mode="out-in"
+      name="custom-classes"
+      enter-active-class=" page_enter"
+      leave-active-class=" page_leave"
+    >
+      <div v-if="isEditMode" style="min-height: calc(100% - 58px); display: flex">
+        <div style="flex-grow: 0">
+          <!-- <MttkWrapComp :config="configLeft"></MttkWrapComp> -->
+          <ToolbarLeft></ToolbarLeft>
         </div>
-        <div style="flex-grow:1">
-          <MttkWrapComp :config="configMain"></MttkWrapComp> 
-
+        <div style="flex-grow: 1; margin-left: 8px">
+          <MttkWrapComp :config="configMain"></MttkWrapComp>
         </div>
       </div>
-
       <el-row v-else>
         <el-col :span="24">
-          <PageRender  :context="context"></PageRender>
+          <PageRender :context="context"></PageRender>
         </el-col>
       </el-row>
     </Transition>
- </el-container>
+  </el-container>
 </template>
 
 <script setup lang="ts">
-
-
-
 import PageRender from '../pageRender/index.vue'
 import { computed, watch } from 'vue'
-import { provide ,inject} from 'vue'
+import { provide, inject } from 'vue'
 import ToolbarLeft from './ToolbarLeft.vue'
 
-import createContext from  '@/context/pageContext/index'
-import {buildTop} from './buildTop'
-import {buildLeft} from './buildLeft'
-import {buildMain} from './buildMain'
+import createContext from '@/context/pageContext/index'
+import { buildTop } from './buildTop'
+import { buildLeft } from './buildLeft'
+import { buildMain } from './buildMain'
 
 //
 const props = defineProps({
@@ -47,7 +47,7 @@ const props = defineProps({
     default() {
       return {}
     }
-  },
+  }
 })
 
 //
@@ -57,14 +57,13 @@ const emit = defineEmits(['action'])
 //
 
 //
-const appContext=inject('appContext')
+const appContext = inject('appContext')
 //Create and provide context
-const context = createContext('edit',appContext)
+const context = createContext('edit', appContext)
 provide('context', context)
 //
-context.mitt.on('action',function(detail){
-
-  emit('action',detail)
+context.mitt.on('action', function (detail) {
+  emit('action', detail)
 })
 
 //whether it is edit mode
@@ -78,15 +77,12 @@ watch(
   { immediate: true }
 )
 //
-const configTop=buildTop(context)
-const configLeft=buildLeft(context)
-const configMain=buildMain(context)
-
-
+const configTop = buildTop(context)
+// const configLeft = buildLeft(context)
+const configMain = buildMain(context)
 
 //
-// 
-
+//
 </script>
 <style lang="scss">
 // .max-tab-height {
@@ -107,7 +103,7 @@ const configMain=buildMain(context)
   height: 100%;
 }
 
-.el-affix>div {
+.el-affix > div {
   height: 100%;
 }
 
@@ -115,12 +111,18 @@ const configMain=buildMain(context)
   //animation-delay: 10s;
   animation: zoomInUp;
   animation-duration: 0.5s;
-
 }
 
 .page_leave {
   animation: zoomOutDown;
   animation-duration: 0.2s;
 }
-</style>
 
+//Remove the tabs top line below
+.page-designer-main {
+  .el-tabs__nav-wrap::after {
+    /* Hide the line under tabs top */
+    height: 0px !important;
+  }
+}
+</style>

@@ -1,10 +1,9 @@
 <template>
-    <el-container>
-        <el-header style="padding:0px;">
-            <div class="lc-common-toolbar"
-                style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
+    <div class="toolbar-table-container" style="margin:0 24px 0 8px;">
+
+            <div class="lc-common-toolbar toolbar">
                 <div class="left" style="font-weight: bold;">
-                  <ModelHeader v-model="model"></ModelHeader>
+                    <ModelHeader v-model="model"></ModelHeader>
                 </div>
                 <el-button-group class="right">
                     <el-button @click="handleReturn"> <template #icon>
@@ -15,42 +14,50 @@
                         </template>保存</el-button>
                 </el-button-group>
             </div>
-        </el-header>
-        <el-container>
-            <el-aside width="240px" style="min-height:420px;height:100%;border-right:1px var(--el-border-color) solid;">
-                <EntityList :entities="entities"></EntityList>
-            </el-aside>
-            <el-main style="padding:0px 8px;">
-                <div style="display:flex;flex-direction:column;">
-                    <div
-                        style="flex-basis:80px;flow-growth:0;background-color: var(--el-fill-color-lighter);border-radius: 4px;;">
-     
-                        <EntityTree v-model="model" ></EntityTree>
-                    </div>
-                    <div style="flex-grow: 1;">
-                        <el-tabs v-model="activeTab">
-                            <el-tab-pane label="字段配置" name="field">
-                                <FiledEditor v-model="model"></FiledEditor>
-                            </el-tab-pane>
-                            <el-tab-pane label="数据预览" name="preview">
-                                <DataPreview :model="model"></DataPreview>
-                            </el-tab-pane>
-                        </el-tabs>
 
-                    </div>
-                </div>
 
-            </el-main>
-        </el-container>
-    </el-container>
+        <lcFullHeight :gap="16" class="table-area">
+            <el-container style="height:100%;">
+                <el-aside width="240px" style="min-height:420px;height:100%;border-right:1px var(--el-border-color) solid;margin-top: 12px;">
+                    <EntityList :entities="entities"></EntityList>
+                </el-aside>
+                <el-main style="height:100%;padding:0px;">
+                    <splitpanes horizontal class="default-theme">
+                        <pane style="background-color: var(--el-fill-color-lighter);border-radius: 4px;" size="30">
+                            <EntityTree v-model="model"></EntityTree>
+                        </pane>
+                        <pane style="background-color: #fff;"  size="70">                      
+                            <el-tabs v-model="activeTab">
+                                <el-tab-pane label="字段配置" name="field" >
+                                    <FieldEditor v-model="model" ></FieldEditor>
+                                </el-tab-pane>
+                                <el-tab-pane label="数据预览" name="preview">
+                                    <DataPreview :model="model"></DataPreview>
+                                </el-tab-pane>
+                                <!-- <el-tab-pane label="Test" name="test">
+                                    {{ model}}
+                                </el-tab-pane> -->
+                            </el-tabs>
+                    
+                        </pane>
+                    </splitpanes>
+                </el-main>
+            </el-container>
+        </lcFullHeight>
+
+
+    </div>
 </template>
 <script setup lang="ts">
-import { ref,  watch, inject, nextTick } from 'vue';
+import { ref, watch, inject, nextTick } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
+import {lcFullHeight} from 'mttk-lowcode-engine'
 import ModelHeader from './ModelHeader.vue'
 import EntityList from './EntityList.vue'
-import DataPreview from '../DataPreview.vue'
-import FiledEditor from '../FiledEditor.vue'
+import DataPreview from './DataPreview.vue'
+import FieldEditor from './fieldEditor/FieldEditor.vue'
 import EntityTree from './entityTree/index.vue'
 //
 const globalContext = inject('globalContext')
@@ -93,7 +100,7 @@ function loadEntities() {
     //
     globalContext.request({
         method: "GET",
-        url: '/dataModel/findEntities',
+        url: '/jdbcConnection/findEntities',
         params: {
             connection: connection
         }
@@ -142,7 +149,7 @@ function saveModel() {
         url: '/dataModel/save',
         data: model.value,
     }).then(function () {
-        dirty=false
+        dirty = false
         //
         ElMessage({
             message: '保存成功.',
@@ -170,5 +177,22 @@ function handleReturn() {
     }
 }
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+
+// // ::v-deep {
+//   .el-tabs {
+//     height: 100%;
+
+//     .el-tabs__content {
+//       height: calc(100% - 50px);
+
+//       .el-tab-pane {
+//         height: 100%;
+//         overflow: auto;
+//       }
+//     }
+//   }
+// }
+
+</style>
   

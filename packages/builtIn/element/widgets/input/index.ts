@@ -11,6 +11,7 @@ const inputConfig = {
   icon: 'mdiFormTextbox',
   sequence: 12,
   transform: buildWidgetFunc('el-input', {},(result, {config}) => {
+
     handleIconIfHave(result, config, 'prefix')
     handleIconIfHave(result, config, 'suffix')
   }),

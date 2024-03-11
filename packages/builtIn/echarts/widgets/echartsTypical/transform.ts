@@ -16,7 +16,7 @@ export function echartsTransform({config, data,  contextWrap}) {
     //props
     option: option,
     // autoresize: true,
-    theme: config.theme || 'light',
+    theme: config.theme || 'default',
     // style: {
     //   height: config.height || '100%',
     //   width: config.width || '100%'

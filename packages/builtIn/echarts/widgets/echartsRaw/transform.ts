@@ -17,6 +17,7 @@ export function echartsRawTransform({config, data, contextWrap}) {
   const result = {
     '~component': VChart ,
     option: option,
+    theme:'default'
     // style: {
     //   height: config.height || '100%',
     //   width: config.width || '100%'

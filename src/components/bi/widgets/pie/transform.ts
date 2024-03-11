@@ -1,5 +1,5 @@
 import {buildTransformEcharts} from '../utils/transformUtil'
-
+import {createTooltip} from '../utils/tooltipUtil'
 const validateRules=[
   {key:'dimension',label:'维度',min:1},
   {key:'metric',label:'度量',min:1}
@@ -15,9 +15,12 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       left: 'center'
     },
     tooltip: {
-      trigger: 'item'
-      // formatter:function(param){
-      //   return param.seriesName+'<br>'+param.name+'   '+param.data[1]
+      trigger: 'item',
+      formatter:function(param){
+        return createTooltip(param,fullConfig)
+      }
+      // valueFormatter: (value,dataIndex) =>{
+      //   return formatMetric(value,dataIndex,fullConfig)
       // }
     },
     legend: {

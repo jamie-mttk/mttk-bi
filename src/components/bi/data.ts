@@ -10,6 +10,10 @@ export const dataTypeList = [
   { label: '时间', value: 'time' }
 ]
 //
+export function findDataType(value){
+  return dataTypeList.find((item)=>item.value==value)
+}
+//
 // export const modelTypeList=[
 //   { label: '表/视图', value: 'entity' },
 //   { label: 'SQL', value: 'sql' },

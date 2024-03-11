@@ -39,6 +39,7 @@ const componentConfig = computed(() => {
     if (c) {
       return c
     } else {
+      // console.log('error load '+props.modelValue.type)
       ElMessage.error("No component is found from :" + JSON.stringify(props.modelValue))
       return {}
     }
@@ -165,7 +166,7 @@ function calProps(propsRaw) {
 
 //Build comp wrap config
 const realConfig =  function (contextWrap) {
-  // console.log(contextWrap)
+
 
   try {
 
@@ -459,7 +460,8 @@ const isActive = computed(() => {
 
 <style lang="scss" scoped>
 .active {
-  outline: 2px outset var(--el-color-primary) !important;
+  outline: 2px dotted var(--el-color-info) !important;
+  border-radius: 0px !important;
   outline-offset: 2px;
   user-select: none;
   z-index: 2000;
@@ -468,7 +470,8 @@ const isActive = computed(() => {
 
 .mttk-warp:hover{
   //
-  outline: 1px dashed var(--el-color-info);
+  // outline: 1px dashed var(--el-color-info);
+  box-shadow: var(--el-box-shadow-light)
 }
 
 // .focused {

@@ -1,8 +1,11 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { ElMessage } from 'element-plus'
+import { ElMessage,ElMessageBox  } from 'element-plus'
+import { useAccountStore } from '@/stores/account'
+
 export default function createRequest(baseUrl: string = '') {
+
   //
   NProgress.configure({ showSpinner: false })
   // create an axios instance
@@ -16,6 +19,11 @@ export default function createRequest(baseUrl: string = '') {
   request.interceptors.request.use(
     (config) => {
       NProgress.start()
+      //Add X-Token
+      const accountStore = useAccountStore()
+      if (accountStore.token) {
+         config.headers['X-Token'] = accountStore.token
+      }
       //
       return config
     },
@@ -43,6 +51,28 @@ export default function createRequest(baseUrl: string = '') {
     (error) => {
       //
       NProgress.done()
+
+      const response = error.response
+      if (response.status === 401) {
+        ElMessageBox.confirm(
+          '未登录或登录已过期,可以取消继续留在当前页面，或者重新登录',
+         '确认',
+          {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消',
+            closeOnClickModal:false,
+            type: 'warning'
+          }
+        ).then(() => {
+          //
+          const accountStore = useAccountStore()
+          accountStore.resetToken();
+          //
+          location.reload()
+        })
+      }else if (response.status === 403) {
+        ElMessageBox.alert('你未授权访问此URL:'+'\n'+response.request.responseURL, '未授权访问')
+      }else{
       //
       //console.log(error);
       //
@@ -57,6 +87,7 @@ export default function createRequest(baseUrl: string = '') {
 
       //
       showErrorInfo(msg)
+    }
       //
       //
       return Promise.reject(error)

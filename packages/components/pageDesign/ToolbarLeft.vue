@@ -1,6 +1,6 @@
 <template>
     <div v-if="isHide"  style="margin:10px 0 0 0;color:var(--el-color-primary)">
-        <lcIcon icon="mdiDotsVertical" size="large" tooltip="Click to expand left panel" @click="isHide=false"></lcIcon>
+        <lcIcon icon="mdiDotsVertical" size="medium" tooltip="Click to expand left panel" @click="isHide=false"></lcIcon>
     </div>
     <div v-else style="width:256px;">
         <el-button plain style="width:100%;" @click="isHide=true">Click to hide the panel

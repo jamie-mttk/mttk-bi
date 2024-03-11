@@ -44,6 +44,7 @@ export default function createAppContext(globalContext: object) {
   //Load all the pages of this app - not full information
   //the return value is a Promise
   appContext.queryPages = function () {
+
     return globalContext.request({
       method: 'GET',
       url: 'page/query',
@@ -63,17 +64,17 @@ export default function createAppContext(globalContext: object) {
       }
     })
   }
-  //Load page full information - by name,please note the return object stucture is different with loadPage
-  appContext.loadPageByName = function (pageName: string) {
-    return globalContext.request({
-      method: 'GET',
-      url: 'page/loadByName',
-      params: {
-        app: keySaved.value,
-        name: pageName
-      }
-    })
-  }
+  // //Load page full information - by name,please note the return object stucture is different with loadPage
+  // appContext.loadPageByName = function (pageName: string) {
+  //   return globalContext.request({
+  //     method: 'GET',
+  //     url: 'page/loadByName',
+  //     params: {
+  //       app: keySaved.value,
+  //       name: pageName
+  //     }
+  //   })
+  // }
   //Load menus
   appContext.loadDeployedMenus = function () {
     //

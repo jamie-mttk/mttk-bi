@@ -4,7 +4,7 @@
       <template #default="{ node, data }">
         <span>
 
-          <lc-icon :icon="nodeIcon(data)" :tooltip="data.dataType || ''" :show-after="1000" size="1.2em" color="#A9A9A9"
+          <lc-icon :icon="nodeIcon(data)" :tooltip="findDataType(data.dataType)?.label || ''" :show-after="1000" size="1.2em" color="#A9A9A9"
             style="margin-right:8px"> </lc-icon>
           <SmartView :value="node.label" :length="8"/> 
 
@@ -17,6 +17,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import SmartView from './SmartView.vue'
+import { findDataType } from '../data'
+
 const props = defineProps(['modelValue'])
 
 const nodeIcon = computed(() => (data) => {

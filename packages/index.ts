@@ -4,18 +4,18 @@ import createGlobalContext from '@/context/globalContext/index'
 import createAppContext from '@/context/appContext/index'
 import createContext from '@/context/pageContext/index'
 
-
 import lcPageRender from '@/components/pageRender/index.vue'
 import lcDeployed from '@/components/deployed/index.vue'
 import lcDeployedNoRouter from '@/components/deployed/deployedNoRouter.vue'
 import lcLayout from '@/components/layout/index.vue'
 import lcPanel from '@/components/panel/index.vue'
 import lcIcon from '@/components/icon/index.vue'
+import lcFullHeight from '@/components/fullHeight/index.vue'
 //import Wrap from './components/wrap/index.vue'
 import WRAPPER from 'mttk-vue-wrap'
 
 //Below are for designer
-import { installDesigner, installRouter ,installPlugin} from '@/installer/index'
+import { installDesigner, installRouter, installPinia, installPlugin } from '@/installer/index'
 import lcWorkspaceManager from '@/components/workspaceManager/index.vue'
 import lcAppEditorWithRouter from '@/components/appEditor/appEditorWithRouter.vue'
 import * as widgetUtil from '@/context/globalContext/componentRepository/util/uiUtil'
@@ -41,7 +41,6 @@ const install = (app) => {
     'lcIconPicker',
     defineAsyncComponent(() => import('@/components/iconPicker/index.vue'))
   )
-
 }
 //
 const installer = { install }
@@ -52,17 +51,18 @@ export {
   createGlobalContext,
   createAppContext,
   createContext,
-
   lcDeployed,
   lcDeployedNoRouter,
   lcLayout,
   lcPanel,
   lcIcon,
+  lcFullHeight,
   tools,
   //Below are for designer
   installDesigner,
   installRouter,
   installPlugin,
+  installPinia,
   lcWorkspaceManager,
   lcAppEditorWithRouter,
   widgetUtil,

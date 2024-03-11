@@ -1,6 +1,6 @@
 <template>
-  <div class="lc-common-toolbar"
-    style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
+  <div class="toolbar-table-container">
+  <div class="lc-common-toolbar toolbar">
     <div class="left" style="font-weight: bold;">Pages</div>
     <el-input v-model="filter" placeholder="Input to filter" class="middle" clearable></el-input>
 
@@ -10,14 +10,14 @@
           <lc-icon icon="mdiRefresh"></lc-icon>
         </template>
         Refresh</el-button>
-      <el-button @click="handleAdd"> <template #icon>
+      <el-button @click="handleAdd" v-auth:page_add> <template #icon>
           <lc-icon icon="mdiPlus"></lc-icon>
         </template>Add page</el-button>
       <el-button @click="handleBatchExport"> <template #icon>
           <lc-icon icon="mdiExport"></lc-icon>
         </template>Batch export</el-button>
       <el-upload style="display:inline-block;margin-top:2px;" ref="doImportRef" action="page/doImport"
-        :http-request="handleImport" :multiple="false" :show-file-list="false" :limit="1">
+        :http-request="handleImport" :multiple="false" :show-file-list="false" :limit="1" v-auth:page_add>
         <el-button> <template #icon>
             <lc-icon icon="mdiImport"></lc-icon>
           </template>Import</el-button>
@@ -25,7 +25,7 @@
     </el-button-group>
   </div>
   <el-table :data="filteredData" :highlight-current-row="true" table-layout="fixed"
-    style="height: calc(100% - 42px);border: 1px solid var(--el-color-primary);" ref="pageEditorTableRef">
+    class="table-area" ref="pageEditorTableRef">
 
     <el-table-column type="selection" width="55" />
     <el-table-column prop="name" label="Name" sortable>
@@ -41,17 +41,19 @@
         {{ formatMongoDate(sp.row['_updateTime']) }}
       </template>
     </el-table-column>
-    <el-table-column label="Operations" width="290">
+    <el-table-column label="Operations" width="380">
       <template #default="sp">
         <el-button-group>
-          <el-button @click="handleDesign(sp)">Design</el-button>
-          <el-button @click="handleEdit(sp)">Edit</el-button>
-          <el-button @click="handleDelete(sp)">Delete</el-button>
-          <el-button @click="handleCopy(sp)">Copy</el-button>
+          <el-button @click="handleDesign(sp)"  v-data-auth:edit="sp.row">Design</el-button>
+          <el-button @click="handleEdit(sp)"  v-data-auth:edit="sp.row">Edit</el-button>
+          <el-button @click="handleDelete(sp)"  v-data-auth:del="sp.row">Delete</el-button>
+          <el-button @click="handleCopy(sp)"  v-auth:page_add>Copy</el-button>
+          <DataAuthButton :data="sp.row" resource="page"/>
         </el-button-group>
       </template>
     </el-table-column>
   </el-table>
+</div>
   <PageEditorDialog ref="pageEditorDialogRef"></PageEditorDialog>
 </template>
 
@@ -64,6 +66,8 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import PageEditorDialog from './PageEditorDialog.vue'
 import { formatMongoDate } from '@/utils/tools'
 import download from "@/utils/download";
+import DataAuthButton from '@/components/auth/DataAuthButton.vue'
+
 //
 const props = defineProps({
   menuFilter: {
@@ -96,6 +100,7 @@ watch(
 
 //Load menu list
 function load() {
+
   if (!appContext.getKey()) {
     //maybe it is NOT finish initiation 
     return
@@ -157,7 +162,7 @@ async function handleAdd() {
       data: {},
       event: [],
       display: {
-        style: { diaplay: 'block', 'min-height': '128px' }
+        style: { diaplay: 'block', 'min-height': '128px','background-color':'#F5F7FA' }
       }//, margin: '10px' 
 
     },

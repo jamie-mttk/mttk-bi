@@ -1,34 +1,45 @@
 <template>
-  <div>
-    <el-button @click="test">TEST</el-button>
-    <el-input v-model="content" ref="testArea" type="textarea" :rows="6"></el-input>
-    </div>
+  <DataModelFieldEditNormal
+    v-model="config"
+    prop="dimension"
+    :column="{ dataType: 'number' }"
+  ></DataModelFieldEditNormal>
+  <el-input-number v-model="data1" style="width: 320px"></el-input-number><br />
+  <el-input-number v-model="data2" style="width: 320px"></el-input-number><br />
+  <el-button @click="test">TEST</el-button>
+  {{ config }}
 </template>
-<script lang="ts" setup>
-import { ref, reactive, onMounted, nextTick } from 'vue'
-import { smartMove, smartFind } from '../test1/itemMoveUti'
 
-const content=ref('需要注意几点：一定要等到dom更新完成后再去改变光标的位置；\r\nLine 2\r\nLine31234567890')
-const testArea=ref(null)
-function  insertContent(val){
-  console.log(testArea.value)
-  let index = testArea.value.textarea.selectionStart;
-   // console.dir(dom);
-  //  let index  = dom.selectionStart;
-   console.log('index',index)
-   content.value= content.value.substring(0,index) + val + content.value.substring(index)
-  //  let contont = dom.value;
-  //  textarea = contont.substring(0,index) + val + contont.substring(index,contont.length)
-  //  nextTick(()=>{
-  //   dom.focus();
-  //   dom.setSelectionRange(index + val.length,index + val.length)
-  // }
+<script setup lang="ts">
+import { ref, reactive, computed } from 'vue'
+import DataModelFieldEditNormal from '../../components/bi/components/DataModelFieldEditNormal.vue'
+// import formatData from '../../components/bi/widgets/utils/dataFormat'
+function test() {
+  const a = 1234.456
+  const b = a.toFixed(2)
+  const c=b.replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+  console.log(a,b,toThousands(a))
 }
-function test(){
-  insertContent('#@~');
+function toThousands(num) {
+    return (num || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
+//
+const config = reactive({
+  _format_number_converter: 'none',
+  _format_number_point: 2,
+  _format_number_thousandth_mark: true,
+  _format_number_negative: 'bracketed',
+  _format_number_prefix: '$',
+  _format_number_suffix: '结束'
+})
+
+const data1 = ref(1234567.56789 * 123.45)
+const data2 = ref(123456.789)
+
+// const c1 = computed(() => formatData(data1.value, config))
+// const c2 = computed(() => formatData(data2.value, config))
+
+
 </script>
-<style>
 
-
-</style>
+<style lang="scss" scoped></style>

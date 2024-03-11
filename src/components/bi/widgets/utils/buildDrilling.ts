@@ -32,7 +32,7 @@ export default function buildDrilling({ context, fullConfig }) {
         return undefined
       }
       //
-      console.log(para)
+       console.log(para,nextLevel)
       //
       const info = { value: para.value, define: nextLevel }
       stack.push(info)
@@ -84,7 +84,7 @@ export default function buildDrilling({ context, fullConfig }) {
       //Add filters
       for (const s of stack) {
         // console.log(s)
-        filters.push({ key: s.define.key, operation: '=', value: s.value })
+        filters.push({ key: s.define.key,_format_datetime:s.define._format_datetime, operation: '=', value: s.value })
       }
       // console.log("handle",arguments)
 
@@ -136,6 +136,9 @@ export default function buildDrilling({ context, fullConfig }) {
     //
     function getNextLevel() {
       const drilling = fullConfig.config.model.drilling
+     if(!drilling){
+      return undefined
+     }
       if (stack.length >=drilling.length) {
         //
         return undefined

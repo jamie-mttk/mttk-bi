@@ -19,7 +19,7 @@ const biLineConfig = {
         'dimension',
         'metric',
         'drilling',
-        'refresh'
+        'refresh','showSQL','showData',
       ]),
     },
     basic: {

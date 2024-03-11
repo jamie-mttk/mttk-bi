@@ -9,6 +9,6 @@ export function installBuiltIn(globalContext) {
     installElement.install(globalContext)
     installEcharts.install(globalContext)
     //
-    globalContext.componentRepository.resetPageWidget()
+    //globalContext.componentRepository.resetPageWidget()
   
 }

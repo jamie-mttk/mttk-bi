@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <div class="lc-common-toolbar"
-            style="background-color:var(--el-color-primary);margin-top:10px 0;border-radius: 4px 4px 0px 0px;">
+    <div class="toolbar-table-container" style="margin:0 24px 0 8px;">
+        <div class="lc-common-toolbar toolbar">
             <div class="left" style="font-weight: bold;">
 
             </div>
@@ -11,7 +10,7 @@
                     </template>新增模型</el-button>
             </el-button-group>
         </div>
-        <el-table :data="modelList" style="width: 100%">
+        <el-table :data="modelList" class="table-area">
             <el-table-column prop="name" label="名称" width="320px"/>
             <el-table-column prop="description" label="描述" />
             <el-table-column prop="_insertTime" label="创建时间" width="200px">
@@ -24,10 +23,14 @@
                     {{ formatDateTime(sp.row._updateTime) }}
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="160px">
+            <el-table-column label="操作" width="240px">
                 <template #default="sp">
-                    <el-button link @click="handleEdit(sp.row)">编辑</el-button>
-                    <el-button link @click="handleDelete(sp.row)">删除</el-button>
+                    <el-button-group>
+                    <el-button  @click="handleEdit(sp.row)">编辑</el-button>
+                    <el-button  @click="handleDelete(sp.row)">删除</el-button>
+                    <DataAuthButton :data="sp.row" resource="dataModel">
+                    </DataAuthButton>
+                </el-button-group>
                 </template>
             </el-table-column>
         </el-table>
@@ -40,6 +43,8 @@ import { ref, inject } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { formatDateTime } from '../../../utils/biTool'
 import AddModelDialog from './AddModelDialog.vue'
+import DataAuthButton from '@/components/auth/DataAuthButton.vue'
+
 //
 const emit = defineEmits(['edit'])
 //

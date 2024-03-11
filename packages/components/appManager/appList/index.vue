@@ -1,12 +1,12 @@
 <template>
   <el-row>
-    <el-col :span="6" v-for="app in apps" :key="app['_id']">
+    <el-col :span="6" v-for="app in apps" :key="app['_id']" >
       <AppSingle :modelValue="app" @action="handleAction"></AppSingle>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="6" v-auth:app_add>
       <el-row style="padding:16px;">
-        <el-col :span="24" style="height:160px;width:100%;border-radius: 6px; padding:16px;background-color:#137372;">         
-          <el-button type="success" link  style="margin-top:48px;margin-left:96px;" @click="handleAdd">
+        <el-col :span="24" style="height:160px;width:100%;border-radius: 4px; padding:16px;background-color:#137372;display:flex;justify-content: center;">         
+          <el-button type="success" link   @click="handleAdd">
             <lc-icon icon="mdiPlus" size="x-large"></lc-icon>
             <h3>Add a new application</h3></el-button>
         </el-col>
@@ -43,7 +43,7 @@ load();
 function load() {
   globalContext.request({
     method: "GET",
-    url: 'app/findAll',
+    url: 'app/query',
   }).then(function (response) {
     apps.value = response.list
   });
@@ -119,13 +119,12 @@ const callback = (dataNew: Object) => {
 
 </script>
 <style scope>
-.app-list-area {
+/* .app-list-area {
   margin-top: 10px;
   background-color: var(--el-fill-color-dark);
   border-radius: 8px;
   height: 100%;
-  /* .app-list-area-item{
-    background-color: var(--el-fill-color-light);
-  } */
-}
+
+} */
+
 </style>

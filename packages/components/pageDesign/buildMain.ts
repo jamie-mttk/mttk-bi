@@ -15,7 +15,7 @@ export function buildMain(context) {
   const config = {
     '~': 'el-tabs',
     '~modelValue': mainTabActive,
-    type: 'border-card',
+    // type: 'border-card',
     '#': [buildUiPabel()]
   }
   //
@@ -83,7 +83,7 @@ export function buildMain(context) {
           '#': {
             '~': 'lc-icon',
             icon: 'mdiDotsVertical',
-            size: 'large',
+            size: 'medium',
             tooltip: 'Click to expand right panel',
             style: { 'z-index': 999 },
             '@click': function () {

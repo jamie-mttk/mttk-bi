@@ -53,7 +53,7 @@ function buildComponents() {
         const r=deepCopy(folder)
         r.type='folder'
         //
-        r.children=componentRepository.componentsByFolder(folder.key)
+        r.children= globalContext.componentRepository.componentsByFolder(folder.key)
         //
         result.push(r)
         //

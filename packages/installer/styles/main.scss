@@ -1,4 +1,4 @@
-@import './base.css';
+// @import './base.css';
 
 html,body,#app {
   height: 100%;
@@ -10,6 +10,25 @@ body{
   font-family:Microsoft YaHei,PingFang SC, Hiragino Sans GB, Arial, sans-serif,
   Helvetica Neue, Helvetica;
 }
+
+//Change element plus theme color
+// :root {
+//   --el-color-primary: #27ba9b;
+//   --el-color-success: #1dc779;
+//   --el-color-warning: #ffb302;
+//   --el-color-danger: #e26237;
+//   --el-color-error: #cf4444;
+// }
+
+:root {
+  --el-color-primary: #405189;
+  --el-color-success: #0ab39c;
+  --el-color-warning: #f7b84b;
+  --el-color-danger: #f06548;
+  --el-color-error: #cf4444;
+}
+
+
 /*Height fullfill the available full area with no margin*/
 .height-full{
   height: 100%;
@@ -80,6 +99,7 @@ body{
 .lc-main-title{
   font-size:1.2em;
   font-weight:700;
+  color:var(--el-color-white)
 }
 
 .test{
@@ -132,3 +152,24 @@ body{
 
 }
 
+//typical toolbar+table style
+.toolbar-table-container {
+  background-color: var(--el-fill-color-light);
+
+  .toolbar {
+    background-color: var(--el-fill-color-darker);
+    margin-top: 10px 0;
+    border-radius: 6px 6px 0 0;
+  }
+  .table-area {
+    height: calc(100% - 42px);
+    border: 1px solid var(--el-border-color-darker);
+    border-radius: 0 0 6px 6px;
+  }
+}
+
+//account/account group/account role
+.auth-container {
+  margin: 16px;
+  @extend .toolbar-table-container;
+}

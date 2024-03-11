@@ -20,7 +20,8 @@ const biPieConfig = {
         'dimension',
         { _type: 'metric', prop:'metric',label: '度量', option: { maxRow: 1 } },
         'drilling',
-        'refresh'
+        'interval',
+        'refresh','showSQL','showData',
       ])
     },
     basic: {

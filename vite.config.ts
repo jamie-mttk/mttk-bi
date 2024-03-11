@@ -15,6 +15,13 @@ export default defineConfig({
   server: {
     port: 2008,
   },
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@use "@/installer/styles/element/index.scss" as *;`,
+  //     },
+  //   },
+  // },
   build: {
     outDir: "dist",
     lib: {

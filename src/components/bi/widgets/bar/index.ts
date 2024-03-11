@@ -23,7 +23,8 @@ const biBarConfig = {
         'dimension',
         'metric',
         'drilling',
-        'refresh'
+        'rowLimit',
+        'refresh','showSQL','showData',
       ]),
     },
     basic: {

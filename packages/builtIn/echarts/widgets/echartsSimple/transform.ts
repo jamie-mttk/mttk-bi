@@ -17,6 +17,7 @@ export function echartsSimpleTransform({config, data,  contextWrap}) {
     '~component': VChart ,
     option: option,
     autoresize:true,
+     theme:'default'
     // style: {
     //   height: config.height || '100%',
     //   width: config.width || '100%'

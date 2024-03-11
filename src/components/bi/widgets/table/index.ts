@@ -20,30 +20,24 @@ const biTableConfig = {
       ui: buildModel([
         { _type: 'dimension', dimension:'metric',label: '维度', option: { minRow: 0 } },
         { _type: 'metric', prop:'metric',label: '度量', option: { minRow: 0 } },
-        'refresh'
+        'rowLimit',
+        'pagination',
+        'refresh', 'showSQL','showData'
       ])
     },
     basic: {
-      init: { showBorders: true,
-        showColumnLines: true,
-        showRowLines: true,
-        allowColumnResizing: true,
-        _DxHeaderFilter:false },
+      init: { border: true,
+        stripe: false, },
       ui: [
-        widgetUtil.createInput('title-text', '标题'),
-        widgetUtil.createSwitch('showBorders', '显示边框'),
-        widgetUtil.createSwitch('showColumnLines', '显示列线'),
-        widgetUtil.createSwitch('showRowLines', '显示行线'),
-        widgetUtil.createSwitch('allowColumnResizing', '列改变宽度'),
-        widgetUtil.createSwitch('_DxFilterRow', '显示行过滤'),
-        widgetUtil.createSwitch('_DxHeaderFilter', '显示表头过滤'),
-        widgetUtil.createSwitch('_DxFilterPanel', '显示过滤面板'),
-        widgetUtil.createSwitch('_DxColumnChooser', '显示列选择器'),
-        widgetUtil.createSwitch('_DxColumnFixing', '固定列'),
+        widgetUtil.createInput('_title', '标题'),
+        widgetUtil.createSwitch('border', '显示边框'),
+        widgetUtil.createSwitch('stripe', '显示斑马条纹'),
+        widgetUtil.createSwitch('_showIndex', '显示序号'),
+  
 
       ]
     },
-    ...buildOtherProp()
+    ...buildOtherProp(false)
   }
 }
 

@@ -17,7 +17,7 @@
 
             <div v-if="modelValue.type != 'SQL'">
                 <el-form-item label="Schema" prop="schema">
-                    <el-input :modelValue="modelValue.schema||modelValue.category" :disabled="true" />
+                    <el-input :modelValue="modelValue.schema||modelValue.catalog" :disabled="true" />
                 </el-form-item>
                 <el-form-item label="表格/视图" prop="table">
                     <el-input v-model="modelValue.table" :disabled="true" />

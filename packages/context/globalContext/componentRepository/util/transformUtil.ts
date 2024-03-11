@@ -129,8 +129,7 @@ function buildWidgetBase(widget,paras?, option?) {
   }
   //
   copyProp(paras?.config||{}, result, option)
-  //
-  console.log(result)
+
   //
   return result
 }

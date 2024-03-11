@@ -1,9 +1,9 @@
 <template>
     <el-dialog v-model="modelValue" title="增加 层级字段" width="30%"  :close-on-click-modal="false" :close-on-press-escape="false"  @open="data = {}">
         <el-form ref="addHierarchyFormRef" :model="data" label-width="80px">
-            <el-form-item label="字段" prop="key" required :rules="keyRules">
+            <!-- <el-form-item label="字段" prop="key" required :rules="keyRules">
                 <el-input v-model="data.key" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="名称" prop="label" required>
                 <el-input v-model="data.label" />
             </el-form-item>
@@ -20,9 +20,9 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, onMounted, nextTick, watch } from 'vue'
+import { ref,  } from 'vue'
 import { useVModels } from '@vueuse/core'
-import {keyRules} from './data'
+import {tools} from 'mttk-lowcode-engine'
 const props = defineProps(['modelValue', 'callback'])
 const emit = defineEmits(['update:modelValue'])
 //
@@ -38,6 +38,7 @@ function handleAddHierarchy() {
         return
     } 
     //
+    data.value.key=tools.createUniqueString()
     data.value.type='hierarchy'
     data.value.children=[]
     //

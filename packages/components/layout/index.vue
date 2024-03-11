@@ -2,12 +2,12 @@
 <template>
 
     <el-container style="height:100%;">
-      <el-header class="lc-common-toolbar" >
-        <span class="lc-main-title">{{appContext.getCode().name}}
+      <el-header class="lc-common-toolbar"  style="background-color: var(--el-color-primary);border-radius: 0px;height:42px;color:red">
+        <span class="lc-main-title" style="margin-left:16px;"> <lc-icon size="medium" :icon="appContext.getCode().icon" style="margin-right:16px;"></lc-icon>  {{appContext.getCode().name}}
         </span></el-header>
       <el-container style="height:100%;">
         <el-aside width="300px" style="background-color:#545c64;">
-          <el-menu :router="true" active-text-color="#ffd04b" background-color="#545c64" text-color="#fff">
+          <el-menu :router="true" active-text-color="#ffd04b" background-color="#545c64" text-color="#fff" style="padding-top:8px;">
             <el-sub-menu v-for="menu in menus" :index="'/' + menu['_id']" :key="menu['_id']">
               <template #title>
       
@@ -23,6 +23,7 @@
           </el-menu>
         </el-aside>
         <el-main style="margin:0;padding:0;">
+
           <router-view v-slot="{ Component }">
             <component :is="Component" />
           </router-view>

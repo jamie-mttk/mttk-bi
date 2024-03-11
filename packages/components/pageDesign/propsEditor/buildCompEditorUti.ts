@@ -262,16 +262,8 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
   //
   //
   function buildTabEvent() {
-    //
-    const pageList = ref([])
-    context
-      .appContext
-      .queryPages()
-      .then(function (response) {
-        pageList.value = response.list.map((item) => {
-          return { value: item['_id'], label: item.name }
-        })
-      })
+
+
 
     //
     const data = reactive(choosed.config || [])

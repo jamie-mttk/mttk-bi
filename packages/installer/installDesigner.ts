@@ -1,5 +1,5 @@
 import { defineAsyncComponent } from 'vue'
-import './styles/main.scss'
+
 //Bin editor
 import Editor from 'bin-editor-next'
 import * as ace from 'brace'
@@ -12,8 +12,12 @@ import 'brace/snippets/json'
 import 'brace/theme/chrome'
 
 //Element PLUS
+
 import ElementPlus from 'element-plus'
+// import 'element-plus/theme-chalk/index.css'
 import 'element-plus/dist/index.css'
+//
+import './styles/main.scss'
 //
 import 'animate.css'
 //
@@ -21,14 +25,15 @@ import MttkVueWrap from 'mttk-vue-wrap'
 
 //
 import createGlobalContext from '@/context/globalContext/index'
-
+//
+import {vAuth,vDataAuth} from '@/utils/auth'
 
 export function installDesigner(app, option) {
 
   //Install bin-editor
   app.component(Editor.name, Editor)
   //Element plus install
-  app.use(ElementPlus)
+  app.use(ElementPlus, { size: 'default'})
   //MttkVueWrap install
   app.use(MttkVueWrap)
   //Some components
@@ -44,6 +49,9 @@ export function installDesigner(app, option) {
     'lc-icon-picker',
     defineAsyncComponent(() => import('@/components/iconPicker/index.vue'))
   )
+  
+  app.directive('dataAuth',vDataAuth)
+  app.directive('auth',vAuth)
   //
   //Create global context
   const globalContext = createGlobalContext(option.url || '', app,option.router)

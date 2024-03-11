@@ -4,11 +4,12 @@
         <el-table :data="allFields" style="width: 100%" ref="columnChooseTableRef">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="key" label="字段名" />
-            <el-table-column prop="label" label="字段标签" />
+            <el-table-column prop="label" label="备注" />
 
         </el-table>
         <template #footer>
             <span class="dialog-footer">
+                <el-switch v-model="useRemarkAsName" style="margin-right:16px" active-text="导入时字段名称使用数据库中字段备注" />
                 <el-button @click="dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="handleConfirm">
                     确认
@@ -30,9 +31,14 @@ const columnChooseTableRef = ref()
 const dialogVisible = ref(false)
 //data of the table of all the fields
 const allFields = ref([])
+
+//
+const useRemarkAsName = ref(true)
 //
 let modelSaved=undefined
 let entitySaved=undefined
+//Chosoed columns while the dialog is opened - save to compare the difference while saving 
+let choosedColumns=[]
 //
 function show(entity, model) {
     modelSaved=model
@@ -46,7 +52,7 @@ function show(entity, model) {
         
         //Use nextTick to wait table to finish rendering
         nextTick(() => {
-            const choosedColumns = findColumns(model, entity.key)
+            choosedColumns = findColumns(model, entity.key)
 
             //Defaultly choose columns already choosed
             for (const c of choosedColumns) {
@@ -72,13 +78,23 @@ function handleConfirm() {
     //Remove the columns in model which is not choosed any more
     removeUnSelected(rows)
     //Add into model columns which is choosed
-    addNewSelected(rows)
+     addNewSelected(rows)
     //
     dialogVisible.value=false
 }
 function removeUnSelected(rows) {
-    //Try to find the index of model columns which is NOT in rows
-     const index=modelSaved.columns.findIndex(c=>{
+    removeUnselectedInternal(rows,modelSaved?.columns)
+    //try to remove from children
+    for(const column of modelSaved?.columns){
+        removeUnselectedInternal(rows,column.children)
+    }
+}
+function removeUnselectedInternal(rows,columns){
+        if(!columns){
+            return
+        }
+        //Try to find the index of model columns which is NOT in rows
+        const index=columns.findIndex(c=>{
         //First check entity matched
         if(c.entity!=entitySaved.key){
             return false;
@@ -88,33 +104,53 @@ function removeUnSelected(rows) {
      })
      if(index>=0){
         //Found
-        modelSaved.columns.splice(index,1)
+        columns.splice(index,1)
         //Try to delete next one
         removeUnSelected(rows)
      }
 }
 function addNewSelected(rows) {
     //Try to check whether rows is in model columns
-  for(const r of rows){
-    const index=modelSaved.columns.findIndex(c=>{
+  for(const row of rows){
+     if(!columnExist(row)){
+        //r is not in model column,add
+        modelSaved.columns.push(  {
+            "key" : tools.createUniqueString(),
+            "entity" : entitySaved.key,
+            "dataType" : row.dataType,
+            "label" : useRemarkAsName.value ? row.label : row.key,
+            "type" : "field",
+            "column" : row.key
+        })
+     }
+  }
+}
+function columnExist(row){
+    if(columnExistInternal(row,modelSaved.columns)){
+        return true;
+    }
+    for(const column of modelSaved.columns){
+        if(columnExistInternal(row,column.children)){
+            return true;
+        }
+    }
+    //
+    return false;
+}
+function columnExistInternal(row,columns){
+    if(!columns){
+        return false
+    }
+    //
+    const index=columns.findIndex(c=>{
         //First check entity matched
         if(c.entity!=entitySaved.key){
             return false;
         }
         //This is to determine whether the column is NOT in rows
-        return c.column==r.key
+        return c.column==row.key
      })
-     if(index<0){
-        //r is not in model column,add
-        modelSaved.columns.push(  {
-            "key" : tools.createUniqueString(),
-            "entity" : entitySaved.key,
-            "dataType" : r.dataType,
-            "label" :r.label,
-            "type" : "field",
-            "column" : r.key
-        })
-     }
-  }
+     //
+     return index>=0;
 }
 </script>

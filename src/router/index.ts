@@ -28,6 +28,7 @@ const router = createRouter({
     //     }
     //   ]
     // },
+
     {
       path: '/test1',
       name: 'test1',

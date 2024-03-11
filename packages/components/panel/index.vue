@@ -148,6 +148,7 @@ function handleDrop(event) {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 
   .draggable-header {
     min-height: 72px;

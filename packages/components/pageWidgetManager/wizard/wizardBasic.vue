@@ -57,7 +57,7 @@ const globalContext = inject('globalContext')
 const pages = ref([])
 globalContext.request({
     method: "GET",
-    url: 'page/findAll',
+    url: 'page/query',
 }).then(function (response) {
     pages.value = response.list
 });
