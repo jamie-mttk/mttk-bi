@@ -3,8 +3,8 @@ import { buildModel, buildOtherProp } from '../utils/indexUtil'
 import { widgetUtil } from 'mttk-lowcode-engine'
 //
 const biTableConfig = {
-  key: '_bi_table',
-  name: 'BI表格',
+  key: '_bi_table2',
+  name: 'BI表格2',
   description: '',
   icon: 'mdiTableLarge',
   sequence: 2,

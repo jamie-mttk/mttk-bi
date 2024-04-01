@@ -3,10 +3,11 @@
         <span class="left handle" style="padding:0">
             <lc-icon icon="mdiDrag" size="1.2em" color="#A9A9A9" style="margin-right:2px">
             </lc-icon>
-           <SmartView :value="fieldLabel" :length="12"></SmartView>
+           <SmartView :value="fieldLabel" :length="8"></SmartView>
             </span>
         <span class="right" style="padding:0">
-            <DataModelFieldEdit v-model="$props.modelValue" :prop="$props.prop" :option="$props.option" :column="column"></DataModelFieldEdit>
+            <DataModelFieldEdit v-model="$props.modelValue" :prop="$props.prop" :option="$props.option" :column="column"
+            :modelConfig="props.modelConfig"></DataModelFieldEdit>
 
             <lc-icon icon="mdiTrashCanOutline" size="1.2em" color="#A9A9A9" style="margin-right:0px" @click="handleDelete">
             </lc-icon>
@@ -18,7 +19,9 @@ import {  computed, inject } from 'vue'
 import DataModelFieldEdit from './DataModelFieldEdit.vue'
 import SmartView from './SmartView.vue'
 
-const props = defineProps(['modelValue','prop', 'option'])
+//modelValue is a single config of one item, for example a dimension config /a metric config or a filter config
+//Later it will be call as singleConfig
+const props = defineProps(['modelValue','modelConfig','prop', 'option'])
 const emit = defineEmits(['delete'])
 //
 const dataModel = inject('dataModel')
@@ -49,7 +52,7 @@ function findMatchColumn(columns, key) {
 //
 const fieldLabel = computed(() => {
     const aggregation = props.modelValue['_aggregation']
-    if (aggregation && aggregation != 'NONE') {
+    if (aggregation && aggregation != '_NONE') {
         if (aggregation == '_COUNT_DISTINCT') {
             return 'COUNT(DISTINCT ' +props.modelValue?.label + ')'
         } else if (aggregation == '_CUSTOMIZE') {

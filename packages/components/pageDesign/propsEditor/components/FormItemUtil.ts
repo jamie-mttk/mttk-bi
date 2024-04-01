@@ -9,15 +9,17 @@ export function buildConfig(modelValue: Object, itemConfig: Object, pageContext)
  // console.log('buildConfig',itemConfig)
   //
   const c = {
-    '~component': mapComponent(itemConfig['~component']),
-    '~modelValue': modelValue,
+    '~component': mapComponent(itemConfig['~component']||itemConfig['~']),
+    '~modelValue':modelValue,
     '~modelValuePath': itemConfig['~prop']
     //
   }
+  //
+
   //copy all propties to slot #
   mergeJson(c, itemConfig, true)
   //
-  const compName = stdComponent(itemConfig['~component'])
+  const compName = stdComponent(c['~component'])
   if ('elselect' == compName) {
     //select
     selectTransform(c, itemConfig, pageContext)
@@ -47,8 +49,9 @@ export function stdComponent(component) {
 }
 
 function mapComponent(componentName) {
+
   if (typeof componentName != 'string') {
-    return
+    return componentName
   }
   //
   const stdName = stdComponent(componentName)

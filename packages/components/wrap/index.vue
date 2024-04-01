@@ -2,7 +2,7 @@
 //import type { throwError } from 'element-plus/es/utils';
 import { computed, inject, unref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { deepCopy,isPromise } from '@/utils/tools'
+import { deepCopy, } from '@/utils/tools'
 
 // import { convertFlatConfig } from 'vuewrapper'
 import { tryEval } from '@/utils/expression'
@@ -18,7 +18,7 @@ const props = defineProps({
     }
   },
 })
-
+const emit=defineEmits(['componentChoosed'])
 // const emit = defineEmits<{
 //   (e: 'deleteMe', data: Object): void
 // }>()
@@ -308,6 +308,7 @@ const realConfig =  function (contextWrap) {
 
   //style
   if (props.modelValue.config?.display?.style) {
+
     if (result.style) {
       //If result already has syles, append all from props.modelValue
       //otherwise,set directly in else
@@ -340,19 +341,20 @@ const realConfig =  function (contextWrap) {
     result.class=[]
   }
   //Do not set this class to panel, so the hovor style will not affect pane
-  if(result['~']||result['~component']!=lcPanel){
-  result.class.push('mttk-warp')
+  if((result['~']||result['~component']!=lcPanel) && context.mode.value == 'edit'){
+
+  result.class.push('mttk-wrap')
 }
   //
 
   //Add choosed classed if needed
-  if (isActive.value) {
-    if (!result.class) {
-      result.class = []
-    }
-    result.class.push('active')
-    // console.log('actived',result)
-  }
+  // if (isActive.value) {
+  //   if (!result.class) {
+  //     result.class = []
+  //   }
+  //   result.class.push('active')
+  //   console.log('actived',result)
+  // }
   //Visisble
   if (props.modelValue?.config?.basic && props.modelValue?.config?.basic['~hideComponent'] != undefined) {
     result['~if'] = !tryEval(props.modelValue?.config?.basic['~hideComponent'], context)
@@ -361,7 +363,7 @@ const realConfig =  function (contextWrap) {
   }
   //
   // console.log('realconfig is called!!!333',result['~show'],result)
-  // console.log('wrap real config',result)
+  //  console.log('wrap real config',result)
   //
   return result;
 }
@@ -426,6 +428,8 @@ function componentChoosed(event: any) {
   //
   // console.log('COMPONENT CHOOSED IS CALLED',props.modelValue)
   context.choosedManager.set(props.modelValue,event.timeStamp)
+    //
+    emit('componentChoosed')
 
 }
 
@@ -453,6 +457,7 @@ const isActive = computed(() => {
 
 <template>
    <!-- @mousedown="componentChoosed"    @componentChoosed="componentChoosed" -->
+
   <MttkWrapComp ref="target" :config="realConfig" :contextParent="contextParent" @mousedown="componentChoosed">
   </MttkWrapComp>
 </template>
@@ -468,7 +473,7 @@ const isActive = computed(() => {
   //margin-top: 32px;
 }
 
-.mttk-warp:hover{
+.mttk-wrap:hover{
   //
   // outline: 1px dashed var(--el-color-info);
   box-shadow: var(--el-box-shadow-light)

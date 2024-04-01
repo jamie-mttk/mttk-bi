@@ -1,4 +1,5 @@
-import {buildTransformEcharts} from '../utils/transformUtil'
+import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
+import {safeGetArrayItem} from '../utils/transformTools'
 import {createTooltip} from '../utils/tooltipUtil'
 const validateRules=[
   {key:'dimension',label:'维度',min:1},
@@ -8,12 +9,10 @@ const validateRules=[
 
 function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   //
+  const metricConfig=safeGetArrayItem(fullConfig.config.model,'metric',0)
+  //
   const option = {
-    title: {
-      text: config['title-text'] || '',
-      subtext: config['title-subtext'] || '',
-      left: 'center'
-    },
+    ...buildBaseOption({config,skipLegend:true}),
     tooltip: {
       trigger: 'item',
       formatter:function(param){
@@ -23,13 +22,11 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       //   return formatMetric(value,dataIndex,fullConfig)
       // }
     },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
-    },
+    
     series: [
       {
         type: 'pie',
+        name:metricConfig?.label||metricConfig?.column,
         roseType: config['series-roseType'] || '',
         radius: config['series-radius']|| '60%',
         itemStyle:{
@@ -53,14 +50,6 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   return option
 }
 
-//return error info is valdiate failed,otherwise return undefined
-function validate({ config, data, context, key, contextWrap, fullConfig }) {
-
-  return undefined
-}
-
-
-
 
 //
-export const biPieTransform = buildTransformEcharts(buildOption, validateRules,validate)
+export const biPieTransform = buildTransformEcharts(buildOption, validateRules,undefined)

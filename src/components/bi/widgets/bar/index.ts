@@ -1,37 +1,30 @@
 import { biBarTransform } from './transform'
 
-import {buildModel,buildOtherProp} from '../utils/indexUtil'
+import {buildModelFull,buildEchartsBaseUI,buildOtherProp} from '../utils/indexUtil'
 import  {widgetUtil} from 'mttk-lowcode-engine'
 //
-
-//button config
 const biBarConfig = {
   key: '_bi_bar',
   name: 'BI 柱状图',
   description: '',
   icon: 'mdiChartBar',
-  sequence: 2,
+  sequence: 13,
   transform: biBarTransform,
   editor: {
-    model: {
-      name: '数据模型',
-      sequence: 1,
-      init: {
+    model: buildModelFull( {
         type: 'bar'
-      },
-      ui: buildModel([
+      },[
         'dimension',
         'metric',
         'drilling',
+        'filter',
         'rowLimit',
         'refresh','showSQL','showData',
       ]),
-    },
     basic: {
       init: {},
       ui: [
-        widgetUtil.createInput('title-text','标题'),
-        widgetUtil.createInput('title-subtext','副标题'),
+        ...buildEchartsBaseUI(),
         widgetUtil.createSwitch('stack', '堆叠'),
         widgetUtil.createSwitch('reverse', '坐标切换')
       ]

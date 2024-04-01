@@ -1,5 +1,5 @@
 <template>
-    <el-popover :visible="visiblePopover" placement="bottom" width="40%" :teleported="true">
+    <el-popover :visible="visiblePopover" placement="bottom" width="100%" :teleported="true" @show="handleShow">
         <template #reference>
             <div class="icon" :class="{ icon_empty: !props.modelValue }" @click="showPickerList">
                 <lc-icon size="large" :icon="props.modelValue" >
@@ -7,7 +7,7 @@
             </div>
         </template>
         <template #default>
-            <PickerList @icon-choosed="handleIconChoosed"  @closePopover="hidePopover"></PickerList>
+            <PickerList ref="pickerListRef" @icon-choosed="handleIconChoosed"  @closePopover="hidePopover"></PickerList>
         </template>
     </el-popover>
 </template>
@@ -35,7 +35,12 @@ const visiblePopover = ref(false)
 function showPickerList(){
     visiblePopover.value = true
 }
+//
+const pickerListRef=ref(null)
+function handleShow(){
 
+    pickerListRef.value.show()
+}
 //
 function handleIconChoosed(icon: string) {
 

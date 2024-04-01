@@ -1,4 +1,4 @@
-import { ref, reactive, computed, watch, toRaw, isRef, isReactive } from 'vue'
+import { ref,  computed, watch,  } from 'vue'
 
 
 
@@ -29,14 +29,14 @@ export default function buildCompEditor(context) {
   const compEditor = ref(pageProps(context))
 //
 //Add a scrollbar so the basic can be displayed even if it is very high
-const sc_height = ref('640px') 
-calScHeight()
-window.onresize = function () {
-    calScHeight()
-}
-function calScHeight(){
-    sc_height.value = (window.innerHeight - 320) + 'px' 
-}
+// const sc_height = ref('640px') 
+// calScHeight()
+// window.onresize = function () {
+//     calScHeight()
+// }
+// function calScHeight(){
+//     sc_height.value = (window.innerHeight - 320) + 'px' 
+// }
 
   watch(
     () => context.choosedManager.get(),

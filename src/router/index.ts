@@ -3,31 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: () => import('@/workspaceManager/index.vue')
-    // },
-    // {
-    //   path: '/design/:app?',
-    //   name: 'App design',
-    //   component: () => import('@/appEditor/appEditorWithRouter.vue')
-    // },
-    // {
-    //   path: '/deploy',
-    //   name: 'deploy',
-    //   component: () => import('@/components/layout/index.vue'),
-    //   children: [
-    //     {
-    //       path: ':app?/:page?',
-    //       name: 'Page deployed',
-    //       component: () => import('@/deployed/index.vue'),
-    //       meta: {
-    //         showBreadcrumb: false
-    //       }
-    //     }
-    //   ]
-    // },
 
     {
       path: '/test1',

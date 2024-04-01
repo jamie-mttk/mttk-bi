@@ -52,7 +52,7 @@ function showEdit(node, model) {
     //Just copy entity to edit sicne the structure is same
     dataBasic.value = tools.deepCopy(node.entity)
     //Build join data
-    console.log('@@@@@@@@@',node.relation)
+    //console.log('@@@@@@@@@',node.relation)
     if (!node.relation) {
         //That means it is the first node
         dataJoin.value = {}
@@ -67,7 +67,7 @@ function showAdd(json, model) {
     isEditing.value = false
     dialogVisible.value = true
     //
-    const entityKey = tools.createUniqueString()
+    const entityKey = 'e'+tools.createUniqueString()
     //Create default data basic
     if (json.type == 'SQL') {
         dataBasic.value = {
@@ -148,7 +148,7 @@ function handleUpdateAdd() {
     loadEntityColumnsPromise(globalContext.request, modelSaved._id, dataBasic.value).then(function (response) {
         for (const item of response.data || []) {
             modelSaved.columns.push({
-                "key": tools.createUniqueString(),
+                "key": 'c'+tools.createUniqueString(),
                 "entity": dataBasic.value.key,
                 "dataType": item.dataType,
                 "label": useRemarkAsName.value ? item.label : item.key,

@@ -1,7 +1,7 @@
 <template>
-    <div ref="fullHeightRef" :style="styleFullHeight">
+    <el-scrollbar ref="fullHeightRef" :style="myStyle">
         <slot></slot>
-    </div>
+    </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -15,8 +15,13 @@ const fullHeightRef = ref(null)
 const { top } = useElementBounding(fullHeightRef)
 //Get window height
 const { height } = useWindowSize()
-const styleFullHeight = computed(() => {
-    // console.log('evaled', (height.value - top.value -(props.gap||0)) + 'px')
-    return { width:'100%', height: (height.value - top.value -(props.gap||0) ) + 'px' }
+//Use height to set scroll height does not works well,so here change to use style
+//Infact height property is also changed to style in el-scrollbar implementation
+const myStyle = computed(() => {
+     if(props.gap==34){
+      console.log('evaled',height.value , top.value, (height.value - top.value -(props.gap||0)) )
+     }
+     const h=height.value - top.value -(props.gap||0) 
+    return {height: h+'px'}
 })
 </script>

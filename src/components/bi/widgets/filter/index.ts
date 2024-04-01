@@ -1,8 +1,28 @@
 import { biFilterTransform } from './transform'
-import { buildModel, buildOtherProp } from '../utils/indexUtil'
-import { computed } from 'vue'
-import { widgetUtil } from 'mttk-lowcode-engine'
-import DataModelFieldEditFilter from './DataModelFieldEditFilter.vue'
+import { buildModelFull, buildOtherProp } from '../utils/indexUtil'
+
+import DataModelFieldEditFilter from './editor/DataModelFieldEditFilter.vue'
+
+export const filterIndexOptions = {option: { editComponent: DataModelFieldEditFilter },
+  checkDrop: function (dropList, dropped, toDrop) {
+    //Set default value
+    //Choose default value if not set
+    if (dropped.dataType == 'string') {
+      toDrop._ui_mode = 'input'
+      toDrop._ui_input_match = 'LIKE'
+    } else if (dropped.dataType == 'integer' || dropped.dataType == 'number') {
+      toDrop._ui_mode = 'input-number'
+      toDrop['_ui_input-number_match'] = '>'
+    } else if (dropped.dataType == 'datetime') {
+      toDrop._ui_mode = 'datetime'
+      toDrop['_ui_input-datetime_match'] = '_CUSTOMIZE'
+    } else if (dropped.dataType == 'time') {
+      toDrop._ui_mode = 'time'
+      toDrop['_ui_input-time_match'] = '_CUSTOMIZE'
+    }
+  }
+}
+
 
 //
 const biFilterConfig = {
@@ -13,49 +33,34 @@ const biFilterConfig = {
   sequence: 1,
   transform: biFilterTransform,
   editor: {
-    model: {
-      name: '数据模型',
-      sequence: 1,
-      init: {
-        type: 'line'
+    model: buildModelFull(
+      {
+        type: 'filter',
+        showButton: true,
+        qtyPerRow: 6
       },
-      ui: buildModel([
-        {//Please note:type should be dimension or metric
+      [
+        {
+          //Please note:type should be dimension or metric
           _type: 'dimension',
           prop: 'filter',
           label: '过滤条件',
-          option: { editComponent: DataModelFieldEditFilter },
-          checkDrop: function (dropList, dropped, toDrop) {
-            //Set default value
-            //Choose default value if not set
-            if (dropped.dataType == 'string') {
-              toDrop._ui_mode = 'input'
-              toDrop._ui_input_match = 'LIKE'
-            } else if (dropped.dataType == 'integer' || dropped.dataType == 'number') {
-              toDrop._ui_mode = 'input-number'
-              toDrop['_ui_input-number_match'] = '>'
-            } else if (dropped.dataType == 'datetime') {
-              toDrop._ui_mode = 'datetime'
-              toDrop['_ui_input-datetime_match'] = '_CUSTOMIZE'
-            } else if (dropped.dataType == 'time') {
-              toDrop._ui_mode = 'time'
-              toDrop['_ui_input-time_match'] = '_CUSTOMIZE'
-            }
+          description: '拖入字段设置过滤方式',
+          ...filterIndexOptions,
+        },
+        {
+          _type: 'normal',
+          label: '显示重置按钮',
+          prop: 'showButtonReset',
+          item: {
+            '~': 'el-switch'
           }
         },
         {
-          _type:'normal',
-          label: '显示查询按钮',
-          prop: 'showButton',
-          item:{
-            '~': 'el-switch',
-          }
-        },
-        {
-          _type:'normal',
+          _type: 'normal',
           label: '每行控件数',
           prop: 'qtyPerRow',
-          item:{
+          item: {
             '~': 'el-select',
             '#': [
               { '~': 'el-option', label: '1', value: 1 },
@@ -64,32 +69,24 @@ const biFilterConfig = {
               { '~': 'el-option', label: '4', value: 4 },
               { '~': 'el-option', label: '6', value: 6 },
               { '~': 'el-option', label: '8', value: 8 },
-              { '~': 'el-option', label: '12', value: 12 }
-            ],
+              { '~': 'el-option', label: '12', value: 12 },
+              { '~': 'el-option', label: '24', value: 24 }
+            ]
           }
         },
         {
-          _type:'normal',
+          _type: 'normal',
           label: '标题宽度',
-          prop: 'labelWidth',
-        }, 
-
-      ])
-    },
-    basic: {
-      init: {},
-      ui: [
-        widgetUtil.createInput('title-text', '标题'),
-        widgetUtil.createInput('title-subtext', '副标题'),
-        widgetUtil.createSwitch('smooth', '平滑曲线'),
-        widgetUtil.createSwitch('areaMode', '面积填充'),
-        widgetUtil.createSwitch('stack', '堆叠'),
-        widgetUtil.createSwitch('reverse', '坐标切换')
+          prop: 'labelWidth'
+        }
       ]
-    },
-    ...buildOtherProp(false)
+    ),
+
+    ...buildOtherProp({ initDisplay: false })
   }
 }
 
 //
 export default biFilterConfig
+
+//

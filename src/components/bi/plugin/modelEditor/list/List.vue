@@ -1,17 +1,16 @@
 <template>
     <div class="toolbar-table-container" style="margin:0 24px 0 8px;">
-        <div class="lc-common-toolbar toolbar">
-            <div class="left" style="font-weight: bold;">
-
-            </div>
+        <div class="lc-common-toolbar toolbar" style="background-color: var(--el-color-primary)">
+            <div class="left" style="font-weight: bold; color: var(--el-color-white);">BI数据模型</div>
             <el-button-group class="right">
                 <el-button @click="handleAddModel"> <template #icon>
                         <lc-icon icon="mdiPlus"></lc-icon>
                     </template>新增模型</el-button>
             </el-button-group>
         </div>
-        <el-table :data="modelList" class="table-area">
+        <el-table :data="modelList" class="table-area" v-fullHeight="8">
             <el-table-column prop="name" label="名称" width="320px"/>
+            <el-table-column prop="_connectionName" label="数据库连接" idth="320px"/>
             <el-table-column prop="description" label="描述" />
             <el-table-column prop="_insertTime" label="创建时间" width="200px">
                 <template #default="sp">
@@ -28,8 +27,8 @@
                     <el-button-group>
                     <el-button  @click="handleEdit(sp.row)">编辑</el-button>
                     <el-button  @click="handleDelete(sp.row)">删除</el-button>
-                    <DataAuthButton :data="sp.row" resource="dataModel">
-                    </DataAuthButton>
+                    <lcDataAuthButton :data="sp.row" resource="dataModel">
+                    </lcDataAuthButton>
                 </el-button-group>
                 </template>
             </el-table-column>
@@ -43,7 +42,8 @@ import { ref, inject } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { formatDateTime } from '../../../utils/biTool'
 import AddModelDialog from './AddModelDialog.vue'
-import DataAuthButton from '@/components/auth/DataAuthButton.vue'
+
+import { lcDataAuthButton,vFullHeight } from 'mttk-lowcode-engine'
 
 //
 const emit = defineEmits(['edit'])
@@ -58,7 +58,7 @@ function handleAddModel() {
 function handleCallback(model) {
     globalContext.request({
         method: "POST",
-        url: '/dataModel/save',
+        url: '/bi/dataModel/save',
         data: model,
     }).then(function (response) {
         //
@@ -78,7 +78,7 @@ function handleDelete(model) {
         //
         globalContext.request({
             method: "POST",
-            url: 'dataModel/delete',
+            url: '/bi/dataModel/delete',
             params: {
                 id: model['_id']
             }
@@ -96,7 +96,7 @@ function loadModelList() {
     //Load mode list
     globalContext.request({
         method: "GET",
-        url: '/dataModel/query',
+        url: '/bi/dataModel/query',
         params: {
             app: appContext.getKey()
         }

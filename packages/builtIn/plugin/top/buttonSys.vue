@@ -3,6 +3,7 @@
     <el-button  @click="handleReturn">Return to list</el-button>
     <el-button  @click="handleSave">Save</el-button>
     <el-button  @click="switchMode">{{ previewEditLabel }}</el-button>
+    <el-button  @click="previewFullScreen" v-if="context.mode.value == 'edit'">Preview in full screen</el-button>
     <!-- <el-button type="warning"  @click="testTempoary">Test</el-button> -->
   </el-button-group>
 </template>
@@ -36,7 +37,7 @@ function saveIfNeed(force: boolean) {
 }
 //
 //Preview/Edit button title
-const previewEditLabel = computed(() => context.mode.value == 'edit' ? 'Switch to preview' : 'Return to edit')
+const previewEditLabel = computed(() => context.mode.value == 'edit' ? 'Peview' : 'Edit')
 
 //Preview/Edit switch
 function switchMode() {
@@ -45,5 +46,10 @@ function switchMode() {
   } else {
     context.mode.value = 'edit'
   }
+}
+function previewFullScreen(){
+  context.mode.value = 'view'
+  //
+  context.mitt.emit('previewFullSCreen');
 }
 </script>

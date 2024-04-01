@@ -1,4 +1,4 @@
-
+import * as uiUtil from '@/context/globalContext/componentRepository/util/uiUtil'
 //button config
  const imgConfig = {
   key: '_img',
@@ -22,26 +22,11 @@
         alt: 'No picture'
       },
       ui: [
-        {
-          '~component': 'el-input',
-          '~label': 'Image URL',
-          '~prop': 'src'
-        },
-        {
-          '~component': 'el-input',
-          '~label': 'Alternative text',
-          '~prop': 'alt'
-        },
-        {
-          '~component': 'el-input-number',
-          '~label': 'Width',
-          '~prop': 'width'
-        },
-        {
-          '~component': 'el-input-number',
-          '~label': 'Height',
-          '~prop': 'height'
-        }
+        uiUtil.createInput('src', 'Image URL'),
+        uiUtil.createInput('alt', 'Alternative text'),
+        uiUtil.createInputNumber('width', 'Width'),
+        uiUtil.createInputNumber('height', 'Height'),
+
       ]
     },
     display: {

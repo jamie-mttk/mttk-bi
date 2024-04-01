@@ -11,17 +11,21 @@ import lcLayout from '@/components/layout/index.vue'
 import lcPanel from '@/components/panel/index.vue'
 import lcIcon from '@/components/icon/index.vue'
 import lcFullHeight from '@/components/fullHeight/index.vue'
+import lcFormItem from '@/components/pageDesign/propsEditor/components/FormItem.vue'
+
 //import Wrap from './components/wrap/index.vue'
 import WRAPPER from 'mttk-vue-wrap'
 
 //Below are for designer
-import { installDesigner, installRouter, installPinia, installPlugin } from '@/installer/index'
+import { installDesigner, installRouter,  installPlugin } from '@/installer/index'
 import lcWorkspaceManager from '@/components/workspaceManager/index.vue'
 import lcAppEditorWithRouter from '@/components/appEditor/appEditorWithRouter.vue'
 import * as widgetUtil from '@/context/globalContext/componentRepository/util/uiUtil'
 import * as widgetTransformUtil from '@/context/globalContext/componentRepository/util/transformUtil'
 import * as tools from '@/utils/tools'
-
+import lcDataAuthButton from '@/components/auth/DataAuthButton.vue'
+import {vFullHeight} from '@/components/fullHeight/directive'
+import * as authentication from './utils/authentication'
 //install
 const install = (app) => {
   app.component('lcPageRender', lcPageRender)
@@ -57,12 +61,16 @@ export {
   lcPanel,
   lcIcon,
   lcFullHeight,
+  lcFormItem,
+  lcDataAuthButton,
+  vFullHeight,
+  authentication,
   tools,
   //Below are for designer
   installDesigner,
   installRouter,
   installPlugin,
-  installPinia,
+
   lcWorkspaceManager,
   lcAppEditorWithRouter,
   widgetUtil,

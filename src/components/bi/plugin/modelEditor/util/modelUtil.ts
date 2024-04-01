@@ -76,7 +76,7 @@ export function findRelation(model, source, target) {
 export function loadEntityColumnsPromise(request, model, entity) {
   return request({
     method: 'POST',
-    url: 'dataModel/loadEntityFields',
+    url: '/bi/dataModel/loadEntityFields',
     params: { model },
     data: entity
   })

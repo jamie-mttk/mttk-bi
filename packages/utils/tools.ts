@@ -65,3 +65,7 @@ export function smartJsonParse(str: string) {
 export function isPromise(value: any) {
   return typeof value.then == "function" && typeof value.catch == "function";
 }
+//whether the input is a number/float
+export function isNumber(str) {
+	return /^[0-9]+.?[0-9]*$/.test(str);
+}

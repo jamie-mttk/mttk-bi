@@ -1,11 +1,8 @@
-
-
 import build from './pageWidget/builder'
 //It is defined outside function,so it will be shared among different import
 const folders = [] as object[]
 let components = [] as object[]
 export default function useComponentRepository(globalContext) {
-
   //Later repository will be built automatically from some defined folder
 
   //return all the compont folders
@@ -20,7 +17,9 @@ export default function useComponentRepository(globalContext) {
   }
   //list component by folder
   function componentsByFolder(folder: string) {
-    return components.filter((component) => folder == component.folder).sort((item1,item2)=>(item1.sequence||0)-(item2.sequence||0))
+    return components
+      .filter((component) => folder == component.folder)
+      .sort((item1, item2) => (item1.sequence || 0) - (item2.sequence || 0))
   }
   //Find component by key;return undefined if not found by key
   function componentByKey(key: string) {
@@ -33,7 +32,7 @@ export default function useComponentRepository(globalContext) {
     folders.push(folder)
   }
   //
-  function registComponent(component: object,folder?: object) {
+  function registComponent(component: object, folder?: object) {
     //Useless,removed since it only called once
     // function is imported as  ()=>import('./card/index'),
     // if(typeof component=='function'){
@@ -41,23 +40,23 @@ export default function useComponentRepository(globalContext) {
     // }
     //if it is a Promise
     //Promise is imported as above or import('./button/index'),
-    if (component instanceof Promise){
-      component.then(function(data){
-        registerComponentInternal(data.default,folder)
+    if (component instanceof Promise) {
+      component.then(function (data) {
+        registerComponentInternal(data.default, folder)
       })
-    }else{
-      registerComponentInternal(component,folder)
-    }    
+    } else {
+      registerComponentInternal(component, folder)
+    }
   }
   //
-  function registerComponentInternal(component: object,folder?: object){
-    if(folder && folder.key){
-      component.folder=folder.key
+  function registerComponentInternal(component: object, folder?: object) {
+    if (folder && folder.key) {
+      component.folder = folder.key
     }
     //
     components.push(component)
     //
-    components.sort((item1,item2)=>item1.sequence||0>item2.sequence||0)
+    components.sort((item1, item2) => item1.sequence || 0 > item2.sequence || 0)
   }
   //Regist folder and components array(set the folder to the given folder)
   function registerComponents(folder: object, componentConfigs: Array<object>) {
@@ -65,9 +64,8 @@ export default function useComponentRepository(globalContext) {
 
     //
     for (const componentConfig of componentConfigs) {
-
       //
-      registComponent(componentConfig,folder)
+      registComponent(componentConfig, folder)
     }
   }
 
@@ -80,7 +78,7 @@ export default function useComponentRepository(globalContext) {
   //
   function resetPageWidget() {
     //Clear exisitng
-    components=components.filter((item)=>!item.isPageWidget)
+    components = components.filter((item) => !item.isPageWidget)
     //
     globalContext
       .request({
@@ -89,10 +87,10 @@ export default function useComponentRepository(globalContext) {
       })
       .then(function (resp) {
         for (const compConfig of resp.list || []) {
-              const config = build(globalContext,compConfig, compConfig.rawPage)
-              config.isPageWidget=true
-     
-              registComponent(config)
+          const config = build(globalContext, compConfig, compConfig.rawPage)
+          config.isPageWidget = true
+
+          registComponent(config)
           //
           // globalContext
           //   .request({

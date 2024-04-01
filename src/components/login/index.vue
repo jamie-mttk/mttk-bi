@@ -47,7 +47,7 @@ import { useRouter } from 'vue-router'
 
 import bg from './bg.png'
 import leftImg from "./left.svg";
-import { useAccountStore } from '@/stores/account'
+import { authentication } from 'mttk-lowcode-engine'
 //
 const globalContext = inject('globalContext')
 //
@@ -64,6 +64,7 @@ const loginData = reactive({
 const showLoginError = ref(false)
 //
 const router = useRouter()
+
 //
 function handleLogin() {
     loginFormRef.value.validate((valid,) => {
@@ -72,10 +73,9 @@ function handleLogin() {
         if (!valid) {
             return
         }
-        //
-        const accountStore = useAccountStore()
 
-        accountStore.login(globalContext, loginData).then( ()=> {
+
+        authentication.login(globalContext, loginData).then( ()=> {
             //forward to redirect from URL or root page
             router.push(globalContext.router.currentRoute.value.query?.redirect||'/')
         }).catch( (error)=> {

@@ -54,7 +54,7 @@ import Account from './account/index.vue'
 import AccountGroup from './accountGroup/index.vue'
 import AccountRole from './accountRole/index.vue'
 import AppManager from '../appManager/index.vue'
-import { useAccountStore } from '@/stores/account'
+import { logout } from '@/utils/authentication'
 import { useRouter } from 'vue-router'
 import { inject } from 'vue'
 import { hasAuth } from '@/utils/auth'
@@ -82,8 +82,7 @@ function handleCommand(command) {
 const router = useRouter()
 //
 function handleLogout() {
-  const accountStore = useAccountStore()
-    .logout(globalContext)
+ logout(globalContext)
     .then(() => {
       router.push('/login')
     })

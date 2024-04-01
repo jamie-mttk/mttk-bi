@@ -1,4 +1,4 @@
-import { useAccountStore } from '@/stores/account'
+import { loginState } from '@/utils/authentication'
 
 export const vShowOldKey = Symbol('_vod')
 
@@ -41,8 +41,7 @@ export const vDataAuth = {
 //Check current user has the auth
 //value can be page,app or page.add,app.edit
 export function hasAuth(value) {
-  const accountStore = useAccountStore()
-  const authorities = accountStore.authorities
+  const authorities = loginState.value.authorities
   if (!authorities) {
     //user is not login
     return false

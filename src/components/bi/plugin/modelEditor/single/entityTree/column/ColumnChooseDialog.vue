@@ -115,7 +115,7 @@ function addNewSelected(rows) {
      if(!columnExist(row)){
         //r is not in model column,add
         modelSaved.columns.push(  {
-            "key" : tools.createUniqueString(),
+            "key" : 'c'+tools.createUniqueString(),
             "entity" : entitySaved.key,
             "dataType" : row.dataType,
             "label" : useRemarkAsName.value ? row.label : row.key,

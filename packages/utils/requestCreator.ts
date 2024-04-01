@@ -2,12 +2,12 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { ElMessage,ElMessageBox  } from 'element-plus'
-import { useAccountStore } from '@/stores/account'
+import { loginState,reset } from './authentication'
 
 export default function createRequest(baseUrl: string = '') {
 
   //
-  NProgress.configure({ showSpinner: false })
+  NProgress.configure({ showSpinner: true })
   // create an axios instance
   const request = axios.create({
     baseURL: baseUrl,
@@ -20,9 +20,8 @@ export default function createRequest(baseUrl: string = '') {
     (config) => {
       NProgress.start()
       //Add X-Token
-      const accountStore = useAccountStore()
-      if (accountStore.token) {
-         config.headers['X-Token'] = accountStore.token
+      if (loginState.value.token) {
+         config.headers['X-Token'] = loginState.value.token
       }
       //
       return config
@@ -65,8 +64,8 @@ export default function createRequest(baseUrl: string = '') {
           }
         ).then(() => {
           //
-          const accountStore = useAccountStore()
-          accountStore.resetToken();
+         
+          reset();
           //
           location.reload()
         })

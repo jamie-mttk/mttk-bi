@@ -1,5 +1,5 @@
 <template>
-    <div style="display:flex;margin:0 24px 0 8px;">
+    <div style="display:flex;margin:0 8px 0 8px;">
           <div style="flex-basis:360px;" v-auth:menu>
             <MenuEditor @selectionChanged="menuChanged"></MenuEditor>
           </div>

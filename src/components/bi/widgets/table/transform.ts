@@ -20,11 +20,11 @@ function buildResult({ config, data, context, key, contextWrap, fullConfig }) {
   //
   if (!resultTitle && !resultPagination) {
     //
-    return wrapResult(context, resultTable)
+    return  resultTable
   } else {
     const result = { '~': 'div', '#': [resultTitle, resultTable, resultPagination] }
     //
-    return wrapResult(context, result)
+    return result
   }
 
   function buildTable() {

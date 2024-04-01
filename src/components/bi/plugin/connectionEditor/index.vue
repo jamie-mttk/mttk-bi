@@ -1,19 +1,19 @@
 <template>
   <div class="toolbar-table-container" style="margin:0 24px 0 8px;">
-    <div class="lc-common-toolbar toolbar">
-      <div class="left" style="font-weight: bold">数据库连接</div>
+    <div class="lc-common-toolbar toolbar" style="background-color: var(--el-color-primary)">
+      <div class="left" style="font-weight: bold; color: var(--el-color-white);">数据库连接</div>
 
       <el-button-group class="right">
         <el-button @click="reload">
-          <template #icon> <lc-icon icon="mdiRefresh"></lc-icon> </template>Refresh</el-button
+          <template #icon> <lc-icon icon="mdiRefresh"></lc-icon> </template>刷新</el-button
         >
         <el-button @click="handleAdd" v-auth:jdbcConnection_add>
-          <template #icon> <lc-icon icon="mdiPlus"></lc-icon> </template>Add menu</el-button
+          <template #icon> <lc-icon icon="mdiPlus"></lc-icon> </template>新建连接</el-button
         >
       </el-button-group>
     </div>
 
-    <el-table :data="tableData"  class="table-area">
+    <el-table :data="tableData"  class="table-area" v-fullHeight="8">
       <el-table-column prop="name" label="名称" />
       <el-table-column prop="description" label="描述" />
       <el-table-column prop="driverClass" label="驱动类" />
@@ -35,7 +35,7 @@
           <el-button-group>
             <el-button @click="handleEdit(sp)" v-data-auth:edit="sp.row">修改</el-button>
             <el-button @click="handleDelete(sp)" v-data-auth:del="sp.row">删除</el-button>
-            <DataAuthButton :data="sp.row" resource="jdbcConnection" />
+            <lcDataAuthButton :data="sp.row" resource="jdbcConnection" />
           </el-button-group>
         </template>
       </el-table-column>
@@ -52,7 +52,8 @@
 import { ref, computed, inject } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import ConnectionEditorDialog from './ConnectionEditorDialog.vue'
-import DataAuthButton from '@/components/auth/DataAuthButton.vue'
+import { lcDataAuthButton,vFullHeight } from 'mttk-lowcode-engine'
+
 const globalContext = inject('globalContext')
 const appContext = inject('appContext')
 
@@ -66,7 +67,7 @@ function reload() {
   globalContext
     .request({
       method: 'GET',
-      url: '/jdbcConnection/query',
+      url: '/bi/jdbcConnection/query',
       params: {
         app: appContext.getKey()
       }
@@ -96,7 +97,7 @@ const callback = (dataNew) => {
   globalContext
     .request({
       method: 'POST',
-      url: '/jdbcConnection/save',
+      url: '/bi/jdbcConnection/save',
       data: dataNew
     })
     .then(function () {
@@ -115,7 +116,7 @@ const handleDelete = (sp) => {
     globalContext
       .request({
         method: 'POST',
-        url: 'jdbcConnection/delete',
+        url: '/bi/jdbcConnection/delete',
         params: {
           id: sp.row['_id']
         }

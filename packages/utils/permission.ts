@@ -1,16 +1,15 @@
 //Handle router Navigation Guards
-import { useAccountStore } from '@/stores/account'
+import { loginState } from './authentication'
 //
 
 export function initPermission(globalContext) {
-  const accountStore = useAccountStore()
 
   //URLs without login to access
   const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
   //
   globalContext.router.beforeEach((to, from) => {
     //Check whether loginInfo is available
-    if (accountStore.token) {
+    if (loginState.value.token) {
       //Already login
       //   if (to.path === '/login') {
       //     return '/'

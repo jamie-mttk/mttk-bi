@@ -1,32 +1,31 @@
 import { biPieTransform } from './transform'
-import { buildModel, buildOtherProp } from '../utils/indexUtil'
+import { buildModelFull,  buildOtherProp } from '../utils/indexUtil'
 import { widgetUtil } from 'mttk-lowcode-engine'
+//
+
 //
 const biPieConfig = {
   key: '_bi_pie',
   name: 'BI Pie',
   description: '',
   icon: 'mdiChartPie',
-  sequence: 2,
+  sequence: 13,
   transform: biPieTransform,
   editor: {
-    model: {
-      name: '数据模型',
-      sequence: 1,
-      init: {
+    model: buildModelFull({
         type: 'pie'
-      },
-      ui: buildModel([
+      },[
         'dimension',
         { _type: 'metric', prop:'metric',label: '度量', option: { maxRow: 1 } },
         'drilling',
+        'filter','rowLimit',
         'interval',
         'refresh','showSQL','showData',
-      ])
-    },
+      ]),
     basic: {
       init: { 'series-radius': '65%' },
       ui: [
+        widgetUtil.createBase('lc-theme-select','echartsTheme','Echarts主题'),
         widgetUtil.createInput('title-text', '标题'),
         widgetUtil.createInput('title-subtext', '副标题'),
         widgetUtil.createSelect('series-roseType', [ { label: '角度表示大小', value: 'radius' }, { label: '面积表示大小', value: 'area' } ], '玫瑰形状'),

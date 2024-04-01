@@ -1,4 +1,5 @@
-import {buildTransformEcharts} from '../utils/transformUtil'
+import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
+import {safeGetArrayItem} from '../utils/transformTools'
 import {createTooltip} from '../utils/tooltipUtil'
 const validateRules=[
   {key:'dimension',label:'维度',min:1},
@@ -7,28 +8,24 @@ const validateRules=[
 
 
 function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
+  const modelConfig=fullConfig.config.model
   //
   const option = {
-    title: {
-      text: config['title-text'] || '',
-      subtext: config['title-subtext'] || '',
-      left: 'center'
-    },
+    ...buildBaseOption({config}),
     tooltip: {
       trigger: 'axis', 
       formatter:function(param){
         return createTooltip(param,fullConfig)
       },
     },
+
     xAxis: {
-      type: config.reverse ? 'value' : 'category'
+      type: config.reverse ? 'value' : 'category',
+      name:config.reverse ?safeGetArrayItem(modelConfig,'metric',0)?.label:safeGetArrayItem(modelConfig,'dimension',0)?.label
     },
     yAxis: {
-      type: config.reverse ? 'category' : 'value'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
+      type: config.reverse ? 'category' : 'value',
+      //y can not set name since it may have more than one
     },
     series: [],
 
@@ -38,26 +35,12 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
     option.series.push({
       type: 'bar',
       id: c.id,
+      name:c.label||c.column,
       stack: config.stack ? 'x' : ''
     })
   }
   return option
 }
 
-//return error info is valdiate failed,otherwise return undefined
-function validate({ config, data, context, key, contextWrap, fullConfig }) {
-  //
-  // if (fullConfig?.config?.model?.dimension?.length <= 0) {
-  //   return '维度没有设置'
-  // }
-  // //
-  // if (fullConfig?.config?.model?.metric?.length <= 0) {
-  //  return '度量没有设置'
-  // }
-  //
-  return undefined
-}
-
-
 //
-export const biBarTransform = buildTransformEcharts(buildOption, validateRules,validate)
+export const biBarTransform = buildTransformEcharts(buildOption, validateRules,undefined)

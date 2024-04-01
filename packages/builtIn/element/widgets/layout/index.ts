@@ -45,7 +45,15 @@ const layoutConfig = {
           { span: 24, offset: 0, push: 0, pull: 0, key: createUniqueString()}
         ]
       }
-    }
+    },
+    display: {
+      init: {
+        style: {
+          width: '100%'
+        },
+        class: ''
+      }
+    },
   }
 }
 //

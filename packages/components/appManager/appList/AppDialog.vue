@@ -3,7 +3,7 @@
         :close-on-press-escape="false" width="75%" class="app-dialog-dummy" @open="activeTab='basic'">
         <el-tabs v-model="activeTab">
             <el-tab-pane label="Basic" name="basic">
-                <el-form ref="appEditorFormRef" :model="formData" label-width="180px">
+                <el-form ref="appEditorFormRef" :model="formData" label-width="240px">
                     <el-form-item label="ID" prop="_id">
                         <el-input v-model="formData['_id']" :disabled="true" />
                     </el-form-item>
@@ -16,10 +16,12 @@
                     <el-form-item label="Icon" prop="icon">
                         <lc-icon-picker v-model="formData.icon" />
                     </el-form-item>
-                    <el-form-item label="Color" prop="color">
+                    <el-form-item label="Main color" prop="color">
                         <el-color-picker v-model="formData.color" />
                     </el-form-item>
-
+                    <el-form-item label="Page default background" prop="colorBackground">
+                        <el-color-picker v-model="formData.colorBackground" :predefine="['#F5F7FA','#F0F2F5','#EBEDF0','#000000',]"/>
+                    </el-form-item>
                     <el-form-item label="Customize plugin" prop="customizePlugin">
                         <el-switch v-model="formData.customizePlugin" />
                     </el-form-item>

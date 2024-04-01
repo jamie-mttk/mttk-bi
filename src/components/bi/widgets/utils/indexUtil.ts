@@ -1,26 +1,36 @@
-import { ref } from 'vue'
+import { computed } from 'vue'
 import DataModelHolder from '../../components/DataModelHolder.vue'
 import DataModelFieldDrop from '../../components/DataModelFieldDrop.vue'
-import { displayInit } from '../../utils/biTool'
-import { computed } from 'vue'
 
-export function buildModel(rawConfigs) {
+import { displayInit } from '../../utils/biTool'
+import { filterIndexOptions } from '../filter/index'
+import { lcFormItem, widgetUtil } from 'mttk-lowcode-engine'
+
+export function buildModelFull(initConfig = {}, rawConfig = [] as any[]) {
+  return {
+    name: '数据模型',
+    sequence: 1,
+    init: initConfig,
+    ui: buildModel(rawConfig)
+  }
+}
+
+export function buildModel(rawConfig) {
   return function ({ config, context, key, fullConfig }) {
     const result = {
       '~': DataModelHolder,
-      '~modelValue': config,
-      app: context.appContext.getKey(),
-      request: context.appContext.globalContext.request,
+      '~modelValue': fullConfig,
+
       '#': []
     }
     //
-    parse(result)
+    parse()
 
     //
     return result
 
-    function parse(result) {
-      for (const raw of rawConfigs || []) {
+    function parse() {
+      for (const raw of rawConfig || []) {
         if (typeof raw == 'string') {
           //String means it it a sort/filter/dimension/metric/drilling/refresh,otherwise raise exception
           const r = parseString(raw)
@@ -50,64 +60,118 @@ export function buildModel(rawConfigs) {
     }
     function parseString(raw: string = '') {
       //
-      if (raw.startsWith('sort')) {
-        //TBD,not implement yet
-      } else if (raw.startsWith('filter')) {
-        //TBD,not implement yet
-      } else if (raw.startsWith('dimension')) {
-        //
-        return {
-          '~': 'el-form-item',
-          label: '维度',
-          prop: raw,
-          '#': {
-            '~': DataModelFieldDrop,
+      if (raw == 'filter') {
+        const result = {
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
             '~modelValue': config,
+            '~label': '过滤',
+            '~description': '针对本图表设置过滤条件',
+            '~hideSwitchButton': true,
+            prop: raw,
+            ...filterIndexOptions
+          }
+        }
+        //Set mode to true so the edit dialog UI will be a little different between filter in model and it is a pure filter
+        result.config.option.mode=true
+        //
+        return result
+      } else if (raw.startsWith('dimension')) {
+        return {
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
+            '~modelValue': config,
+            '~label': '维度' + raw.substring(raw.length),
+            '~description': '维度一般显示在x轴,当存在度量后台计算时会自动分组',
+            '~hideSwitchButton': true,
             prop: raw,
             option: { maxRow: 1 }
           }
         }
       } else if (raw.startsWith('metric')) {
         //
+        // return {
+        //   '~': 'el-form-item',
+        //   label: '度量',
+        //   prop: raw,
+        //   '#': {
+        //     '~': DataModelFieldDrop,
+        //     '~modelValue': config,
+        //     prop: raw,
+        //     option: {}
+        //     // checkDrop: checkAllowDropMetric
+        //   }
+        // }
         return {
-          '~': 'el-form-item',
-          label: '度量',
-          prop: raw,
-          '#': {
-            '~': DataModelFieldDrop,
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
             '~modelValue': config,
+            '~label': '度量' + raw.substring(raw.length),
+            '~description': '度量一般显示在y轴,往往需要在界面上设置聚合方式',
+            '~hideSwitchButton': true,
             prop: raw,
             option: {}
-            // checkDrop: checkAllowDropMetric
           }
         }
       } else if (raw.startsWith('drilling')) {
         //
+        // return {
+        //   '~': 'el-form-item',
+        //   label: '钻取',
+        //   prop: raw,
+        //   '#': {
+        //     '~': DataModelFieldDrop,
+        //     '~modelValue': config,
+        //     prop: raw,
+        //     option: { maxRow: 10 }
+        //   }
+        // }
         return {
-          '~': 'el-form-item',
-          label: '钻取',
-          prop: raw,
-          '#': {
-            '~': DataModelFieldDrop,
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
             '~modelValue': config,
+            '~label': '钻取' + raw.substring(raw.length),
+            '~description': '钻取顺序需要从上到下设置,而且第一项与钻取的维度完全相同',
+            '~hideSwitchButton': true,
             prop: raw,
             option: { maxRow: 10 }
           }
         }
       } else if (raw.startsWith('rowLimit')) {
         //
+        // return {
+        //   '~': 'el-form-item',
+        //   label: '返回行数~空/负数代表不限',
+        //   prop: raw,
+        //   '#': {
+        //     '~': 'el-input-number',
+        //     '~modelValue': computed({
+        //       get: () => config[raw],
+        //       set: (val) => {
+        //         config[raw] = val
+        //       }
+        //     }),
+        //     controls: false
+        //   }
+        // }
+
         return {
-          '~': 'el-form-item',
-          label: '返回行数(空或负数代表不限制)',
-          prop: raw,
-          '#': {
-            '~': 'el-input-number',
-            '~modelValue': computed({
-              get: () => config[raw],
-              set: (val) => {
-                config[raw] = val
-              }
-            }),
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': 'el-input-number',
+            '~prop': raw,
+            '~label': '返回行数',
+            '~description': '空/负数代表不限',
+            '~hideSwitchButton': true,
             controls: false
           }
         }
@@ -159,7 +223,7 @@ export function buildModel(rawConfigs) {
         return [
           {
             '~': 'el-form-item',
-            label: '自动刷新(再次进入界面修改生效)',
+            label: '自动刷新(再次进入生效)',
             prop: 'interval',
             '#': [
               {
@@ -226,43 +290,35 @@ export function buildModel(rawConfigs) {
       } else if (raw.startsWith('refresh')) {
         //
         return {
-          '~': 'el-form-item',
-          '#': {
-            '~': 'el-button',
-            type: 'primary',
-            '#': '刷新图表',
-            style: { width: '100%' },
-            '@click': function () {
-              context.mitt.emit('bi-chart-reload-' + key, { reset: true, showError: true })
-            }
+          '~': 'el-button',
+          type: 'primary',
+          '#': '刷新图表',
+          // Set margin-eft is beacause element will auto add 12px if there is a button before
+          style: { width: '100%', 'margin-left': '0px', 'margin-top': '10px' },
+          '@click': function () {
+            context.mitt.emit('bi-chart-reload-' + key, { reset: true, showError: true })
           }
         }
       } else if (raw.startsWith('showSQL')) {
         //
         return {
-          '~': 'el-form-item',
-          '#': {
-            '~': 'el-button',
-            type: '',
-            '#': '查看SQL',
-            style: { width: '100%' },
-            '@click': function () {
-              context.mitt.emit('bi-chart-action-' + key, { action: 'showSQL' })
-            }
+          '~': 'el-button',
+          type: '',
+          '#': '查看SQL',
+          style: { width: '100%', 'margin-left': '0px', 'margin-top': '4px' },
+          '@click': function () {
+            context.mitt.emit('bi-chart-action-' + key, { action: 'showSQL' })
           }
         }
       } else if (raw.startsWith('showData')) {
         //
         return {
-          '~': 'el-form-item',
-          '#': {
-            '~': 'el-button',
-            type: '',
-            '#': '查看数据',
-            style: { width: '100%' },
-            '@click': function () {
-              context.mitt.emit('bi-chart-action-' + key, { action: 'showData' })
-            }
+          '~': 'el-button',
+          type: '',
+          '#': '查看数据',
+          style: { width: '100%', 'margin-left': '0px', 'margin-top': '4px' },
+          '@click': function () {
+            context.mitt.emit('bi-chart-action-' + key, { action: 'showData' })
           }
         }
       } else {
@@ -285,13 +341,26 @@ export function buildModel(rawConfigs) {
         //TBD,not implement yet
       } else if (type == 'dimension') {
         //
+        // return {
+        //   '~': 'el-form-item',
+        //   label: raw.label || '维度',
+        //   prop: raw.prop || 'dimension',
+        //   '#': {
+        //     '~': DataModelFieldDrop,
+        //     '~modelValue': config,
+        //     prop: raw.prop || 'dimension',
+        //     checkDrop: raw.checkDrop || undefined,
+        //     option: raw.option || { maxRow: 1 }
+        //   }
+        // }
         return {
-          '~': 'el-form-item',
-          label: raw.label || '维度',
-          prop: raw.prop || 'dimension',
-          '#': {
-            '~': DataModelFieldDrop,
-            '~modelValue': config,
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
+            '~label': raw.label || '维度',
+            '~description': raw.description || '维度一般显示在x轴,当存在度量后台计算时会自动分组',
+            '~hideSwitchButton': true,
             prop: raw.prop || 'dimension',
             checkDrop: raw.checkDrop || undefined,
             option: raw.option || { maxRow: 1 }
@@ -299,13 +368,27 @@ export function buildModel(rawConfigs) {
         }
       } else if (type == 'metric') {
         //
+        // return {
+        //   '~': 'el-form-item',
+        //   label: raw.label || '度量',
+        //   prop: raw.prop || 'metric',
+        //   '#': {
+        //     '~': DataModelFieldDrop,
+        //     '~modelValue': config,
+        //     prop: raw.prop || 'metric',
+        //     checkDrop: raw.checkDrop || undefined,
+        //     option: raw.option || {}
+        //   }
+        // }
         return {
-          '~': 'el-form-item',
-          label: raw.label || '度量',
-          prop: raw.prop || 'metric',
-          '#': {
-            '~': DataModelFieldDrop,
-            '~modelValue': config,
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
+
+            '~label': raw.label || '度量',
+            '~description': raw.description || '度量一般显示在y轴,往往需要在界面上设置聚合方式',
+            '~hideSwitchButton': true,
             prop: raw.prop || 'metric',
             checkDrop: raw.checkDrop || undefined,
             option: raw.option || {}
@@ -313,32 +396,43 @@ export function buildModel(rawConfigs) {
         }
       } else if (type == 'drilling') {
         //
+        // return {
+        //   '~': 'el-form-item',
+        //   label: raw.label || '钻取',
+        //   prop: raw.prop || 'drilling',
+        //   checkDrop: raw.checkDrop || undefined,
+        //   '#': {
+        //     '~': DataModelFieldDrop,
+        //     '~modelValue': config,
+        //     prop: raw.prop || 'drilling',
+        //     option: raw.option || { maxRow: 10 }
+        //   }
+        // }
         return {
-          '~': 'el-form-item',
-          label: raw.label || '钻取',
-          prop: raw.prop || 'drilling',
-          checkDrop: raw.checkDrop || undefined,
-          '#': {
-            '~': DataModelFieldDrop,
-            '~modelValue': config,
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~component': DataModelFieldDrop,
+
+            '~label': raw.label || '钻取',
+            '~description':
+              raw.description || '钻取顺序需要从上到下设置,而且第一项与钻取的维度完全相同',
+            '~hideSwitchButton': true,
             prop: raw.prop || 'drilling',
+            checkDrop: raw.checkDrop || undefined,
             option: raw.option || { maxRow: 10 }
           }
         }
       } else if (type == 'normal') {
         //  normal item
+
         return {
-          '~': 'el-form-item',
-          label: raw.label || '',
-          prop: raw.prop,
-          '#': {
-            ...(raw.item || { '~': 'el-input' }),
-            '~modelValue': computed({
-              get: () => config[raw.prop],
-              set: (val) => {
-                config[raw.prop] = val
-              }
-            })
+          '~': lcFormItem,
+          '~modelValue': config,
+          config: {
+            '~label': raw.label || '',
+            '~prop': raw.prop,
+            ...(raw.item || { '~': 'el-input' })
           }
         }
       }
@@ -346,7 +440,7 @@ export function buildModel(rawConfigs) {
   }
 }
 
-export function buildOtherProp(initDisplay = true) {
+export function buildOtherProp({ initDisplay = true, initStyle = {} } = {}) {
   return {
     data: {
       type: 'Object',
@@ -361,8 +455,16 @@ export function buildOtherProp(initDisplay = true) {
     },
     event: false,
     display: {
-      hide: true,
-      init: initDisplay ? displayInit : {}
+      hide: false,
+      init: initDisplay ? displayInit({ initStyle }) : {}
     }
   }
+}
+
+export function buildEchartsBaseUI() {
+  return [
+    widgetUtil.createBase('lc-theme-select', 'echarts-theme', 'Echarts主题'),
+    widgetUtil.createInput('title-text', '标题'),
+    widgetUtil.createInput('title-subtext', '副标题')
+  ]
 }

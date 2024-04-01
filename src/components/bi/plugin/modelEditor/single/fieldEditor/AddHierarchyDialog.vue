@@ -38,7 +38,7 @@ function handleAddHierarchy() {
         return
     } 
     //
-    data.value.key=tools.createUniqueString()
+    data.value.key='h'+tools.createUniqueString()
     data.value.type='hierarchy'
     data.value.children=[]
     //

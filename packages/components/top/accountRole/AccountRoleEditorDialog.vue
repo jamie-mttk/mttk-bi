@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="dialogVisible" title="用户组编辑" :destroy-on-close="true"
+    <el-dialog v-model="dialogVisible" title="角色编辑" :destroy-on-close="true"
         :close-on-click-modal="false" :close-on-press-escape="false">
 
         <el-form ref="dataEditorFormRef" :model="formData" label-width="120px">

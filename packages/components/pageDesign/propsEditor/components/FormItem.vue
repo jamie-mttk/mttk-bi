@@ -1,7 +1,7 @@
 <template>
     <el-form-item :prop="props.config['~prop']" style="margin-bottom:0px;">
         <template #label>
-            <div class="lc-common-toolbar" style="background-color: transparent;">
+            <div class="lc-common-toolbar" style="background-color: transparent;line-height:22px;">
                 <div>
                     {{ config['~label'] }}
 
@@ -28,7 +28,7 @@
     </el-form-item>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed,  } from 'vue'
 import lcMyInput from './MyInput.vue'
 import { buildConfig, stdComponent } from './FormItemUtil'
 import { isExp } from '@/utils/expression'

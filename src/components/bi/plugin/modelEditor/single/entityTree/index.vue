@@ -1,11 +1,11 @@
 <template>
 
-  <el-scrollbar class="entitity-tree" id="entityTreePanel" @dragover="allowDrop" @drop="handleDrop">
-
+<!-- Here we can NOT use el-scrollbar,otherwise the JsPlumb endpoint will not display in correct position   -->
+<div class="entitity-tree" id="entityTreePanel" @dragover="allowDrop" @drop="handleDrop">
     <EntityNode v-for="node in treeNodes" :key="node.entity?.key" :modelValue="node" :id="'pn_' + node.entity?.key"
       :style="nodeStyle(node)" @nodeCommand="handleNodeCommand"></EntityNode>
 
-  </el-scrollbar>
+  </div>
   <NodeEditDialog ref="nodeEditDialogRef"></NodeEditDialog>
   <ColumnChooseDialog ref="columnChooseDialogRef"></ColumnChooseDialog>
 </template>
@@ -19,6 +19,7 @@ import EntityNode from './EntityNode.vue'
 import NodeEditDialog from './edit//NodeEditDialog.vue'
 import ColumnChooseDialog from './column/ColumnChooseDialog.vue'
 import {findRelationIndex,findEntityIndex,findColumnIndex} from '../../util/modelUtil'
+
 
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
@@ -110,7 +111,7 @@ function allowDrop(ev) {
 }
 function handleDrop(event) {
   const data = event.dataTransfer.getData('text')
-  console.log(data)
+
 
   if (!data) {
     return
@@ -127,7 +128,7 @@ function handleDrop(event) {
   width: 100%;
   min-height: 280px;
   height: 320px;
-
+  position:absolute;
   // background-color: brown;
   .entityTreeLabel {
     color: var(--el-text-color-regular);

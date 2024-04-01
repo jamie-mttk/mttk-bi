@@ -10,17 +10,17 @@ export function installRouter(app, router?) {
       history: createWebHistory(),
       routes: routes || []
     })
-    //
-    app.use(router)
+
     //
   } else {
     //
     for (const route of routes) {
       router.addRoute(route)
     }
-    //Please note ,it does not work if app.use(router) is already called before
-    app.use(router)
+
   }
+      //Please note ,it does not work if app.use(router) is already called before
+      app.use(router)
   //
   return { router }
 }

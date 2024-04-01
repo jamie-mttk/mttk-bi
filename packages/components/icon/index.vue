@@ -62,6 +62,7 @@ function handleClick(event){
     user-select: none;
     vertical-align: middle;
     width: 1em;
+    cursor: pointer;
 }
 
 .lc-icon_svg {

@@ -1,5 +1,7 @@
 <template>
+
     <MttkWrapComp  :config="pageConfig" ></MttkWrapComp>
+
 </template>
 
 <script setup lang="ts">
@@ -55,20 +57,48 @@ const pageConfig = computed (()=> {
   //
   //  console.log('!!!!!!!!!!!!', JSON.stringify(props.context.codeManager.getCode().ui[0]))
   //
-  const config = {
+  const code=props.context.codeManager.getCode();
+  let config = {
     '~component': lcWrap,
-    'modelValue': props.context.codeManager.getCode().ui[0],
+    'modelValue': code.ui[0],
+
     // pageContext: props.context,
     // jamie:'I am '+props.context.test
     ...lifecycles.value
   }
-  // console.log(JSON.stringify(config))
+
+  //Under render mode, we should calculate the style of width/height
+  if(code.renderMode=='absolute'){
+    //
+    // const heightCal=pageHeightByControlls();
+    // console.log(heightCal)
+    //
+    const scaleVal=(code.zoom||100)/100
+    const width=code.width||1920
+    const height=code.height||1080
+
+    config.style={width:width+'px',height:height+'px','transform-origin':'0 0',transform:'scale('+scaleVal+','+scaleVal+')'}//
+    //
+    if(scaleVal!=1){
+      //Here we wrap a DIV since the sapce in DOM is still kept after transform
+    config={
+      '~':'div',
+      style:{width:width*scaleVal+'px',height:height*scaleVal+'px',overflow:'hidden'},
+      '#':config,
+    }
+  }
+  }
+  // console.log(config)
+//  console.log(JSON.stringify(config))
   //
   //  try{
   // throw new Error('TEST ME')
   //  }catch(err){
   //   console.log(err)
   //  }
+//
+
+//
   return config;
 })
 //

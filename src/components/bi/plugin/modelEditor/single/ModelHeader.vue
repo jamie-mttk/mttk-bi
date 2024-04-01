@@ -9,7 +9,7 @@
         </el-input>
     </div>
     <div style="display:inline-block;cursor:pointer;margin-left:10px;">
-        <span v-if="!editMode" @click="startEdit" style="font-size: 0.8em;margin-left:20px;color:var(--el-text-color-regular)">{{ modelValue.description   }}</span>
+        <span v-if="!editMode" @click="startEdit" style="font-size: 0.8em;margin-left:20px;">{{ modelValue.description   }}</span>
         <el-input v-if="editMode" v-model="modelValue.description" placeholder="输入备注" size="small" >
         <template #suffix >
           <lc-icon icon="mdiCheck" @click="finishEdit"  size="medium"></lc-icon>

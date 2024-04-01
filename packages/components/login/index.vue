@@ -6,11 +6,10 @@
 import {inject} from 'vue'
 //
 const globalContext = inject('globalContext')
-//Find all login plugin
-const plugins=globalContext.pluginManager.findByEntry('login')
+
 //
 const config=function(){
-    console.log('??????????????')
+
     //Find all login plugin
     const plugins=globalContext.pluginManager.findByEntry('login')
     if(!plugins||plugins.length==0){

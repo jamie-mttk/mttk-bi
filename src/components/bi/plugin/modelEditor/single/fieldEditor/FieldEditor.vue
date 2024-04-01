@@ -147,13 +147,13 @@ const showAddExpressionDialog = ref(false)
 const editExpressionData = ref({})
 function handleModifyExpression(data = {}) {
   editExpressionData.value = data
-  console.log('111', editExpressionData.value, editExpressionData)
+
   showAddExpressionDialog.value = true
 }
 function expressionDialogCallback(data) {
   if (!data.key) {
     //New created
-    data.key = tools.createUniqueString()
+    data.key = 'e'+tools.createUniqueString()
     modelValue.value.columns.push(data)
   } else {
     //Edit

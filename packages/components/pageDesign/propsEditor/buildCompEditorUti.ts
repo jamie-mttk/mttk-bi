@@ -1,54 +1,149 @@
 //move some util functions from buildCompEditor.ts to make it smaller
 
-import { ref, reactive, computed, watch, toRaw, isRef, isReactive } from 'vue'
+import {  reactive, computed,  } from 'vue'
 
 import { formTransform } from './formTransform'
 import StyleEditor from './styleEditor.vue'
-import PositionEditor from './PositionEditor.vue'
 import MyInput from './components/MyInput.vue'
-import {setByPath} from '@/utils/pathUtil'
+import { setByPath } from '@/utils/pathUtil'
 //If not choosed, show page properties
 export function pageProps(context) {
-  const pageConfig =function(data){
-    // console.log(data.renderMode,data)
+  const pageConfig = function (data) {
+
     return [
-    {
-      '~component': 'el-input',
-      '~label': 'Name',
-      '~prop': 'name',
-      clearable: true
-    },
-    {
-      '~component': 'el-input',
-      '~label': 'Description',
-      '~prop': 'description',
-      clearable: true
-    },
-    {
-      '~component': 'el-radio-group',
-      '~label': 'Render Mode',
-      '~prop': 'renderMode',
-      '~options':{value:[
-        {value:'flex',label:'Flex'},
-        {value:'absolute',label:'Absolute'}
-      ]}
-    },
-    {
-      '~component': 'el-switch',
-      '~show':data.renderMode=='absolute',
-      '~label': 'Show grid',
-      '~prop': 'showGrid',
-    },
-    {
-      '~component': 'el-input-number',
-      '~show':data.renderMode=='absolute',
-      '~label': 'Grid width',
-      '~prop': 'gridWidth',
-      clearable: true
-    },
-  ]
-}
-  return formTransform(pageConfig, context.codeManager.getCode(), context)
+      {
+        '~component': 'el-input',
+        '~label': 'Name',
+        '~prop': 'name',
+        clearable: true
+      },
+      {
+        '~component': 'el-input',
+        '~label': 'Description',
+        '~prop': 'description',
+        clearable: true
+      },
+      {
+        '~component': 'el-radio-group',
+        '~label': 'Render Mode',
+        '~prop': 'renderMode',
+        '~options': {
+          value: [
+            { value: 'flex', label: 'Flex' },
+            { value: 'absolute', label: 'Absolute' }
+          ]
+        }
+      },
+      {
+        '~label': 'Width*Height',
+        '~hideSwitchButton':true,
+        '~component': 'div',
+        '~show': computed(()=>data.value.renderMode == 'absolute'),
+        style: { display: 'flex', 'justify-content': 'space-between' },
+        '#': [
+          {
+            '~': 'el-input-number',
+            '~modelValue': computed({
+              get() {
+                return data.value.width || 1920
+              },
+              set(newValue) {
+                data.value.width = newValue
+              }
+            }),
+            controls: false,
+            precision: 0,
+
+          },
+          {
+            '~':'div',
+            style:{margin:'0 6px'},
+            '#':'*'
+          },
+          {
+            '~': 'el-input-number',
+            '~modelValue': computed({
+              get() {
+                return data.value.height || 1920
+              },
+              set(newValue) {
+                data.value.height = newValue
+              }
+            }),
+            controls: false,
+            precision: 0,
+
+          }
+        ]
+      },
+
+    
+      {
+        '~label': 'Show grid and align to grid',
+        '~component': 'div',
+        '~show': computed(()=>data.value.renderMode == 'absolute'),
+        '~hideSwitchButton':true,
+        style: { display: 'flex', 'justify-content': 'space-between',width:'100%' },
+        '#': [
+          {
+            '~component': 'el-select',
+            style:{'flex-basis':'50%'},
+            '~modelValue': computed({
+              get() {
+                return data.value.showGrid 
+              },
+              set(newValue) {
+   
+                data.value.showGrid = newValue
+              }
+            }),
+            '#': [
+              { '~': 'el-option', value: 'hide', label: 'Hide' },
+              { '~': 'el-option', value: 'showInDesigner', label: 'Show in designer' },
+              { '~': 'el-option', value: 'show', label: 'Show always' }
+            ]
+          },
+          {
+            '~':'div',
+            style:{margin:'0 6px'},
+            '#':''
+          },
+          {
+            '~component': 'el-switch',
+            '~show':computed(()=>data.value.showGrid !='hide'),
+            style:{'flex-basis':'50%'},
+            '~modelValue': computed({
+              get() {
+                return data.value.alignToGrid 
+              },
+              set(newValue) {
+                data.value.alignToGrid = newValue
+              }
+            }),
+            '~prop': 'alignToGrid'
+          },
+        ]},
+
+      {
+        '~component': 'el-input-number',
+        '~show': computed(()=>data.value.renderMode == 'absolute' && data.value.showGrid !='hide'),
+        '~label': 'Grid width',
+        '~prop': 'gridWidth',
+        clearable: true
+      },
+      //Test <el-slider v-model="value1" />
+      {
+        '~component': 'el-slider',
+        '~show': computed(()=>data.value.renderMode == 'absolute'),
+        '~label': 'Zoom',
+        '~prop': 'zoom',
+        'style':{margin:'0px 12px'}
+      }
+    ]
+  }
+  //
+
+  return formTransform(pageConfig,computed(()=>context.codeManager.getCode()), context)
 }
 
 //
@@ -178,7 +273,6 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
     } else if (key == 'display') {
       return buildTabPanel('display', 'Display', buildTabDisplay())
     } else {
-
       return buildTabPanel(
         key,
         componentConfig.editor[key].name,
@@ -262,9 +356,6 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
   //
   //
   function buildTabEvent() {
-
-
-
     //
     const data = reactive(choosed.config || [])
     //
@@ -292,7 +383,7 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
             '~options': [
               { value: 'script', label: 'Script' },
               { value: 'method', label: 'Method' },
-              { value: 'api', label: 'API' },
+              { value: 'api', label: 'API' }
             ]
           },
           {
@@ -319,8 +410,7 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
             '~label': 'Script code',
             '~prop': 'code',
             '~show': computed(() => d.value.mode == 'script')
-          },
-          
+          }
         ]
       }
     }
@@ -334,18 +424,18 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
   // 	<StyleEditor v-model="configStyles" />
   function buildTabDisplay() {
     //Should set default value first,otherwise configStyle does no work as expected
-    if(!choosed?.config?.display?.style){
-      setByPath(choosed,'config.display.style',{},true)
+    if (!choosed?.config?.display?.style) {
+      setByPath(choosed, 'config.display.style', {}, true)
     }
     //
     const configStyle = computed({
       get: () => {
         // console.log('111111',choosed?.config?.display?.style ,choosed)
-        return choosed?.config?.display?.style 
+        return choosed?.config?.display?.style
       },
       set: (val) => {
         // console.log('222222',val)
-        setByPath(choosed,'config.display.style',val,true)
+        setByPath(choosed, 'config.display.style', val, true)
       }
     })
     //
@@ -383,46 +473,26 @@ function buildTabConfig(choosed, context, componentConfig, tabIndex, tabs) {
     config.push({ '~': 'div', style: { margin: '12px 0 4px 0' }, '#': 'Style:' })
     //
     config.push({ '~': StyleEditor, '~modelValue': configStyle })
-    if (context.choosedManager.get()['key']!='_root' &&  context.componentManager.renderMode.value == 'absolute') {
-      handleDisplayPosition(config,choosed)
-    }
+
     //
     return config
   }
 }
-//build position
-//This is only make sense if renderMode=='absolute'
-function handleDisplayPosition(config,choosed) {
-  if(!choosed?.config?.display?.position){
-    //set initial value
-    setByPath(choosed,'config.display.position',{},true)
-  }
-  //
-  config.push({
-    '~': 'div',
-    style: { 'margin': '8px 0' },
-    '#': 'Position(For absolute render mode):'
-  })
-  //
-  const configPosition = computed({
-    get: () => {
-      return choosed?.config?.display?.position || {}
-    },
-    set: (val) => {
-      setByPath(choosed,'config.display.position',val,true)
-    }
-  })
-  config.push({ '~': PositionEditor, '~modelValue': configPosition })
-}
+
 //
 //<el-tab-pane label="Basic" name="basic">
 function buildTabPanel(key, label, config) {
-  return { '~': 'el-tab-pane', label: label, name: key, 
-  '#':{
-    '~':'div',
-    'style':{'margin-right':'1px'},
-    '#':config
-  } }
+  return {
+    '~': 'el-tab-pane',
+    label: label,
+    name: key,
+    '#': {
+      '~': 'div',
+      style: { 'margin-right': '4px' },
+
+      '#': config
+    }
+  }
 }
 //Here based on the ui type ,build proper UI config
 //So far only form items is supported(ui is an array)
@@ -431,12 +501,12 @@ function buildUI(key, componentConfig, choosed, context) {
   //
   let ui = componentConfig.editor[key].ui || {}
   //
-  
+
   const config = choosed.config[key] || {}
   // console.log(key,data,choosed)
   //
   if (typeof ui == 'function') {
-    ui = ui({config,context,componentConfig,fullConfig:choosed,key:choosed.key})
+    ui = ui({ config, context, componentConfig, fullConfig: choosed, key: choosed.key })
   }
   if (Array.isArray(ui)) {
     //If it is array ,assume they are form items

@@ -50,7 +50,7 @@ function refreshData() {
   //
   globalContext.request({
     method: "POST",
-    url: '/dataModel/loadPreviewData',
+    url: '/bi/dataModel/loadPreviewData',
     params: { maxRows: maxRows.value },
     data: props.model,
   }).then(function (response) {

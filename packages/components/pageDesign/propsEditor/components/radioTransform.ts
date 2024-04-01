@@ -31,7 +31,7 @@ function parseOptionsArray(options, value, mode) {
   for (const v of value) {
     result.push({
       '~component': mode == 'standard' ? 'el-radio' : 'el-radio-button' ,
-      label: v[valueField],
+      value: v[valueField],
       '#': '' + v[labelField]
       
     })

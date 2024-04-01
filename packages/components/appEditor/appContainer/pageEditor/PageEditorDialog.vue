@@ -25,10 +25,17 @@
             </el-form-item>
             <el-form-item label="Render mode" prop="renderMode" required>
                 <el-radio-group v-model="formData.renderMode">
-                    <el-radio-button label="flex">Flex</el-radio-button>
-                    <el-radio-button label="absolute">Absolute</el-radio-button>
+                    <el-radio-button value="flex">Flex</el-radio-button>
+                    <el-radio-button value="absolute">Absolute</el-radio-button>
                 </el-radio-group>
             </el-form-item>
+            <el-form-item label="Width" v-if="formData.renderMode=='absolute'" prop="width" required>
+                <el-input-number v-model="formData.width" :controls="false" :precision="0" /> 
+            </el-form-item>
+            <el-form-item label="Height" v-if="formData.renderMode=='absolute'" prop="height" required>
+                <el-input-number v-model="formData.height" :controls="false" :precision="0" /> 
+            </el-form-item>
+
         </el-form>
         <template #footer>
             <span class="dialog-footer">

@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { ref, reactive, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAccountStore } from '@/stores/account'
+import { loginState } from '@/utils/authentication'
 //
 const globalContext = inject('globalContext')
 //
@@ -63,9 +63,7 @@ function handleLogin() {
             return
         }
         //
-        const accountStore = useAccountStore()
-
-        accountStore.login(globalContext, loginData).then( ()=> {
+        loginState.login(globalContext, loginData).then( ()=> {
             //forward to redirect from URL or root page
             router.push(globalContext.router.currentRoute.value.query?.redirect||'/')
         }).catch( (error)=> {

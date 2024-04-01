@@ -1,45 +1,31 @@
-<template>
-  flag:{{ flag }}<br />
-  <el-button @click="test11">TEST 1</el-button>
-  <el-button @click="test22">TEST 2</el-button>
-  <MttkWrapComp :config="buildConfig()"></MttkWrapComp>
-</template>
+<script setup lang="ts">
+import { ref } from 'vue'
 
-<script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
-
-//
-const flag = ref(false)
-
-function test11() {
-  flag.value = !flag.value
+function test(){
+  console.log('200px',parseStyleValue('200px'))
+  console.log('20abc3px',parseStyleValue('20abc3px'))
+  console.log('70%',parseStyleValue('70%'))
+}
+function parseStyleValue(styleText){
+  if(!styleText || typeof styleText!='string' || !styleText.endsWith('px')||styleText.length<=2){
+    return undefined
+  }
+  //
+  const value=styleText.substring(0,styleText.length-2)
+  // console.log(value,isNUmber(value),parseInt(value))
+  if(!isNUmber(value)){
+    //please note: parseFloat(20abc4 ) will return 20,so we should check whther it is a number first
+    return undefined
+  }
+  //
+  return parseFloat((value))
 }
 
-function buildConfig() {
-  //
-  console.log('I AM BUILD' + new Date())
-  //
-
-  return {
-    '~': 'div',
-    class: computed(() => {
-      const cls = ['hello']
-      if (flag.value) {
-        cls.push('hello-active')
-      }
-      return cls
-    })
-  }
+function isNUmber(num) {
+	return /^[0-9]+.?[0-9]*$/.test(num);
 }
 </script>
 
-<style>
-.hello {
-  width: 300px;
-  height: 300px;
-  border: 1px solid red;
-}
-.hello-active {
-  background-color: blue;
-}
-</style>
+<template>
+  <div><el-button @click="test">TEST</el-button></div>
+</template>

@@ -200,7 +200,7 @@ const validateAuthorities = (rule: any, value: any, callback: any) => {
     if(a.type!='ownerGroup' &&  !a.id){
       callback(new Error("第"+(i+1)+"行没有选择用户或用户组"))
     }
-    console.log(a,i,(!a.operations || a.operations.length==0))
+    // console.log(a,i,(!a.operations || a.operations.length==0))
     if(!a.operations || a.operations.length==0){
       callback(new Error("第"+(i+1)+"行没有选择任何权限"))
     }

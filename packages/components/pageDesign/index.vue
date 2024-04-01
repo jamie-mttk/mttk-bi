@@ -3,39 +3,41 @@
     <el-header style="padding: 0px; margin: 0 0 8px 0; height: 48px">
       <MttkWrapComp :config="configTop"></MttkWrapComp>
     </el-header>
-    <Transition
+    <!-- <Transition  
       mode="out-in"
       name="custom-classes"
       enter-active-class=" page_enter"
       leave-active-class=" page_leave"
-    >
-      <div v-if="isEditMode" style="min-height: calc(100% - 58px); display: flex">
-        <div style="flex-grow: 0">
+    > -->
+    <div ref="previewPageRenderRef">
+      <el-container v-if="isEditMode" >
+        <el-aside width="auto">
           <!-- <MttkWrapComp :config="configLeft"></MttkWrapComp> -->
           <ToolbarLeft></ToolbarLeft>
-        </div>
-        <div style="flex-grow: 1; margin-left: 8px">
+        </el-aside>
+        <el-main style="padding: 0 0 0 8px;">
           <MttkWrapComp :config="configMain"></MttkWrapComp>
-        </div>
-      </div>
+        </el-main>
+      </el-container>
       <el-row v-else>
-        <el-col :span="24">
-          <PageRender :context="context"></PageRender>
+        <el-col :span="24" >
+          <PageRender :context="context" ></PageRender>
         </el-col>
       </el-row>
-    </Transition>
+    </div>
+    <!-- </Transition> -->
   </el-container>
 </template>
 
 <script setup lang="ts">
 import PageRender from '../pageRender/index.vue'
-import { computed, watch } from 'vue'
-import { provide, inject } from 'vue'
+import { ref,computed, watch,provide, inject } from 'vue'
+import { useFullscreen } from '@vueuse/core'
 import ToolbarLeft from './ToolbarLeft.vue'
 
 import createContext from '@/context/pageContext/index'
 import { buildTop } from './buildTop'
-import { buildLeft } from './buildLeft'
+
 import { buildMain } from './buildMain'
 
 //
@@ -80,8 +82,19 @@ watch(
 const configTop = buildTop(context)
 // const configLeft = buildLeft(context)
 const configMain = buildMain(context)
-
 //
+const previewPageRenderRef=ref()
+const { isFullscreen, enter, exit, toggle } = useFullscreen(previewPageRenderRef)
+context.mitt.on('previewFullSCreen',()=>{
+
+  enter()
+})
+watch(isFullscreen, (value) => {
+  if(!value){
+    //Once full scren preview is done, change to edit mode
+    context.mode.value = 'edit'
+  }
+})
 //
 </script>
 <style lang="scss">

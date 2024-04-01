@@ -1,4 +1,5 @@
-import {buildTransformEcharts} from '../utils/transformUtil'
+import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
+import {safeGetArrayItem} from '../utils/transformTools'
 import {createTooltip} from '../utils/tooltipUtil'
 const validateRules=[
   {key:'dimension',label:'维度',min:1},
@@ -7,13 +8,10 @@ const validateRules=[
 
 
 function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
+  const modelConfig=fullConfig.config.model
   //
   const option = {
-    title: {
-      text: config['title-text'] || '',
-      subtext: config['title-subtext'] || '',
-      left: 'center'
-    },
+    ...buildBaseOption({config}),
     tooltip: {
       trigger: 'axis',
       formatter:function(param){
@@ -21,14 +19,11 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       },
     },
     xAxis: {
-      type: config.reverse ? 'value' : 'category'
+      type: config.reverse ? 'value' : 'category',
+      name:config.reverse ?safeGetArrayItem(modelConfig,'metric',0)?.label:safeGetArrayItem(modelConfig,'dimension',0)?.label
     },
     yAxis: {
       type: config.reverse ? 'category' : 'value'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
     },
     series: [],
 
@@ -38,6 +33,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   for (const c of fullConfig?.config.model.metric || []) {
     option.series.push({
       type: 'line',
+      name:c.label||c.column,
       stack: config.stack?'x' : '',
       areaStyle:config.areaMode?{}:undefined,
       smooth:!!config.smooth,
@@ -46,12 +42,6 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   return option
 }
 
-//return error info is valdiate failed,otherwise return undefined
-function validate({ config, data, context, key, contextWrap, fullConfig }) {
-
-  return undefined
-}
-
 
 //
-export const biLineTransform = buildTransformEcharts(buildOption, validateRules,validate)
+export const biLineTransform = buildTransformEcharts(buildOption, validateRules,undefined)

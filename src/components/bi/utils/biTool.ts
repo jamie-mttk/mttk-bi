@@ -1,19 +1,22 @@
 //wrap result inside a div to have margin and background
-export function wrapResult(context,result,footer?) {
-  const renderMode=context.renderMode.value
+export function wrapResult(context, result, footer?) {
+  // const renderMode=context.renderMode.value
+
   //
   //wrap inside a div
   return {
     '~': 'div',
     style: {
-      'border-radius': '4px',
-       'margin': renderMode=='flex'?'8px':'8px 4px',
-      //   padding: '20px',
+      //Use border to replace margin  and set box-sizing to border-box to avoid complex width/height calculation
+      border: '8px solid ' + (context.appContext.getCode().colorBackground || 'transparent'),
+      'box-sizing': 'border-box',
+      //  'margin': renderMode=='flex'?'8px':'8px 4px',
+      // padding: '12px',
       'background-color': '#fff',
-      height: 'calc(100% - 8px)',
-      width: renderMode=='flex'?'calc(100% - 16px)':'calc(100% - 8px)',
+      height: '100%',
+      width: '100%'
     },
-    '#': [result,footer,]
+    '#': [result, footer]
   }
 }
 
@@ -32,21 +35,15 @@ export function formatDateTime(val) {
 }
 
 //default display init
-export function displayInit({ context }) {
-  if (context.renderMode.value == 'flex') {
+export function displayInit({ initStyle = {} }) {
+  return function ({ context }) {
     return {
       style: {
-        // If width is set to 100% , the width will growth if there are two charts in one panel
-        // width: '99%',
-        height: '320px'
-      }
-    }
-  } else {
-    return {
-      position: {
-        w: 480,
-        h: 320,
-        z: 100
+        width: context.renderMode.value == 'flex' ? '100%' : '480px',
+        height: '320px',
+        padding: '12px',
+        'box-sizing': 'border-box',
+        ...initStyle
       }
     }
   }

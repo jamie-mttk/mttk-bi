@@ -1,41 +1,121 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useCssVar } from '@vueuse/core'
+<template>
+<MttkWrapComp :config="config"></MttkWrapComp>
 
-const el = ref(null)
-const color = useCssVar('--color', el)
+</template>
 
-const color2=useCssVar('--el-color-primary')
+<script lang="ts" setup>
+const tableData = [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  },
+  {
+    date: '2016-05-08',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  },
+  {
+    date: '2016-05-06',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  },
+  {
+    date: '2016-05-07',
+    name: 'Tom',
+    state: 'California',
+    city: 'Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
+    zip: 'CA 90036'
+  }
+]
 
-function switchColor() {
-  if (color.value === '#df8543')
-    color.value = '#7fa998'
-  else
-    color.value = '#df8543'
-}
-
-const elv = ref(null)
-const key = ref('--color')
-const colorVal = useCssVar(key, elv)
-function changeVar() {
-  if (key.value === '--color')
-    key.value = '--color-one'
-  else
-    key.value = '--color'
+const config = {
+  '~': 'el-table',
+  data: tableData,
+  style: { width: '100%' },
+  '#': [
+    {
+      '~': 'el-table-column',
+      prop: 'date',
+      label: 'Date',
+      width: 150
+    },
+    {
+      '~': 'el-table-column',
+      label: 'Delivery Info',
+      '#': function(){return [
+        {
+          '~': 'el-table-column',
+          prop: 'name',
+          label: 'Name',
+          width: 120
+        },
+        {
+          '~': 'el-table-column',
+          label: 'Address Info',
+          '#': [
+            {
+              '~': 'el-table-column',
+              prop: 'state',
+              label: 'State',
+              width: 150
+            },
+            {
+              '~': 'el-table-column',
+              prop: 'city',
+              label: 'City',
+              width: 150
+            },
+            {
+              '~': 'el-table-column',
+              prop: 'address',
+              label: 'Address',
+              width: 150
+            },
+            {
+              '~': 'el-table-column',
+              prop: 'zip',
+              label: 'Zip',
+              width: 150
+            }
+          ]
+        }
+      ]}
+    }
+  ]
 }
 </script>
-
-<template>
-  <div ref="el" style="--color: #7fa998; color: var(--color)">
-    Sample text, {{ color }} === {{ color2 }}
-  </div>
-  <button @click="switchColor">
-    Change Color
-  </button>
-  <div ref="elv" style="--color: #7fa998; --color-one: #df8543;" :style="{ color: colorVal }">
-    Sample text, {{ key }}: {{ colorVal }}
-  </div>
-  <button style="margin-left: 0;" @click="changeVar">
-    Change Color Variable
-  </button>
-</template>

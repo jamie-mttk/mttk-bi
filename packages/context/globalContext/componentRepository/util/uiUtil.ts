@@ -11,7 +11,7 @@ export function createInput(prop: string, label?: string, other?: object) {
     return createBase('el-input',prop,label,other)
 }
 export function createInputNumber(prop: string, label?: string, other?: object) {
-  other=smartAddClearable(other)
+  // other=smartAddClearable(other)
   return createBase('el-input-number',prop,label,other)
 }
 export function createSwitch(prop: string, label?: string, other?: object) {
@@ -33,7 +33,7 @@ export function createSwitch(prop: string, label?: string, other?: object) {
     result['clearable']=true
     return result
   }
-export function createBase(component:string,prop: string, label?: string, other?: object){
+export function createBase(component:any,prop: string, label?: string, other?: object){
     checkProp(prop)
     //
     const result = {
@@ -44,6 +44,8 @@ export function createBase(component:string,prop: string, label?: string, other?
 
     //
     applyOther(result, other)
+    //
+    // console.log(JSON.stringify(result))
     //
     return result
 }

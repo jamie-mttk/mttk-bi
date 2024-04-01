@@ -4,6 +4,7 @@ import * as transformUtil from '@/context/globalContext/componentRepository/util
 export function layoutTransform({config}) {
   //
   const result = transformUtil.buildWidget('el-row', {config})
+
   //build default
   result['#'] = buildCols(config)
   //

@@ -1,7 +1,7 @@
 <template>
   <div class="toolbar-table-container">
-    <div class="lc-common-toolbar toolbar">
-      <div class="left" style="font-weight: bold">Menus</div>
+    <div class="lc-common-toolbar toolbar" style="background-color: var(--el-color-primary)">
+      <div class="left" style="font-weight: bold; color: var(--el-color-white)">Menus</div>
 
       <el-button-group class="right">
         <el-button @click="load">
@@ -12,12 +12,14 @@
         >
       </el-button-group>
     </div>
+
     <el-table
       :data="tableData"
       :show-header="false"
       :highlight-current-row="true"
       @row-click="handleRowClick"
       class="table-area"
+      v-fullHeight="8"
     >
       <el-table-column prop="name" label="Name">
         <template #default="sp">
@@ -50,6 +52,7 @@
         </template>
       </el-table-column>
     </el-table>
+
   </div>
   <MenuEditorDialog ref="menuEditorDialogRef"></MenuEditorDialog>
 </template>
@@ -62,7 +65,7 @@ import { ref, inject, watch } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import MenuEditorDialog from './MenuEditorDialog.vue'
 import DataAuthButton from '@/components/auth/DataAuthButton.vue'
-
+import {vFullHeight} from '../../../fullHeight/directive'
 const emit = defineEmits<{
   (e: 'selectionChanged', type: string): void
 }>()

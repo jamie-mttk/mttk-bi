@@ -1,14 +1,14 @@
 <template>
-  <el-form :model="modelValue" label-width="100px" label-position="left">
+  <el-form :model="modelValue" label-width="180px" label-position="right">
     <el-form-item label="标题">
       <el-input v-model="modelValue['label']" required />
     </el-form-item>
 
     <el-form-item label="排序">
       <el-radio-group v-model="modelValue['_sort']">
-        <el-radio-button label="NONE">不排序</el-radio-button>
-        <el-radio-button label="ASC">升序</el-radio-button>
-        <el-radio-button label="DESC">降序</el-radio-button>
+        <el-radio-button value="NONE">不排序</el-radio-button>
+        <el-radio-button value="ASC">升序</el-radio-button>
+        <el-radio-button value="DESC">降序</el-radio-button>
       </el-radio-group>
     </el-form-item>
     <div v-show="belongTo('metric')">
@@ -61,7 +61,7 @@
           <el-option label="无" value="none" />
           <el-option label="中文自动(万/百万/亿)" value="ch_auto" />
           <el-option label="英文自动(K/M)" value="en_auto" />
-          <el-option label="比分比" value="percentage" />
+          <el-option label="百分比" value="percentage" />
           <el-option label="中文 - 千" value="ch_qian" />
           <el-option label="中文 - 万" value="ch_wan" />
           <el-option label="中文 - 百万" value="ch_baiwan" />

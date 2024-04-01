@@ -6,7 +6,7 @@
             击拖拽插入SQL语句</div>
         <el-input style="margin-left:10px;padding:4px 4px;width:calc(100% - 12px)" v-model="filter" size="small" clearable placeholder="请输入过滤条件"></el-input>
         <!-- We need to set scrollbar height later,now it does not take affect -->
-        <el-scrollbar  height="calc(100vh - 260px)">
+        <el-scrollbar  height="calc(100vh - 200px)" style="width:98%;">
             <div v-for="entity in entitiesFiltered" :key="entity.schema + '.' + entity.name" size="large"
                 class="table-button" :draggable="true" @dragstart="handleDragstartTable($event,entity)">
                
@@ -49,7 +49,9 @@ function handleDragstartSQL(event){
 
 <style scoped>
 .table-button {
-    width: calc(100% - 32px);
+    display:block;
+    overflow: hidden;
+    width: 210px;
     margin: 8px 20px;
     border-radius: 4px;
     color: var(--el-text-color-regular);

@@ -32,6 +32,7 @@ function iconChoosed(){
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width:140px;
     height: 100%;
     cursor: pointer;
 

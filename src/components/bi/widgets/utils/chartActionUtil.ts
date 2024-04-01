@@ -1,97 +1,123 @@
-import { unref, ref } from 'vue'
+import { unref, ref,computed } from 'vue'
 
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
-import {dynamicRender} from 'mttk-vue-wrap'
+import { dynamicRender } from 'mttk-vue-wrap'
 import ExtendTableColumn from '../../components/ExtendTableColumn.vue'
 
-  //Functions insdide transform
-  export function showSQL(context,data) {
-    //get data
-    const sqls = unref(data).sqls || []
-    let content = undefined
-    if (!sqls || sqls.length == 0) {
-      content = { '~': 'el-empty', description: '没有SQL' }
-    } else {
-      content = { '~': 'el-form', 'label-position': 'top', '#': [] }
+//Functions insdide transform
+export function showSQL(context, data) {
+  //get data
+  const sqls = unref(data).sqls || []
+  //
+  const timecost=computed(()=>{
+    const cost=unref(data).timecost
+    if(cost>=1000){
+      return (cost/1000)+' 秒'
+    }else{
+      return cost+' 毫秒'
+    }
+  })
+  console.log('11111111',timecost.value)
+  let content = undefined
+  if (!sqls || sqls.length == 0) {
+    content = { '~': 'el-empty', description: '没有SQL' }
+  } else {
+    content = { '~': 'el-form', 'label-position': 'top', '#': [] }
+    //
+    const { copy, isSupported } = useClipboard()
+    //time cost
+    content['#'].push({
+      '~': 'el-form-item',
+      label: '服务器端运行耗时',
+      '#': {
+        '~': 'el-input',
+        '~modelValue': timecost,
+        readonly: true
+      }
+    })
+
+    //
+    for (const sql of sqls) {
       //
-      const { copy,isSupported } = useClipboard()
-      //
-      for (const sql of sqls) {
-        //
-        content['#'].push({
-          '~': 'el-form-item',
-          '#label':{
-            '~':'div',
-            '#':[sql.type,{
-              '~':'lc-icon',
-              '~show':isSupported,
-              'icon':'mdiContentCopy',
-              tooltip:'点击拷贝',
-              style:{cursor:'pointer','margin-left':'10px'},
-              '@click':function (){
-                copy(sql.sql);
+      content['#'].push({
+        '~': 'el-form-item',
+        '#label': {
+          '~': 'div',
+          '#': [
+            sql.type,
+            {
+              '~': 'lc-icon',
+              '~show': isSupported,
+              icon: 'mdiContentCopy',
+              tooltip: '点击拷贝',
+              style: { cursor: 'pointer', 'margin-left': '10px' },
+              '@click': function () {
+                copy(sql.sql)
                 ElMessage({
                   message: '拷贝完成.',
-                  type: 'success',
+                  type: 'success'
                 })
-              },
-            }]
-          },
-          '#': {
-            '~': 'el-input',
-            '~modelValue': sql.sql,
-            type: 'textarea',
-            rows: 6,
-            readonly: true
-          }
-        })
-      }
+              }
+            }
+          ]
+        },
+        '#': {
+          '~': 'el-input',
+          '~modelValue': sql.sql,
+          type: 'textarea',
+          rows: 6,
+          readonly: true
+        }
+      })
     }
-
-    const visible = ref(false)
-    const config = {
-      '~': 'el-drawer',
-      '~modelValue': visible,
-      title: '查看SQL',
-      direction: 'btt',
-      size: '75%',
-      '#': content
-    }
-    dynamicRender(config, context.appContext.globalContext.vueApp._context, {
-      removeEvent: 'close'
-    })
-    visible.value = true
   }
 
-  export function showData(context,data,fullConfig) {
-
-    //get data
-    const dt = unref(data).data || []
-    const content =(!dt || dt.length == 0)?{ '~': 'el-empty', description: '没有数据' }:buildDataTable(dt,fullConfig)
-    
-    const visible = ref(false)
-    const config = {
-      '~': 'el-drawer',
-      '~modelValue': visible,
-      title: '查看数据',
-      direction: 'btt',
-      size: '80%',
-      '#': content
-    }
-    dynamicRender(config, context.appContext.globalContext.vueApp._context, {
-      removeEvent: 'close'
-    })
-    visible.value = true
+  const visible = ref(false)
+  const config = {
+    '~': 'el-drawer',
+    '~modelValue': visible,
+    title: '查看SQL',
+    direction: 'btt',
+    size: '75%',
+    '#': content
   }
+  dynamicRender(config, context.appContext.globalContext.vueApp._context, {
+    removeEvent: 'close'
+  })
+  visible.value = true
+}
 
- function buildDataTable(data, fullConfig) {
+export function showData(context, data, fullConfig) {
+  //get data
+  const dt = unref(data).data || []
+  const content =
+    !dt || dt.length == 0
+      ? { '~': 'el-empty', description: '没有数据' }
+      : buildDataTable(dt, fullConfig)
+
+  const visible = ref(false)
+  const config = {
+    '~': 'el-drawer',
+    '~modelValue': visible,
+    title: '查看数据',
+    direction: 'btt',
+    size: '80%',
+    '#': content
+  }
+  dynamicRender(config, context.appContext.globalContext.vueApp._context, {
+    removeEvent: 'close'
+  })
+  visible.value = true
+}
+
+function buildDataTable(data, fullConfig) {
   //store table columns
   const columns = []
   //Used to store all dimensions and  metrics,used to convert data is needed
   //If dump mode==JSON, no need to convert so set it value to undefined
   //Otherwise set to empty array
-  const dimenionAndMetric=fullConfig?.config?.model?.dumpMode== 'JSON'?undefined:[]
+  const dimenionAndMetric = fullConfig?.config?.model?.dumpMode == 'JSON' ? undefined : []
   //
   const result = {
     '~component': 'el-table',
@@ -104,13 +130,13 @@ import ExtendTableColumn from '../../components/ExtendTableColumn.vue'
   columns.push({
     '~': 'el-table-column',
     type: 'index',
-    label:'#',
+    label: '#',
     width: '50'
   })
   //
   parseColumns()
   //
-  result.data=buildData()
+  result.data = buildData()
   //
   return result
 
@@ -131,40 +157,40 @@ import ExtendTableColumn from '../../components/ExtendTableColumn.vue'
           '~': ExtendTableColumn,
           prop: c.id,
           label: c.label || c.key
+          // 'class-name':'show-data-'+prefix
         })
         //
-        if(dimenionAndMetric!=undefined){
+        if (dimenionAndMetric != undefined) {
           dimenionAndMetric.push(c)
         }
       }
     }
   }
-  function buildData(){
-    if(dimenionAndMetric==undefined){
+  function buildData() {
+    if (dimenionAndMetric == undefined) {
       //no need to convert
-      return data;
+      return data
     }
     //
-    const dataConerted=[]
-    let ifFirstLine=true
-    for(const dt of data){
-      if(ifFirstLine){
+    const dataConerted = []
+    let ifFirstLine = true
+    for (const dt of data) {
+      if (ifFirstLine) {
         //Skip first line
-        ifFirstLine=false
-        continue;
+        ifFirstLine = false
+        continue
       }
+      //
+      const d = {}
+      dataConerted.push(d)
+      for (let i = 0; i < Math.min(dt.length, dimenionAndMetric.length); i++) {
         //
-        const d={}
-        dataConerted.push(d)
-      for(let i=0;i<Math.min(dt.length,dimenionAndMetric.length);i++){
-        //
-        d[dimenionAndMetric[i].id]=dt[i]
-       
+        d[dimenionAndMetric[i].id] = dt[i]
       }
     }
     //
     // console.log(JSON.stringify(dataConerted,null,2))
     //
-    return dataConerted;
+    return dataConerted
   }
 }

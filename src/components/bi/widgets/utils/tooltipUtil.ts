@@ -103,10 +103,12 @@ export function formatData(value, config) {
   }
 }
 function formatDataNumber(value, config) {
+
   //
   if (typeof value!='number'){
     return value;
   }
+
   //Converter - valueNew is numeric
   const { value: valueConverted, suffix: suffixConver } = formatDataNumberConvert(value, config)
   //Decimal Point
@@ -132,14 +134,15 @@ function formatDataNumberConvert(value, config) {
   //
   const converter = config._format_number_converter || 'none'
   if (converter == 'ch_auto') {
+
     //
-    if (value < 10000) {
+    if (Math.abs(value) < 10000) {
       //
       return { value }
-    } else if (value < 1000000) {
+    } else if (Math.abs(value) < 1000000) {
       //wan  - DO NOT DO i18n for below line
       return { value: value / 10000, suffix: '万' }
-    } else if (value < 10000 * 10000) {
+    } else if (Math.abs(value) < 10000 * 10000) {
       //baiwan  - DO NOT DO i18n for below line
       return { value: value / 1000000, suffix: '百万' }
     } else {
@@ -148,10 +151,10 @@ function formatDataNumberConvert(value, config) {
     }
   } else if (converter == 'en_auto') {
     //
-    if (value < 1000) {
+    if (Math.abs(value) < 1000) {
       //
       return { value }
-    } else if (value < 1000 * 1000) {
+    } else if (Math.abs(value) < 1000 * 1000) {
       //K
       return { value: value / 1000, suffix: 'K' }
     } else {

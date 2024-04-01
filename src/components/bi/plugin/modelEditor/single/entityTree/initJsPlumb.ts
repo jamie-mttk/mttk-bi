@@ -1,10 +1,12 @@
 import jsplumb from 'jsplumb'
   //This means only one caller,otherwise it will be conflict
   let jp = undefined
+
 export default function initJsPlumb(treeNodes) {
 
   //
   initInstance()
+  
   initNodes()
   //
 
@@ -15,6 +17,7 @@ export default function initJsPlumb(treeNodes) {
     for (const node of treeNodes) {
       //
       const nodeId = 'pn_' + node.entity.key
+
       //Source end point
       if (node.children.length > 0) {
         jp.addEndpoint(nodeId, {
@@ -55,8 +58,7 @@ export default function initJsPlumb(treeNodes) {
         //   .setLabel(node.relation.joinType)
       }
     }
-    for (const node of treeNodes) {
-    }
+
   }
 
   function initInstance() {
@@ -75,35 +77,15 @@ export default function initJsPlumb(treeNodes) {
 
         Container: 'entityTreePanel',
         EndpointStyle: { fill: '#999999' },
-        EndpointHoverStyle: { fill: '#777777' }, //这个是控制连线终端那个小点的样式
+        EndpointHoverStyle: { fill: '#777777' },
         PaintStyle: {
           stroke: '#777777',
           strokeWidth: 2,
-          dashstyle: '1 1'
-          // gradient: { stops: [[0, "green"], [1, "blue"]] }
-        } //配置自己拖拽小点的时候连接线的默认样式
+          dashstyle: '1 1',
+          //  gradient: { stops: [[0, "green"], [1, "blue"]] }
+        } 
       })
-      //click和dblclick都绑定到编辑连接上
-      jp.bind('click', function (conn, originalEvent) {
-        console.log(arguments)
-      })
-      jp.bind('dblclick', function (conn, originalEvent) {
-        //   vm.handleConnectionEdit(conn, originalEvent);
-      })
-      jp.bind('connection', function (info, originalEvent) {
-        //   vm.handleConnection(info, originalEvent);
-      })
-      jp.bind('connectionMoved', function (info, originalEvent) {
-        //   vm.handleConnectionMoved(info, originalEvent);
-      })
-      jp.bind('beforeDetach', function (info) {
-        //   return vm.handleBeforeDetach(info);
-      })
-      jp.bind('connectionDetached', function (info, originalEvent) {
-        //   vm.handleConnectionDetached(info, originalEvent);
-      })
-      //
-      //console.log("DONE");
+      
     })
   }
 }

@@ -1,11 +1,11 @@
 <template>
 
-  <el-input v-model="inputValue"  v-bind="$attrs" @dblclick="handleDblClick" ></el-input> 
+  <el-input v-model="inputValue"  v-bind="$attrs" @dblclick="handleDblClick" @blur="handleBlur"></el-input> 
   <el-drawer
     v-model="drawerShow"  direction="rtl" size="30%"
     title="Edit data in drawer window"
   >
-  <el-input v-model="inputValue"  type="textarea" :rows="20"></el-input> 
+  <el-input v-model="inputValue"  type="textarea" :rows="20" ></el-input> 
   </el-drawer>
 
 
@@ -40,7 +40,12 @@ watchDebounced(
   },
   { debounce: debounceDelay, maxWait: 3000 },
 )
-
+//
+function handleBlur(){
+  //Emit to avoid data loose because the delay update of watchDebounced 
+  emit('update:modelValue', inputValue.value)
+  
+}
 //
 const drawerShow=ref(false)
 function handleDblClick(){

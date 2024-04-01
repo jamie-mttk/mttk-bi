@@ -1,3 +1,4 @@
+import {computed} from 'vue'
 //Once use select this component
 export function componentChoosed(context, event,item) {
 
@@ -23,7 +24,12 @@ export function componentChoosed(context, event,item) {
   
   }
 
-
+//Whether the component is the one current choosed
+export const isItemChoosed = computed(() => {
+  return function (context,item) {
+      return context.mode.value == 'edit' && item.key == context.choosedManager.get()?.key
+  }
+})
 
   import { deepCopy } from '@/utils/tools'
 //Clone component for drag and drop
@@ -96,7 +102,7 @@ export function cloneComponent(context,component) {
     //event
     handleInitValue(component,para,configInit,'event',[])
     //display
-    handleInitValue(component,para,configInit,'display',{ style: {}, class: '' ,position:{}})
+    handleInitValue(component,para,configInit,'display',{ style: {}, class: '' })
     //Checker whether there are customized 
     for (const k of Object.keys(component.editor)) {
       if (k == 'basic' || k == 'data' || k == 'event' || k == 'display') {

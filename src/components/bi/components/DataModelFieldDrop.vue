@@ -1,32 +1,39 @@
 <template>
     <div @dragover="allowDrop" @drop="handleDragDrop" style="min-height:32px;width:100%;font-size:0.9em;">
-        <div style="position:absolute;top:-32px;right:10px;font-size:0.8em;">{{qtyTip}}</div>
+        <div style="position:absolute;top:-32px;right:10px;font-size:0.8em;">
+            <el-tooltip :content="qtyTip" placement="top">{{qtyInfo}}</el-tooltip>
+            </div>
         <div v-if="dropList.length == 0" style="height:32px;color:#ccc;text-align: center;border:2px dashed antiquewhite;">
             请拖入数据列</div>
-
+          
         <VueDraggable v-else v-model="dropList" handle=".handle" @end="handleUpdateModelValue">
-            <DataModelField v-for="d in dropList" :key="d.id" :modelValue="d"  :prop="$props.prop" :option="$props.option" style="margin:4px;"
+            <DataModelField v-for="d in dropList" :key="d.id" :modelValue="d" :modelConfig="props.modelValue"  :prop="$props.prop" :option="$props.option" style="margin:4px;"
                 @delete="handleDelete">
             </DataModelField>
         </VueDraggable>
-
+        
     </div>
 </template>
 <script lang="ts" setup>
-import { ref,computed } from 'vue'
+import { computed,reactive,ref } from 'vue'
 import DataModelField from './DataModelField.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { ElMessage } from 'element-plus'
-import { createUniqueString} from '@/utils/tools'
+import { tools} from 'mttk-lowcode-engine'
 
+//modelValue is modelConfig
 const props = defineProps(['modelValue', 'prop', 'checkDrop', 'option'])
 const emit = defineEmits(['update:modelValue'])
 
-
 //
+//const dropList = computed(()=>props.modelValue[props.prop] || [])
 const dropList = ref(props.modelValue[props.prop] || [])
 //
 const qtyTip=computed(()=>{
+    return '当前数量:'+dropList.value.length+' 最少允许数量:'+(props.option.minRow||0) + ' 最多允许数量:' +  (props.option.maxRow||'不限')
+})
+//
+const qtyInfo=computed(()=>{
     return dropList.value.length+'~'+(props.option.minRow||0) + '/' +  (props.option.maxRow||'∞')
 })
 
@@ -60,7 +67,7 @@ function handleDragDrop(evt) {
     }
     //No need to copy since it is parse above
     const toDrop = dropped
-    toDrop.id="F_"+createUniqueString()
+    toDrop.id="F_"+tools.createUniqueString()
     //Check option to add SUM/COUNT
     if ((props.prop||'').startsWith('metric')) {
         if (dropped.dataType == 'number' || dropped.dataType == 'integer') {
@@ -107,6 +114,7 @@ function handleDelete(data) {
 function handleUpdateModelValue() {
     let v = props.modelValue
     v[props.prop] = dropList.value
+    // console.log('handleUpdateModelValue',props.modelValue,JSON.stringify(dropList.value,null,2))
     emit('update:modelValue', v)
 }
 </script>

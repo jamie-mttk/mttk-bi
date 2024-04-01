@@ -2,6 +2,8 @@ import { ref, computed } from 'vue'
 import { findPluginsByEntry } from '@/context/appContext/appContextUtil'
 import PageRender from '../pageRender/index.vue'
 import PropsEditor from './propsEditor/index.vue'
+import { useElementBounding } from '@vueuse/core'
+
 export function buildMain(context) {
   const mainTabActive = ref('ui')
 
@@ -50,13 +52,17 @@ export function buildMain(context) {
     //Whether propEditor is expand
     const isExpand = ref(true)
     return {
-      '~': 'div',
-      style: { display: 'flex' },
-      class: 'height-full',
+      '~': 'el-container',
+      // style: { display: 'flex' },
+  
       '#': [
         {
-          '~': 'div',
-          style: { 'flex-grow': 1 },
+          '~': 'el-main',
+          style: computed(()=>{
+           
+            //
+            return { padding:'0px',height:'calc(100vh - 120px)'}
+          }),
           '@mousedown': panelOuterClicked,
           '#': {
             '~': PageRender,
@@ -64,12 +70,12 @@ export function buildMain(context) {
           }
         },
         {
-          '~': 'div',
+          '~': 'el-aside',
           '~show': isExpand,
-          style: { 'flex-grow': 0, 'flex-basis': '360px', 'margin-left': '10px', 'z-index': 2000 },
+          style: { 'flex-basis': '380px', 'margin-left': '10px', 'z-index': 2000, },
           '#': {
             '~': PropsEditor,
-            class: 'height-full',
+     
             style: { 'z-index': 999 },
             '@narrow': function () {
               isExpand.value = false

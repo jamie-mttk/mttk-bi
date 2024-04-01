@@ -1,24 +1,17 @@
 <template>
-  <div style="max-width: 600px">
-    <el-alert title="Success alert" type="success" effect="dark" :closable="false"/>
-    <el-alert title="Info alert" type="info" effect="dark" :closable="false"/>
-    <el-alert title="Warning alert" type="warning" effect="dark" :closable="false"/>
-    <el-alert title="Error alert" type="error" effect="dark" :closable="false" />
-
-
-    <el-alert title="Success alert" type="success"  :closable="false"/>
-    <el-alert title="Info alert" type="info"  :closable="false"/>
-    <el-alert title="Warning alert" type="warning" :closable="false" />
-    <el-alert title="Error alert" type="error"  :closable="false"/>
-
-  </div>
+  <div>
+    <div style="height:64px;width:64px;background-color:beige;"> 0</div>
+  <el-row style="border:1px solid red;">
+    <el-col :span="12" style="height:128px;background-color:aqua;">1</el-col>
+    <el-col :span="12" style="height:128px;background-color:blue;">2</el-col>
+    <el-col :span="12" style="height:128px;background-color:brown">3</el-col>
+    <el-col :span="12" style="height:128px;background-color:violet">4</el-col>
+    <div style="height:64px;width:64px;background-color:sienna;position:fixed;top:64px;left:64px;"> 5</div>
+  </el-row>
+</div>
 </template>
 
-<style scoped>
-.el-alert {
-  margin: 20px 0 0;
-}
-.el-alert:first-child {
-  margin: 0;
-}
-</style>
+<script lang="ts" setup>
+
+
+</script>

@@ -1,4 +1,4 @@
-import { reactive, isRef, inject, unref } from 'vue'
+import { reactive, isRef, inject, unref,computed } from 'vue'
 
 import { createUniqueString } from '@/utils/tools'
 import lcFormItem from './components/FormItem.vue'
@@ -34,7 +34,7 @@ export function formTransform(rawConfig, data, context?: object, hideComponent =
       config: {
         '~component': 'el-switch',
         '~label': 'Hide component',
-        '~prop': '~hideComponent'
+        '~prop': '~hideComponent',
       },
       context: context
       // id:createUniqueString(),
@@ -101,7 +101,10 @@ function calFormItem(data, itemConfig, context?: object) {
   //
   const c = {
     '~component': lcFormItem,
-    '~show': itemConfig['~show'],
+    // '~show': computed(()=>{
+    //   console.log('###',itemConfig['~show'])
+    //   return itemConfig['~show']==undefined?true:itemConfig['~show']}),
+     '~show':itemConfig['~show'],
     //Set to true to avoid vue3 reuse the component , so the onMounted onUnmounted will be called
     '~instanceKeyAsKey':true,
     //

@@ -10,6 +10,7 @@ export default function buildMain(appContext){
     const config={
         '~':'el-tabs',
         '~modelValue':activeTab,
+        style:{height:'100%'},
         // type:'border-card',
         '#':[
             {
