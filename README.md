@@ -15,6 +15,15 @@ Password : 123456
 Please DO NOT CHANGE THE PASSWORD and the data will be reset every day.
 And since the server performance is pool it is a little slow to access especially the first time since some JS should be download.
 
+### Documents
+
+|Document|Description|
+|---|---|
+|README|This file|
+|[User manual](https://github.com/jamie-mttk/mttk-bi/blob/master/UserManual.md)| How to use MTTK Open BI|
+|[Developer manual](https://github.com/jamie-mttk/mttk-bi/blob/master/DeveloperManual.md)|How to develop new plugin|
+|[Release Note](https://github.com/jamie-mttk/mttk-bi/blob/master/ReleaseNote.md)|Change history|
+
 ## Screen captures
 
 ![Login](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/login.png)
