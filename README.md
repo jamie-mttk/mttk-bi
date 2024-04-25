@@ -26,6 +26,15 @@ And since the server performance is pool it is a little slow to access especiall
 
 ### Project list
 
+There are serveral projects related to MTTK Open BI as described below
+
+|Project|Description|
+|---|---|
+|[mttk-lowcode-server](https://github.com/jamie-mttk/mttk-lowcode-server) | A spring boot project with the compiled result of mttk-lowcode-designer as static resource. It is both lowcode engine backend and BI backend as well|
+|[mttk-lowcode-engine](https://github.com/jamie-mttk/mttk-lowcode-engine) | Lowcode engine front-end, the compiled result is a JS package named 'mttk-lowcode-engine'.|
+|[mttk-vue-wrap](https://github.com/jamie-mttk/mttk-vue-wrap) | The foundation technology of lowcode engine.|
+|[mttk-bi](https://github.com/jamie-mttk/mttk-bi) | A set of lowcode plugins to implement a lightweight BI. The compiled result is a JS package named 'mttk-bi'.|
+|[mttk-lowcode-designer](https://github.com/jamie-mttk/mttk-lowcode-designer) |A project combined mttk-lowcode-engine and mttk-bi, the compiled result is an index.html +JS/CSS which can be lauched|
 
 ## Features
 
@@ -79,3 +88,6 @@ spring.data.mongodb.database=mttk_bi
 #
 spring.servlet.multipart.enabled=false
 ```
+
+5. Finish
+  Access URL  http://localhost:8825/ with username: admin and password: 123456
