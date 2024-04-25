@@ -72,7 +72,7 @@ Second, easy to use. For example ,to build an echart need to provide many many c
 4. Start
    Run command below ,replace %xxx% to correct path
    %your java path%/bin/java -jar %your lowcode jar path%/lowcode.jar
-   Defautly the lowcode.jar will connect to local mongodb:27017 without authorization.
+   Defautly the lowcode.jar will connect to local mongodb:27017 without authorization. Admin account and other configuration will automatiaclly be created in mongodb.
    If the mongodb is not at local machine or authorization is enabled, you need to create your own application.properties and then start with spring boot command parameter --spring.config.location
    By the way the backend is not well defined and will be optimzied later.
    Below is a template of application.properties
@@ -91,3 +91,7 @@ spring.servlet.multipart.enabled=false
 
 5. Finish
   Access URL  http://localhost:8825/ with username: admin and password: 123456
+
+## How to use
+
+Refer to [User manual](https://github.com/jamie-mttk/mttk-bi/blob/master/UserManual.md)
