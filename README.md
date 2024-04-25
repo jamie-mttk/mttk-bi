@@ -9,6 +9,7 @@ A user-friendly lightweight BI tool.
 A live demo is  is avaibale at [http://139.129.210.30:8825](http://139.129.210.30:8825)
 
 User name: admin 
+
 Password : 123456
 
 Please DO NOT CHANGE THE PASSWORD and the data will be reset every day.
@@ -23,6 +24,7 @@ All operations are achieved through drag and drop on the webpage. The operation 
 ### Scalability
 
 The MTTK Open BI is based on [MTTK Lowcode Engine] (https://github.com/jamie-mttk/mttk_lowcode_engine). On the otherword ,BI is a set of plugins of MTTK lowcode engine.
+
 So it is easy to extend the BI functionalities by building your own plugins,such as new component to present data.
 How to build a new plugin is described in developer manual (Not finished yet)
 
