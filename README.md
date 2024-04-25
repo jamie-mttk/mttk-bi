@@ -15,6 +15,18 @@ Password : 123456
 Please DO NOT CHANGE THE PASSWORD and the data will be reset every day.
 And since the server performance is pool it is a little slow to access especially the first time since some JS should be download.
 
+## Screen captures
+
+![Login](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/login.png)
+![App list](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/app_list.png)
+![Launch](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/launch.png)
+![Data model](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/data_model.png)
+![Design](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/design.png)
+![Page design](https://github.com/jamie-mttk/mttk-lowcode-designer/blob/master/src/screenCaptures/single_page.png)
+
+### Project list
+
+
 ## Features
 
 ### Easy to use
