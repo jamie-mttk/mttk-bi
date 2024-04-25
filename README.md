@@ -9,7 +9,6 @@ A user-friendly lightweight BI tool.
 A live demo is  is avaibale at [http://139.129.210.30:8825](http://139.129.210.30:8825)
 
 User name: admin 
-
 Password : 123456
 
 Please DO NOT CHANGE THE PASSWORD and the data will be reset every day.
