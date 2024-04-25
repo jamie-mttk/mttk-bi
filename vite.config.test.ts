@@ -18,25 +18,19 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // sourcemap:true,
-        // compact:false,
+        sourcemap:false,
+        compact:true,
 
-        // manualChunks: (filePath) => {
- 
-        //   if (filePath.includes('/node_modules/ace')) {    
-        //     return 'ace'
-        //    }else if (filePath.includes('/node_modules/vue-router')) {    
-        //       return 'vue-router'
-        //     }else if (filePath.includes('/node_modules/vue')) {    
-        //       return 'vue'   
-        //   }else   if (filePath.includes('node_modules')) {    
-        //     //return 'vender'
-        //     console.log(filePath.toString().split('node_modules/')[1].split('/')[0].toString())
-        //     return filePath.toString().split('node_modules/')[1].split('/')[0].toString();
-        //   }else{
-        //     return 'lowcode'
-        //   }
-        // }
+        manualChunks (filePath) { 
+          console.log('###########'+filePath)
+          if (filePath.includes('node_modules')) {    
+            return 'vender'
+            // console.log(filePath.toString().split('node_modules/')[1].split('/')[0].toString())
+            // return filePath.toString().split('node_modules/')[1].split('/')[0].toString();
+          }else{
+            return 'mttk-bi'
+          }
+        }
       }
     }
   }

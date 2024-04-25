@@ -1,72 +1,29 @@
-import { createApp, inject } from 'vue'
+import { createApp } from 'vue'
 
 //
 import App from './App.vue'
-import router from './router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { install } from 'mttk-lowcode-engine'
+import 'mttk-lowcode-engine/dist/index.css'
 //
-
-import {
-  installDesigner,
-  installRouter,
-  installPlugin,
-
-  installBuiltIn
-} from '@/installer/index'
-
-
-//
-import installBI from './components/bi/index'
-import { initPermission } from '@/utils/permission'
-//
-import * as echarts from 'echarts'
-
-import ThemeSelect from './components/bi/components/themeSelect/index.vue'
-
+import {installBI} from '@/index'
+import 'element-plus/dist/index.css'
 //
 const app = createApp(App)
-//
 
-
-
-//
-installRouter(app, router)
-const { globalContext } = installDesigner(app, { url: import.meta.env.VITE_APP_API_BASE, router })
-installPlugin(globalContext)
-
-installBuiltIn(globalContext)
-//
-initPermission(globalContext)
-//
-installBI(globalContext)
-//Register login
-//login
-globalContext.pluginManager.register({
-  key: '_login_bi',
-  name: 'Login',
-  description: '',
-  icon: '',
-  entry: 'login',
-  sequence: 20,
-  ui: {
-    '~': import('./components/login/index.vue')
+const { globalContext } = install.installAll(
+  app,
+  createRouter({
+    history: createWebHashHistory(),
+    routes: []
+  }),
+  {
+    url: import.meta.env.VITE_APP_API_BASE
   }
+)
+
+//await will cause compiled show a empty page,so we use promise.then instead
+installBI(globalContext).then(function () {
+  //
+  app.mount('#app')
 })
-//Regiester all echarts themes
-globalContext
-  .request({
-    method: 'GET',
-    url: 'echartsTheme/query'
-  })
-  .then(function (response) {
-    for (const theme of response.list) {
-      echarts.registerTheme(theme.name, theme.value)
-    }
-  })
-//
-app.component('lc-theme-select',ThemeSelect)
-//
-app.mount('#app')
-//
-//app will be used by App.vue
-//export default does not work :(
-export { app }

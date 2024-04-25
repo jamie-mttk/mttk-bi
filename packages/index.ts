@@ -1,78 +1,75 @@
-import { defineAsyncComponent } from 'vue'
-
-import createGlobalContext from '@/context/globalContext/index'
-import createAppContext from '@/context/appContext/index'
-import createContext from '@/context/pageContext/index'
-
-import lcPageRender from '@/components/pageRender/index.vue'
-import lcDeployed from '@/components/deployed/index.vue'
-import lcDeployedNoRouter from '@/components/deployed/deployedNoRouter.vue'
-import lcLayout from '@/components/layout/index.vue'
-import lcPanel from '@/components/panel/index.vue'
-import lcIcon from '@/components/icon/index.vue'
-import lcFullHeight from '@/components/fullHeight/index.vue'
-import lcFormItem from '@/components/pageDesign/propsEditor/components/FormItem.vue'
-
-//import Wrap from './components/wrap/index.vue'
-import WRAPPER from 'mttk-vue-wrap'
-
-//Below are for designer
-import { installDesigner, installRouter,  installPlugin } from '@/installer/index'
-import lcWorkspaceManager from '@/components/workspaceManager/index.vue'
-import lcAppEditorWithRouter from '@/components/appEditor/appEditorWithRouter.vue'
-import * as widgetUtil from '@/context/globalContext/componentRepository/util/uiUtil'
-import * as widgetTransformUtil from '@/context/globalContext/componentRepository/util/transformUtil'
-import * as tools from '@/utils/tools'
-import lcDataAuthButton from '@/components/auth/DataAuthButton.vue'
-import {vFullHeight} from '@/components/fullHeight/directive'
-import * as authentication from './utils/authentication'
-//install
-const install = (app) => {
-  app.component('lcPageRender', lcPageRender)
-  app.component('lcDeployed', lcDeployed)
-  app.component('lcDeployedNoRouter', lcDeployedNoRouter)
-  // app.component('lc-wrap',Wrap)
-  app.component('lcPanel', lcPanel)
-  app.component('lcLayout', lcLayout)
-  app.component('lcIcon', lcIcon)
-  app.use(WRAPPER)
+import folderBI from './folder'
+//devextreme theme
+//import 'devextreme/dist/css/dx.light.css'
+import * as echarts from 'echarts'
+import ecStat from 'echarts-stat'
+//plugins
+import installJdbcConnectionEditor from './plugin/connectionEditor/index'
+import installBiModelEditor from './plugin/modelEditor/index'
+import installLogin from './plugin/login/index'
+//
+import { useTitle } from '@vueuse/core'
+//
+import { installMessages} from './lang/index'
+//
+export   async function installBI(globalContext) {
+  //install i18n
+  installMessages(globalContext)
+   
   //
-  app.component(
-    'lcEditableList',
-    defineAsyncComponent(() => import('@/components/pageDesign/propsEditor/editableList.vue'))
-  )
-  app.component(
-    'lcIconPicker',
-    defineAsyncComponent(() => import('@/components/iconPicker/index.vue'))
-  )
-}
-//
-const installer = { install }
-//
-export {
-  installer,
-  lcPageRender,
-  createGlobalContext,
-  createAppContext,
-  createContext,
-  lcDeployed,
-  lcDeployedNoRouter,
-  lcLayout,
-  lcPanel,
-  lcIcon,
-  lcFullHeight,
-  lcFormItem,
-  lcDataAuthButton,
-  vFullHeight,
-  authentication,
-  tools,
-  //Below are for designer
-  installDesigner,
-  installRouter,
-  installPlugin,
+  echarts.registerTransform(ecStat.transform.regression)
+  //components
+  await installComponents(globalContext.componentRepository)
 
-  lcWorkspaceManager,
-  lcAppEditorWithRouter,
-  widgetUtil,
-  widgetTransformUtil
+  //Plugins register
+  installJdbcConnectionEditor(globalContext)
+  installBiModelEditor(globalContext)
+  installLogin(globalContext)
+  //
+  registerThemes(globalContext);
+  //Change title
+  useTitle().value='MTTK OPEN BI'
+
+}
+async function installComponents(componentRepository) {
+  //Here to load async so the i18n will be installed before 
+  const componentConfigs = [
+    import('./widgets/filter/index'),
+    import('./widgets/table/index'),
+    import('./widgets/pie/index'),
+    import('./widgets/line/index'),
+    import('./widgets/bar/index'),
+    import('./widgets/scatter/index'),
+    import('./widgets/bubble/index'),
+    import('./widgets/funnel/index'),
+    import('./widgets/gauge/index'),
+    import('./widgets/sankey/index'),
+    import('./widgets/themeRiver/index'),
+    import('./widgets/wordCloud/index'),
+    import('./widgets/treemap/index'),
+    import('./widgets/bubbleBaiduMap/index'),
+    // import('./widgets/boxplot/index'),
+    import('./widgets/radar/index'),
+    import('./widgets/heatmap/index'),
+    import('./widgets/indicatorKanban/index'),
+    import('./widgets/heatBaiduMap/index'),
+    import('./widgets/waterfall/index'),
+  ]
+  await componentRepository.registerComponents(folderBI, componentConfigs)
+  //
+}
+
+function registerThemes(globalContext){
+  
+  //Regiester all echarts themes
+  globalContext
+    .request({
+      method: 'GET',
+      url: 'echartsTheme/query'
+    })
+    .then(function (response) {
+      for (const theme of response.list) {
+        echarts.registerTheme(theme.name, theme.value)
+      }
+    })
 }

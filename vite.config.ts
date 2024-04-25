@@ -13,7 +13,8 @@ export default defineConfig({
     }
   },
   server: {
-    port: 2008,
+    host: '0.0.0.0',
+    port: 2008
   },
   // css: {
   //   preprocessorOptions: {
@@ -23,15 +24,36 @@ export default defineConfig({
   //   },
   // },
   build: {
-    outDir: "dist",
+    outDir: 'dist',
+    sourcemap: false,
+    minify: true,
     lib: {
-      entry: "./packages/index.ts",
-      name: "mttk-lowcode-engine",
-      fileName: "mttk-lowcode-engine",
+      entry: './packages/index.ts',
+      name: 'mttk-bi',
+      fileName: 'mttk-bi'
     },
-    rollupOptions: { external: ["vue",'vuedraggable'], output: { 
-      globals: { vue: "Vue",vuedraggable:"vuedraggable" },
-      assetFileNames: 'index.css', },
-   },
-  },
+    rollupOptions: {
+      external: [
+        'dayjs',
+        'echarts',
+        'echarts-simple-transform',
+        'echarts-stat',
+        'echarts-wordcloud',
+        'mttk-lowcode-engine',
+        'vue',
+        'vue-echarts'
+      ],
+      output: {
+        globals: {
+          dayjs: 'dayjs',
+          vue: 'vue',
+          echarts: 'echarts',
+          'echarts-stat': 'echarts-stat',
+          'vue-echarts': 'vue-echarts',
+          'mttk-lowcode-engine': 'mttk-lowcode-engine'
+        },
+        assetFileNames: 'index.css'
+      }
+    }
+  }
 })

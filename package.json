@@ -1,12 +1,12 @@
 {
-  "name": "mttk-lowcode-engine",
-  "version": "0.1.5",
-  "main": "./dist/mttk-lowcode-engine.umd.js",
-  "module": "./dist/mttk-lowcode-engine.mjs",
+  "name": "mttk-bi",
+  "version": "0.0.7",
+  "main": "./dist/mttk-bi.umd.js",
+  "module": "./dist/mttk-bi.mjs",
   "exports": {
     ".": {
-      "import": "./dist//mttk-lowcode-engine.mjs",
-      "require": "./dist//mttk-lowcode-engine.umd.js"
+      "import": "./dist//mttk-bi.mjs",
+      "require": "./dist//mttk-bi.umd.js"
     },
     "./dist/index.css": {
       "import": "./dist/index.css",
@@ -28,39 +28,22 @@
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
-    "build-only": "vite build",
+    "build-only": "vite build ",
     "build-test": "vite build -c vite.config.test.ts",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "analyze": "source-map-explorer 'dist/*.mjs'"
   },
   "dependencies": {
-    "@mdi/js": "^7.2.96",
-    "@vueuse/core": "^10.1.0",
-    "animate.css": "^4.1.1",
-    "axios": "^0.21.4",
-    "bin-editor-next": "^1.1.0",
     "dayjs": "^1.11.10",
-    "devextreme": "23.2.3",
-    "devextreme-vue": "23.2.3",
     "echarts": "^5.4.2",
     "echarts-simple-transform": "^1.0.0",
     "echarts-stat": "^1.2.0",
     "echarts-wordcloud": "^2.1.0",
-    "element-plus": "^2.4.3",
-    "jsplumb": "^2.15.6",
-    "mitt": "^3.0.0",
-    "mttk-lowcode-engine": "^0.1.5",
-    "mttk-vue-wrap": "^0.2.5",
-    "nprogress": "^0.2.0",
-
-    "sortablejs": "^1.15.0",
-    "splitpanes": "^3.1.5",
-    "vue": "^3.4.21",
-    "vue-draggable-plus": "^0.3.5",
-    "vue-echarts": "^6.6.0",
-    "vue-i18n": "^9.2.2",
-    "vue-router": "^4.1.6"
+    "mttk-lowcode-engine": "^0.3.8",
+    "vue": "^3.4.21", 
+    "vue-echarts": "^6.6.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
