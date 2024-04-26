@@ -1,1 +1,0 @@
-# MTTK Open BI Developer Manual
