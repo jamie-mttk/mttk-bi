@@ -15,7 +15,13 @@ const { globalContext } = install.installAll(
   app,
   createRouter({
     history: createWebHashHistory(),
-    routes: []
+    routes: [ 
+    //    {
+    //   path: '/home',
+    //   name: 'home',
+    //   component: () => import('./views/home/index.vue')
+    // },
+  ]
   }),
   {
     url: import.meta.env.VITE_APP_API_BASE

@@ -36,6 +36,7 @@ async function installComponents(componentRepository) {
   const componentConfigs = [
     import('./widgets/filter/index'),
     import('./widgets/table/index'),
+    import('./widgets/crossTable/index'),
     import('./widgets/pie/index'),
     import('./widgets/line/index'),
     import('./widgets/bar/index'),

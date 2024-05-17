@@ -464,6 +464,13 @@ export default {
         stripe:'Show stripe',
         showIndex:'Show index',
       },
+      crossTable: {
+        name: 'BI cross table',
+        dimension_description:'The first parameter is the value displayed vertically, and the second parameter is the value displayed horizontally',
+        metric_description:'The specific indicator parameters under the horizontal dimension to display values',
+        border:'Show border',
+        stripe:'Show stripe',
+      },
       themeRiver: {
         name: 'BI theme river',
         dimension_description: 'The first is time and second one is subject,the thrid is the value(Can also provide in metric).',

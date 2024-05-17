@@ -460,6 +460,13 @@ export default {
         stripe:'显示斑马条纹',
         showIndex:'显示序号',
       },
+      crossTable: {
+        name: 'BI交叉表',
+        dimension_description:'第一个参数是竖向显示的值,第二个参数是横向显示值',
+        metric_description:'横线显示值下的具体指标参数',
+        border:'显示边框',
+        stripe:'显示斑马条纹',
+      },
       themeRiver: {
         name: 'BI河流图',
         dimension_description: '第一个参数是时间，第二个参数是主题,第三个(也可以在度量里给出)是值.',

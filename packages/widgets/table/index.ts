@@ -31,7 +31,7 @@ const biTableConfig = {
         widgetUtil.createSwitch('_showIndex', locale.t('bi.widgets.table.showIndex'))
       ]
     },
-    ...buildOtherProp(false)
+    ...buildOtherProp({initDisplay:false})
   }
 }
 
