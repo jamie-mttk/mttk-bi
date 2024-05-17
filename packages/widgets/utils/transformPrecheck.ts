@@ -1,31 +1,32 @@
 import { ElMessage } from 'element-plus'
 import VChart from 'vue-echarts'
-import {locale} from 'mttk-lowcode-engine'
+import { locale } from 'mttk-lowcode-engine'
 //precheck ,return reasonable component if check failed
 export function precheck(
   { config, data, context, key, contextWrap, fullConfig },
   validateRules,
   validate
 ) {
-  if (!data.value || Object.keys(data.value).length == 0) {
-    //This means data is not loaded,so show loading
-    //
-    if (
-      preValidate(
-        { config, data, context, key, contextWrap, fullConfig },
-        validateRules,
-        validate,
-        false
-      )
-    ) {
+  //
+  if (
+    preValidate(
+      { config, data, context, key, contextWrap, fullConfig },
+      validateRules,
+      validate,
+      false
+    )
+  ) {
+    if (!data.value || Object.keys(data.value).length == 0) {
+      //This means data is not loaded,so show loading
       //Validate passed, consider the chart will be loaded later,so show a loading screen
       return loadingComponent(config)
     } else {
-      //Otherwise show prompt that the necessary information is not input so echart can not be shown
-      return emptyComponent(fullConfig,context)
+      //
+      return undefined
     }
-    //
-    return undefined
+  } else {
+    //Otherwise show prompt that the necessary information is not input so echart can not be shown
+    return emptyComponent(fullConfig, context)
   }
 }
 //
@@ -75,7 +76,9 @@ export function preValidate(
           rule.eq
         ) {
           if (showError) {
-            ElMessage.error(locale.t('bi.widgets.utils.transformPrecheck.metricAndDimensionError1',[rule.eq]))
+            ElMessage.error(
+              locale.t('bi.widgets.utils.transformPrecheck.metricAndDimensionError1', [rule.eq])
+            )
           }
           return false
         }
@@ -86,7 +89,9 @@ export function preValidate(
           rule.min
         ) {
           if (showError) {
-            ElMessage.error(locale.t('bi.widgets.utils.transformPrecheck.metricAndDimensionError2',[rule.eq]))
+            ElMessage.error(
+              locale.t('bi.widgets.utils.transformPrecheck.metricAndDimensionError2', [rule.eq])
+            )
           }
           return false
         }
@@ -97,7 +102,9 @@ export function preValidate(
           rule.max
         ) {
           if (showError) {
-            ElMessage.error(locale.t('bi.widgets.utils.transformPrecheck.metricAndDimensionError3',[rule.eq]))
+            ElMessage.error(
+              locale.t('bi.widgets.utils.transformPrecheck.metricAndDimensionError3', [rule.eq])
+            )
           }
           return false
         }
@@ -109,7 +116,12 @@ export function preValidate(
     if (!fullConfig?.config?.model[rule.key]) {
       if (rule.min > 0) {
         if (showError) {
-          ElMessage.error(locale.t('bi.widgets.utils.transformPrecheck.ruleMinError1',[rulKeyToLabel(rule.key),rule.min]))
+          ElMessage.error(
+            locale.t('bi.widgets.utils.transformPrecheck.ruleMinError1', [
+              rulKeyToLabel(rule.key),
+              rule.min
+            ])
+          )
         }
         return false
       } else {
@@ -118,7 +130,12 @@ export function preValidate(
     }
     if (fullConfig?.config?.model[rule.key].length < rule.min) {
       if (showError) {
-        ElMessage.error(locale.t('bi.widgets.utils.transformPrecheck.ruleMinError2',[rulKeyToLabel(rule.key),rule.min]))
+        ElMessage.error(
+          locale.t('bi.widgets.utils.transformPrecheck.ruleMinError2', [
+            rulKeyToLabel(rule.key),
+            rule.min
+          ])
+        )
       }
       return false
     }
@@ -151,7 +168,7 @@ function rulKeyToLabel(key) {
 function loadingComponent(config) {
   return {
     '~component': VChart,
-    style:{'min-height':'64px','min-width':'64px'},
+    style: { 'min-height': '64px', 'min-width': '64px' },
     autoresize: true,
     option: {},
     theme: config['echarts-theme'] || 'default',
@@ -161,28 +178,29 @@ function loadingComponent(config) {
   }
 }
 //
-function emptyComponent(fullConfig,context) {
- //Find icon 
-// console.log(fullConfig.type,context.appContext.globalContext.componentRepository.componentByKey(fullConfig.type))
-//
-const componentConfig=findComponentConfig(fullConfig,context) 
-//
+function emptyComponent(fullConfig, context) {
+  //Find icon
+  // console.log(fullConfig.type,context.appContext.globalContext.componentRepository.componentByKey(fullConfig.type))
+  //
+  const componentConfig = findComponentConfig(fullConfig, context)
+  //
   return {
     '~': 'el-empty',
-    description: (componentConfig?'[ '+componentConfig.name+' ] ':'')+ locale.t('bi.widgets.utils.transformPrecheck.empty'),
+    description:
+      (componentConfig ? '[ ' + componentConfig.name + ' ] ' : '') +
+      locale.t('bi.widgets.utils.transformPrecheck.empty'),
     '#image': {
       '~': 'lc-icon',
-      icon: componentConfig?.icon||'mdiChartBoxOutline',
-      size: '12em',
-    },
+      icon: componentConfig?.icon || 'mdiChartBoxOutline',
+      size: '12em'
+    }
   }
 }
 
-function findComponentConfig(fullConfig,context) {
-  if(!fullConfig.type){
+function findComponentConfig(fullConfig, context) {
+  if (!fullConfig.type) {
     return
   }
   //
   return context.appContext.globalContext.componentRepository.componentByKey(fullConfig.type)
- 
 }
