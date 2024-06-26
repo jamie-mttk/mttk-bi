@@ -1,6 +1,8 @@
 import { biThemeRiverTransform } from './transform'
 import {buildModelFull,buildEchartsBaseUI,buildOtherProp,commonMoldelConfig} from '../utils/indexUtil'
 import {locale} from 'mttk-lowcode-engine'
+export const baseConfigList={excludeList:['xAxis','yAxis','dataZoom','grid']}
+
 //
 const biThemeRiverConfig = {
   key: '_bi_themeRiver',
@@ -28,7 +30,7 @@ const biThemeRiverConfig = {
     basic: {
       init: {  },
       ui: [
-        ...buildEchartsBaseUI(),
+        ...buildEchartsBaseUI(baseConfigList),
 
       ]
     },

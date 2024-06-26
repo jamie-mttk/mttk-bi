@@ -10,7 +10,9 @@
             />
           </el-option-group>
     </el-select>
-    <el-input clearable style="flex-basis:0; flex-grow: 10;" v-if="inputHasValueOptions.includes(model[c.id + '-match'] || '')" v-model="modelValueValue"></el-input>
+
+    <!-- v-if="inputHasValueOptions.includes(model[c.id + '-match'] || '')" -->
+    <el-input clearable style="flex-basis:0; flex-grow: 10;" v-if="inputHasValueOptions.includes(c['_ui_input_match_init'] || '')" v-model="modelValueValue"></el-input>
 </span>
 </template>
 <script lang="ts" setup>

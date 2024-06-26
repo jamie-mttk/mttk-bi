@@ -7,6 +7,7 @@ export function precheck(
   validateRules,
   validate
 ) {
+
   //
   if (
     preValidate(
@@ -19,7 +20,10 @@ export function precheck(
     if (!data.value || Object.keys(data.value).length == 0) {
       //This means data is not loaded,so show loading
       //Validate passed, consider the chart will be loaded later,so show a loading screen
-      return loadingComponent(config)
+      //this will cause chart not auto reloaded
+      //  return loadingComponent(config)
+      return undefined
+
     } else {
       //
       return undefined
@@ -38,6 +42,7 @@ export function preValidate(
   validate,
   showError
 ) {
+
   //General
   //
   if (!fullConfig?.config?.model?.dataModel) {

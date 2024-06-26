@@ -1,6 +1,8 @@
 import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 
 import { formatData, } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
+
 const validateRules = [
   { key: 'metric', min: 1 }
 ]
@@ -10,7 +12,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
 
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({config,...baseConfigList}),
 
     tooltip: {
       show:false,
@@ -24,6 +26,10 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
         },
         //Move a little below if there is a title
         center: ['50%', config['title-text']?'60%':'50%'],
+        radius : config.radius||'75%',
+        startAngle : config.startAngle||'225',
+         endAngle : config.endAngle||'-45',
+          clockwise :!!config.clockwise,
         detail: {
           valueAnimation: true,
           formatter: function(params){            

@@ -4,7 +4,7 @@ import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 import { formatData } from '../utils/tooltipUtil'
 import 'echarts/extension/bmap/bmap'
 import { loadBMapWithCheck } from '../utils/baiduMapUtil'
-
+import { baseConfigList } from './index'
 const validateRules = [{ key: 'dimension',  min: 3 },
 { key: '_dimensionAndMetric', eq: 4}]
 
@@ -26,7 +26,7 @@ async function buildOption({ config, data, context, key, contextWrap, fullConfig
   const maxVal = calMaxValue(sourceData)
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({config,...baseConfigList}),
     tooltip: {
       trigger: 'item',
       valueFormatter(value) {

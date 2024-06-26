@@ -2,6 +2,8 @@ import { unref } from 'vue'
 import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 import {safeGetArrayItem} from '../utils/transformTools'
 import { formatData } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
+
 const validateRules = [
   { key: 'dimension', min: 2 },
   { key: '_dimensionAndMetric', eq:3 }
@@ -18,7 +20,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
 
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({config,...baseConfigList}),
     tooltip: {
       trigger: 'axis',
       axisPointer: {

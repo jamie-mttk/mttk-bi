@@ -32,24 +32,25 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({config,options:{'xAxis-name':safeGetArrayItem(modelConfig,'dimension',0)?.label}}),
     tooltip: {
-      trigger: 'axis', 
+      // trigger: 'axis', 
       formatter:function(param){
+        // console.log(param)
         return createTooltip(param,fullConfig)
       },
     },
 
-    xAxis: {
-      type: config.reverse ? 'value' : 'category',
-      name:config.reverse ?safeGetArrayItem(modelConfig,'metric',0)?.label:safeGetArrayItem(modelConfig,'dimension',0)?.label,
-      // ...(axis_setting_value?.x||{})
-    },
-    yAxis: {
-      type: config.reverse ? 'category' : 'value',
-      //y can not set name since it may have more than one
-      // ...(axis_setting_value?.y||{})
-    },
+    // xAxis: {
+    //   type: config.reverse ? 'value' : 'category',
+    //   name:config.reverse ?safeGetArrayItem(modelConfig,'metric',0)?.label:safeGetArrayItem(modelConfig,'dimension',0)?.label,
+    //   // ...(axis_setting_value?.x||{})
+    // },
+    // yAxis: {
+    //   type: config.reverse ? 'category' : 'value',
+    //   //y can not set name since it may have more than one
+    //   // ...(axis_setting_value?.y||{})
+    // },
     series: [],
 
   }
@@ -59,9 +60,11 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       type: 'bar',
       id: c.id,
       name:c.label||c.column,
+      barWidth:config.barWidth||'',
       stack: config.stack ? 'x' : ''
     })
   }
+
   return option
 }
 

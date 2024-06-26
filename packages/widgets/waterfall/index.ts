@@ -2,6 +2,7 @@ import { biWaterfallTransform } from './transform'
 
 import {buildModelFull,buildEchartsBaseUI,buildOtherProp,commonMoldelConfig} from '../utils/indexUtil'
 import {locale} from 'mttk-lowcode-engine'
+export const baseConfigList={excludeList:['legend']}
 //
 const biWaterfallConfig = {
   key: '_bi_waterfall',
@@ -22,7 +23,7 @@ const biWaterfallConfig = {
     basic: {
       init: {},
       ui: [
-        ...buildEchartsBaseUI(),
+        ...buildEchartsBaseUI(baseConfigList),
       ]
     },
     ... buildOtherProp()

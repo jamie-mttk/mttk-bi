@@ -3,7 +3,7 @@ import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 import { getDistinctColumns,  } from '../utils/dataUtil'
 import { formatData } from '../utils/tooltipUtil'
 import { countTitle } from '../utils/transformTools'
-
+import { baseConfigList } from './index'
 const validateRules = [
   { key: 'dimension',min: 2 },
   { key: '_dimensionAndMetric', eq: 3 }
@@ -24,7 +24,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   const option = {
     //grid does not take affect to sankey chart,so do not generate it
     //and top is set in the series
-    ...buildBaseOption({config,skipGrid:true}),
+    ...buildBaseOption({config,...baseConfigList}),
     tooltip: {
       // formatter: function (params) {
       //   //

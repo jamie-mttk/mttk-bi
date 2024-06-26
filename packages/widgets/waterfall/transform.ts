@@ -2,10 +2,12 @@ import { unref } from 'vue'
 import { buildBaseOption, buildTransformEcharts } from '../utils/transformUtil'
 import { safeGetArrayItem } from '../utils/transformTools'
 import { formatData } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
 const validateRules = [
   { key: 'dimension',min: 1 },
   { key: 'metric', min: 1 }
 ]
+
 
 function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   const modelConfig = fullConfig.config.model
@@ -15,16 +17,8 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
 
   //
   const option = {
-    ...buildBaseOption({ config,skipLegend: true }),
-    xAxis: {
-      type: 'category',
-      name: safeGetArrayItem(modelConfig, 'dimension', 0)?.label,
-      data:dimenions
-    },
-    yAxis: {
-      type: 'value',
-      name: metricConfig?.label
-    },
+    ...buildBaseOption({ config, ...baseConfigList ,options:{'xAxis-name':safeGetArrayItem(modelConfig,'dimension',0)?.label}}),
+
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -57,6 +51,8 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       
     ]
   }
+  //
+  option.xAxis.data=dimenions
   //
   if(hasPositive){
     option.series.push(   {

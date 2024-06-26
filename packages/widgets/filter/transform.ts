@@ -1,7 +1,7 @@
 // import {unref,ref,computed} from 'vue'
 
 import Filter from './render/Filter.vue'
-import { wrapResult } from '../../utils/biTool'
+import { wrapResult } from '../utils/shareUtil'
 import {buildInitValue} from './filterInitUtil'
 
 export function biFilterTransform({ config, data, context, key, contextWrap, fullConfig }) {
@@ -19,6 +19,6 @@ export function biFilterTransform({ config, data, context, key, contextWrap, ful
   }
   // const result=build(dataFilter,fullConfig.config.model)
   //
-  return wrapResult(context, result)
+  return wrapResult({context, result,fullConfig})
 }
 

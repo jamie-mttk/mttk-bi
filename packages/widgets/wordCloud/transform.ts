@@ -3,7 +3,7 @@ import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 
 import { formatData } from '../utils/tooltipUtil'
 import 'echarts-wordcloud';
-
+import { baseConfigList } from './index'
 const validateRules = [
   { key: 'dimension', min: 1 },
   { key: '_dimensionAndMetric', eq: 2 }
@@ -20,7 +20,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
 
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({config, ...baseConfigList }),
     tooltip: {
       valueFormatter(value){
         //Get value config from metric or dimension depends on where it is set

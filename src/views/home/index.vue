@@ -1,98 +1,24 @@
 <template>
-  <el-table :data="tableData" style="width: 100%">
-    <el-table-column label="Delivery Info 111">
-      <el-table-column prop="date" label="Date" width="150" />
-      <el-table-column prop="state" label="State" width="120" />
-    </el-table-column>
-    <el-table-column label="Delivery Info 222">
-      <el-table-column prop="name" label="Name" width="120" />
-
-      <el-table-column prop="city" label="City" width="120" />
-      <el-table-column prop="address" label="Address" />
-      <el-table-column prop="zip" label="Zip" width="120" />
-    </el-table-column>
-  </el-table>
-  <el-divider></el-divider>
-  <TwoLevelTable :data="tableData" style="width: 100%" :config="config"></TwoLevelTable>
+  <div>AA<MttkWrapComp :config="tableConfig"></MttkWrapComp> BB</div>
 </template>
 
 <script lang="ts" setup>
-import TwoLevelTable from '@/components//TowLevelTable.vue'
+import { tableData } from './data'
+// import { build } from './pivot'
 //
-const config = [
-  {
-    label: 'Delivery Info 111',
-    _children: [
-      { prop: 'date', label: 'Date', width: '150' },
-      { prop: 'state', label: 'State', width: '120' }
-    ]
-  },
-  {
-    label: 'Delivery Info 222',
-    _children: [
-      { prop: 'name', label: 'Name', width: '120' },
-      { prop: 'city', label: 'City', width: '120' },
-      { prop: 'address', label: 'Address' },
-      { prop: 'zip', label: 'Zip', width: '120' }
-    ]
-  }
+const dimensionX = [
+  { key: 'province', label: '省' },
+  { key: 'city', label: '市' },
+  { key: 'district', label: '区' }
 ]
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036'
-  }
+const dimensionY = [
+  { key: 'category', label: '产品分类' },
+  { key: 'goods', label: '产品名称' }
 ]
+const metric = [
+  { key: 'quantity', label: '数量' },
+  { key: 'amount', label: '金额' }
+]
+//
+// const { tableConfig } = build(tableData, dimensionX, dimensionY, metric)
 </script>

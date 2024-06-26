@@ -2,7 +2,7 @@ import { biBubbleBaiduMapTransform } from './transform'
 import {buildModelFull,buildEchartsBaseUI,buildOtherProp,commonMoldelConfig} from '../utils/indexUtil'
 import  {widgetUtil,locale} from 'mttk-lowcode-engine'
 
-
+export const baseConfigList={excludeList:['xAxis','yAxis','dataZoom','grid','legend']}
 
 
 //
@@ -25,14 +25,21 @@ const biBubbleBaiduMapConfig = {
     basic: {
       init: {'center-longitude':104.114129,'center-latitude':37.550339,'zoom':5,'highlight-top':0,'symbol-size':40,'symbol-size-base':0},
       ui: [
-        ...buildEchartsBaseUI(),
-        widgetUtil.createInput('baidu-map-ak',locale.t('bi.widgets.bubbleBaiduMap.baidu-map-ak')),
-        widgetUtil.createInputNumber('center-longitude',locale.t('bi.widgets.bubbleBaiduMap.center-longitude')),
-        widgetUtil.createInputNumber('center-latitude',locale.t('bi.widgets.bubbleBaiduMap.center-latitude')),
-        widgetUtil.createInputNumber('zoom',locale.t('bi.widgets.bubbleBaiduMap.zoom')),
-        widgetUtil.createInputNumber('highlight-top',locale.t('bi.widgets.bubbleBaiduMap.highlight-top'),{min:0}),
-        widgetUtil.createInputNumber('symbol-size',locale.t('bi.widgets.bubbleBaiduMap.symbol-size')),
-        widgetUtil.createInputNumber('symbol-size-base',locale.t('bi.widgets.bubbleBaiduMap.symbol-size-base')),
+        {
+          '~component': 'el-collapse',
+          '~label': locale.t('bi.widgets.bubbleBaiduMap.name'),
+          '~default':true,
+          _children: [
+            widgetUtil.createInput('baidu-map-ak',locale.t('bi.widgets.bubbleBaiduMap.baidu-map-ak')),
+            widgetUtil.createInputNumber('center-longitude',locale.t('bi.widgets.bubbleBaiduMap.center-longitude')),
+            widgetUtil.createInputNumber('center-latitude',locale.t('bi.widgets.bubbleBaiduMap.center-latitude')),
+            widgetUtil.createInputNumber('zoom',locale.t('bi.widgets.bubbleBaiduMap.zoom')),
+            widgetUtil.createInputNumber('highlight-top',locale.t('bi.widgets.bubbleBaiduMap.highlight-top'),{min:0}),
+            widgetUtil.createInputNumber('symbol-size',locale.t('bi.widgets.bubbleBaiduMap.symbol-size')),
+            widgetUtil.createInputNumber('symbol-size-base',locale.t('bi.widgets.bubbleBaiduMap.symbol-size-base')),
+          ]},
+        ...buildEchartsBaseUI(baseConfigList),
+
       ]
     },
     //Position should be set to relative,otherwise baidu map may display outside div

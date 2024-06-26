@@ -1,4 +1,4 @@
-import folderBI from './folder'
+
 //devextreme theme
 //import 'devextreme/dist/css/dx.light.css'
 import * as echarts from 'echarts'
@@ -36,7 +36,7 @@ async function installComponents(componentRepository) {
   const componentConfigs = [
     import('./widgets/filter/index'),
     import('./widgets/table/index'),
-    import('./widgets/crossTable/index'),
+    import('./widgets/pivotTable/index'),
     import('./widgets/pie/index'),
     import('./widgets/line/index'),
     import('./widgets/bar/index'),
@@ -49,14 +49,14 @@ async function installComponents(componentRepository) {
     import('./widgets/wordCloud/index'),
     import('./widgets/treemap/index'),
     import('./widgets/bubbleBaiduMap/index'),
-    // import('./widgets/boxplot/index'),
+    import('./widgets/boxplot/index'),
     import('./widgets/radar/index'),
     import('./widgets/heatmap/index'),
     import('./widgets/indicatorKanban/index'),
     import('./widgets/heatBaiduMap/index'),
     import('./widgets/waterfall/index'),
   ]
-  await componentRepository.registerComponents(folderBI, componentConfigs)
+  await componentRepository.registerComponents( import('./folder'), componentConfigs)
   //
 }
 

@@ -34,7 +34,7 @@ const context=inject('context')
 //
 const result = computed(() => build(model, props.config,props.fullConfig,context))
 //
-// console.log(result)
+// console.log(result.value)
 
 
 
@@ -47,7 +47,7 @@ const result = computed(() => build(model, props.config,props.fullConfig,context
 
     .el-form-item {
         margin-right: 0 !important;
-        padding-right: 12px;
+        padding-right: 0px;
         margin-bottom: 8px;
     }
 }

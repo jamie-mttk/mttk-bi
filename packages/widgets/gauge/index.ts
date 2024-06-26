@@ -1,6 +1,8 @@
 import { biGaugeTransform } from './transform'
 import {buildModelFull,buildEchartsBaseUI,buildOtherProp,commonMoldelConfig} from '../utils/indexUtil'
-import {locale} from 'mttk-lowcode-engine'
+import {widgetUtil,locale} from 'mttk-lowcode-engine'
+export const baseConfigList={excludeList:['xAxis','yAxis','dataZoom','legend','grid']}
+
 //
 const biGaugeConfig = {
   key: '_bi_gauge',
@@ -19,9 +21,20 @@ const biGaugeConfig = {
       ]),
     
     basic: {
-      init: {},
+      init: {radius:'75%', startAngle : 225,endAngle : -45, clockwise : true},
       ui: [
-        ...buildEchartsBaseUI(),
+        {
+          '~component': 'el-collapse',
+          '~label': locale.t('bi.widgets.gauge.name'),
+          '~default':true,
+          _children: [
+            widgetUtil.createInput('radius', locale.t('bi.widgets.gauge.radius'),{'~description':locale.t('bi.widgets.utils.indexUtil._valueDescription'),}),
+            widgetUtil.createInputNumber('startAngle', locale.t('bi.widgets.gauge.startAngle')),
+            widgetUtil.createInputNumber('endAngle', locale.t('bi.widgets.gauge.endAngle')),
+            widgetUtil.createSwitch('clockwise', locale.t('bi.widgets.gauge.clockwise')),
+          ]
+        },
+        ...buildEchartsBaseUI(baseConfigList),
 
       ]
     },

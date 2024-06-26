@@ -22,19 +22,17 @@ const biBarConfig = {
     basic: {
       init: {statck:false,'axis-setting':'bl'},
       ui: [
+        {
+          '~component': 'el-collapse',
+          '~label': locale.t('bi.widgets.bar.name'),
+          '~default':true,
+          _children: [
+            widgetUtil.createSwitch('stack', locale.t('bi.widgets.bar.stack')),
+            widgetUtil.createInput('barWidth', locale.t('bi.widgets.bar.barWidth'),{'~description':locale.t('bi.widgets.utils.indexUtil._valueDescription'),}),
+          ]
+        },
         ...buildEchartsBaseUI(),
-        widgetUtil.createSwitch('stack', locale.t('bi.widgets.bar.stack')),
-        widgetUtil.createSwitch('reverse', locale.t('bi.widgets.bar.reverse')),
-        // widgetUtil.createSelect(
-        //   'axis-setting',
-        //   [
-        //     { label: 'X坐标在下Y坐标在左', value: 'bl' },
-        //     { label: 'X坐标在下Y坐标在右', value: 'br' },
-        //     { label: 'X坐标在上Y坐标在左', value: 'tl' },
-        //     { label: 'X坐标在上Y坐标在右', value: 'tr' },
-        //   ],
-        //   'Axis setting'
-        // )
+
       ]
     },
     ... buildOtherProp()

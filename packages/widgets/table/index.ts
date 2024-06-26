@@ -28,10 +28,13 @@ const biTableConfig = {
         widgetUtil.createInput('_title', locale.t('bi.widgets.table.title')),
         widgetUtil.createSwitch('border', locale.t('bi.widgets.table.border')),
         widgetUtil.createSwitch('stripe', locale.t('bi.widgets.table.stripe')),
-        widgetUtil.createSwitch('_showIndex', locale.t('bi.widgets.table.showIndex'))
+        widgetUtil.createSwitch('_showIndex', locale.t('bi.widgets.table.showIndex')),
+        widgetUtil.createSwitch('_showSummary', locale.t('bi.widgets.table.showSummary')),
+        widgetUtil.createSwitch('_mergeSameColumn', locale.t('bi.widgets.table.mergeSameColumn')),
+        widgetUtil.createSwitch('_sortable', locale.t('bi.widgets.table.sortable')),
       ]
     },
-    ...buildOtherProp({initDisplay:false})
+    ... buildOtherProp({initStyle:{height:'auto'}})
   }
 }
 

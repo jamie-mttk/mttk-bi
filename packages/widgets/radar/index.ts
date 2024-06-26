@@ -1,6 +1,8 @@
 import { biRadarTransform } from './transform'
 import { buildModelFull, buildEchartsBaseUI, buildOtherProp,commonMoldelConfig } from '../utils/indexUtil'
-import {locale} from 'mttk-lowcode-engine'
+import { widgetUtil,locale} from 'mttk-lowcode-engine'
+export const baseConfigList={excludeList:['grid','xAxis','yAxis','dataZoom']}
+
 //
 const biRadarConfig = {
   key: '_bi_radar',
@@ -19,9 +21,25 @@ const biRadarConfig = {
         ...commonMoldelConfig
       ]),
     basic: {
-      init: {},
+      init: {'legend-left':'right','legend-orient':'vertical','shape':'polygon','radius':'75%'},
       ui: [
-        ...buildEchartsBaseUI(),
+        {
+          '~component': 'el-collapse',
+          '~label': locale.t('bi.widgets.radar.name'),
+          '~default':true,
+          _children: [
+            widgetUtil.createInput('radius', locale.t('bi.widgets.radar.radius'),{'~description':locale.t('bi.widgets.utils.indexUtil._valueDescription'),}),
+            widgetUtil.createSelect(
+              'shape',
+              [
+                { label: locale.t('bi.widgets.radar.shape_1'), value: 'polygon' },
+                { label:locale.t('bi.widgets.radar.shape_2'), value: 'circle' },
+              ],
+              locale.t('bi.widgets.radar.shape')
+            )
+          ]
+        },
+        ...buildEchartsBaseUI(baseConfigList),
 
       ]
     },

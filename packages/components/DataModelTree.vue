@@ -1,10 +1,11 @@
 <template>
   <el-input
     v-model="filterStr"
-    
+    v-show="props.modelValue?._id"
     style="margin: 8px 4px 8px 4px"
-    placeholder="input to filter columns"
+    :placeholder="$t('bi.components.dataModelTree.placeholder')"
   ></el-input>
+  
   <lcFullHeight :gap="12">
     <el-tree
       :data="columnFiltered"

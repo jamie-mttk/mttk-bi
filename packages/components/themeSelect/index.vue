@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="model" placeholder="Please choose echarts theme">
+  <el-select v-model="model" clearable>
     <el-option v-for="item in themes" :key="item.name" :value="item.name">
       <ThemeBar :theme="item"></ThemeBar>
     </el-option>

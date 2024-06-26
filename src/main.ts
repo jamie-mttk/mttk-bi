@@ -16,10 +16,10 @@ const { globalContext } = install.installAll(
   createRouter({
     history: createWebHashHistory(),
     routes: [ 
-    //    {
-    //   path: '/home',
-    //   name: 'home',
-    //   component: () => import('./views/home/index.vue')
+      //  {
+      // path: '/home',
+      // name: 'home',
+      // component: () => import('./views/home/index.vue')
     // },
   ]
   }),

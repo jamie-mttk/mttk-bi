@@ -3,6 +3,8 @@ import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 import { formatData } from '../utils/tooltipUtil'
 import {tools} from 'mttk-lowcode-engine'
 import {getMetricOrDimension} from '../utils/transformTools.ts'
+import { baseConfigList } from './index'
+
 const validateRules = [
   { key: 'dimension', min: 1 },
   { key: '_dimensionAndMetric', min: 2 }
@@ -20,13 +22,14 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
 
   //
   const option = {
-    ...buildBaseOption({config,skipLegend:true}),
+    ...buildBaseOption({config,...baseConfigList }),
     tooltip: {
       valueFormatter(value){
         //Get value config from metric or dimension depends on where it is set
         return formatData(value,getMetricOrDimension(modelConfig))
       }
     },
+
     series: [
       {
         type: 'treemap',
@@ -34,7 +37,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
         //if it is not set or it is zero, set to undefined to disable leafDepth
         //Once leafDepth is set ,drilling down is automatically enabled
          leafDepth :config['leaf-depth']||undefined,
-         top:'20%',
+        //  top:'20%',
         data: dataFinal,
 
       }
@@ -49,7 +52,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
     option.series[0].levels= getLevelOption(modelConfig)
   }
 
-  // console.log(JSON.stringify(option))
+  //  console.log(JSON.stringify(option.legend))
   return option
 }
 

@@ -1,11 +1,13 @@
 import { unref } from 'vue'
-import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
+import { buildBaseOption, buildTransformEcharts } from '../utils/transformUtil'
 import { getDistinctColumns, arrayToIndexMap } from '../utils/dataUtil'
-import {getMetricOrDimension,safeGetArrayItem} from '../utils/transformTools'
+import { getMetricOrDimension, safeGetArrayItem } from '../utils/transformTools'
 import { formatData } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
+
 const validateRules = [
-  { key: 'dimension',  min: 2 },
-  { key: 'metric',  min: 1 }
+  { key: 'dimension', min: 2 },
+  { key: 'metric', min: 1 }
 ]
 
 function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
@@ -19,7 +21,14 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   const maxVal = calMaxValue(sourceData)
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({
+      config,
+      ...baseConfigList,
+      options: {
+        'xAxis-name': safeGetArrayItem(modelConfig, 'dimension', 0)?.label,
+        'yAxis-name': safeGetArrayItem(modelConfig, 'dimension', 1)?.label
+      }
+    }),
     tooltip: {
       formatter: function (params) {
         //
@@ -36,22 +45,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
         return result
       }
     },
-    xAxis: {
-      type: 'category',
-      name:safeGetArrayItem(modelConfig,'dimension',0)?.label,
-      data: dataX,
-      splitArea: {
-        show: config['split-area-mode'] == 'x' || config['split-area-mode'] == 'both'
-      }
-    },
-    yAxis: {
-      type: 'category',
-      name:safeGetArrayItem(modelConfig,'dimension',1)?.label,
-      data: dataY,
-      splitArea: {
-        show: config['split-area-mode'] == 'y' || config['split-area-mode'] == 'both'
-      }
-    },
+
     visualMap: {
       min: 0,
       max: maxVal,
@@ -64,9 +58,8 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
         data: dataFinal,
         label: {
           show: !!config['show-label'],
-          formatter:function(params){
-
-            return formatData(params.value[2], modelConfig.metric[0]) 
+          formatter: function (params) {
+            return formatData(params.value[2], modelConfig.metric[0])
           }
         },
         emphasis: {
@@ -78,8 +71,14 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       }
     ]
   }
-
-  //  console.log(JSON.stringify(option))
+  //
+  option.xAxis.data = dataX
+  option.yAxis.data = dataY
+  console.log(
+    safeGetArrayItem(modelConfig, 'dimension', 0)?.label,
+    safeGetArrayItem(modelConfig, 'dimension', 1)?.label,
+    JSON.stringify(option.xAxis)
+  )
   return option
 }
 //

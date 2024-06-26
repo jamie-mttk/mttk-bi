@@ -1,23 +1,25 @@
-
-
 export function createTooltip(params, fullConfig) {
   let result = ''
   //We need to skip the dimensions from data
   const dimensionCount = countDimension(fullConfig)
-
   if (Array.isArray(params)) {
     if (params.length > 0) {
       result += buildTitle(params[0])
     }
     result += startGrid()
+
     for (let i = 0; i < params.length; i++) {
-      result += createSingle(params[i], i, dimensionCount, fullConfig)
+
+      const r = createSingle(params[i],  params[i].seriesIndex||i, dimensionCount, fullConfig)
+      if (r) {
+        result += r
+      }
     }
     result += endGrid()
   } else {
     result += buildTitle(params)
     result += startGrid()
-    result += createSingle(params, 0, dimensionCount, fullConfig)
+    result += createSingle(params, params.seriesIndex||0, dimensionCount, fullConfig)
     result += endGrid()
   }
 
@@ -41,13 +43,14 @@ function createSingle(param, index, dimensionCount, fullConfig) {
   //
   const metricIndex = dimensionCount + index
   if (param.data.length <= metricIndex) {
-    //it will not happen!
-    return result
+    //It may happen for bar chart
+    return undefined
   }
   //
   const value = param.data[metricIndex]
   //
   const metricConfig = findMetric(index, fullConfig)
+
   //
   // result += ' : '
   result += '<div style="text-align: right">' + formatData(value, metricConfig) + '</div>'
@@ -87,13 +90,10 @@ function countDimension(fullConfig) {
 
 export function formatData(value, config) {
   try {
-    if (
-      config?.dataType == 'number' ||
-      config?.dataType == 'integer'
-    ) {
-      if(!value){
+    if (config?.dataType == 'number' || config?.dataType == 'integer') {
+      if (!value) {
         //value may be undefined or null
-        value=0
+        value = 0
       }
       return formatDataNumber(value, config)
     } else {
@@ -105,10 +105,9 @@ export function formatData(value, config) {
   }
 }
 function formatDataNumber(value, config) {
-
   //
-  if (typeof value!='number'){
-    return value;
+  if (typeof value != 'number') {
+    return value
   }
 
   //Converter - valueNew is numeric
@@ -136,7 +135,6 @@ function formatDataNumberConvert(value, config) {
   //
   const converter = config._format_number_converter || 'none'
   if (converter == 'ch_auto') {
-
     //
     if (Math.abs(value) < 10000) {
       //

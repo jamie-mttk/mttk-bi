@@ -21,7 +21,7 @@
       <el-table
         :data="prviewData"
         border
-        :fit="true"
+        :fit="true" table-layout="auto"
         :empty-text=" $t('bi.plugin.modelEditor.single.dataPreview.emptyText') "
         v-fullHeight="8"
       >
@@ -51,7 +51,7 @@
 <script lang="ts" setup>
 import { ref, inject } from 'vue'
 import { vFullHeight } from 'mttk-lowcode-engine'
-import ExtendTableColumn from '../../../components/ExtendTableColumn.vue'
+import {ExtendTableColumn} from 'element-pivot'
 
 import { showLoadDataError } from '../../../widgets/utils/chartActionUtil'
 //

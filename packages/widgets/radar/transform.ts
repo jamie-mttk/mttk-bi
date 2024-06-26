@@ -2,6 +2,9 @@ import { unref } from 'vue'
 import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 
 import { formatData, } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
+import {safeParseJon} from '../utils/shareUtil'
+
 const validateRules = [
   { key: 'dimension', min: 1 },
   { key: 'metric', min: 1 }
@@ -16,7 +19,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   const {legend,indicator,dataFinal}=buildData(sourceData,modelConfig)
   //
   const option = {
-    ...buildBaseOption({config,skipLegend:true}),
+    ...buildBaseOption({config, ...baseConfigList}),
 
     tooltip: {
       trigger: 'item',
@@ -39,14 +42,10 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       return result
       }   
     },
-    legend:{
-      orient:'vertical',
-      right:'48px',
-      top:'4px',
-      data:legend
-    },
+
     radar: {
-      // shape: 'circle',
+       shape: config.shape||'',
+       radius:safeParseJon(config.radius||'75%'),
        indicator: indicator,
     },
     series: [
@@ -57,8 +56,9 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       }
     ]
   }
-
-  //  console.log(JSON.stringify(option,null,2))
+//
+option.legend.data=legend
+    console.log(JSON.stringify(option.radar,null,2))
   return option
 }
 

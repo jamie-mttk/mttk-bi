@@ -5,9 +5,9 @@
         <slot></slot>
       </el-form>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="12" >
       <div style="font-size:14px;font-weight:400;line-height:22px;color:var(--el-text-color-regular);margin-bottom:8px;">{{ $t('bi.components.dataModelHolder.name') }}</div>
-          <SelectRemote
+          <SelectRemote filterable
             v-model="model.config.model.dataModel"
             @dataChanged="handleDataChanged"
             :url="'/bi/dataModel/query?app=' + appContext.getKey()"
@@ -51,21 +51,20 @@ function handleDataChanged(value, flag) {
     }
     // console.log(model.value)
     //clear dimension/metric/filter
-    if(model.value.config?.model?.dimension){
-        model.value.config.model.dimension=[]
-    }
-    if(model.value.config?.model?.metric){
-        model.value.config.model.metric=[]
-    }
-    if(model.value.config?.model?.filter){
-        model.value.config.model.filter=[]
-    }
-    if(model.value.config?.model?.drilling){
-        model.value.config.model.drilling=[]
-    }
+    clearAll(['dimension','metric','filter','drilling'])
   }
 }
-
+function clearAll(prefixList:Array<string>){
+  for(let key of Object.keys(model.value.config.model)){
+    //
+    for(const p of prefixList){
+      if(key.startsWith(p)){
+        model.value.config.model[key]=[]
+        break;
+      }
+    }
+  } 
+}
 //Fix drop issue on firefox
 onMounted(() => {
   //Prevent firefox to open new page once item is dropped
@@ -75,7 +74,11 @@ onMounted(() => {
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" >
+ .el-select-dropdown__wrap{
+
+  max-height:100%;
+}
 // Reduce label height to set some padding in fiield drop, so the drop area become bigger
 // .dataModelHolderForm11 {
 //     .el-form-item {

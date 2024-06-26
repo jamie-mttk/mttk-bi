@@ -19,11 +19,27 @@ const biLineConfig = {
     basic: {
       init: {smooth:true,},
       ui: [
+                {
+          '~component': 'el-collapse',
+          '~label': locale.t('bi.widgets.line.name'),
+          '~default':true,
+          _children: [
+            widgetUtil.createSwitch('smooth', locale.t('bi.widgets.line.smooth')),
+            widgetUtil.createSelect(
+              'step',
+              [
+                { label: locale.t('bi.widgets.line.step_start'), value: 'start' },
+                { label: locale.t('bi.widgets.line.step_middle'), value: 'middle' },
+                { label: locale.t('bi.widgets.line.step_end'), value: 'end' },
+              ],
+              locale.t('bi.widgets.line.step')
+            ),
+            widgetUtil.createSwitch('areaMode',locale.t('bi.widgets.line.areaMode')),
+            widgetUtil.createSwitch('stack', locale.t('bi.widgets.line.stack')),
+          ]
+        },
         ...buildEchartsBaseUI(),
-        widgetUtil.createSwitch('smooth', locale.t('bi.widgets.line.smooth')),
-        widgetUtil.createSwitch('areaMode',locale.t('bi.widgets.line.areaMode')),
-        widgetUtil.createSwitch('stack', locale.t('bi.widgets.line.stack')),
-        widgetUtil.createSwitch('reverse',locale.t('bi.widgets.line.reverse'))
+
       ]
     },
     ...buildOtherProp()

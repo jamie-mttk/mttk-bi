@@ -26,11 +26,21 @@ export default {
       connectionEditor: {
         name: '数据库连接',
         description: '',
+        trial:'检查',
+        trialSuccess:'检查成功',
+        trialFail:'检查失败',
         data: {
+          basic:'基础',
           driverClass: '驱动类',
           user: '用户名',
           password: '密码',
-          readonly: '只读'
+          readonly: '只读',
+          pool:'连接池',
+          minimumIdle:'最少空闲连接数',
+          maximumPoolSize:'最大连接数',
+          connectionTimeout:'连接超时(毫秒)',
+          idleTimeout:'空闲超时(毫秒)',
+          maxLifetime:'最大寿命(毫秒)',
         },
         deleteConfirm: '确定要删除数据库连接?'
       },
@@ -57,6 +67,7 @@ export default {
           },
           entityTree: {
             deleteConfirm: '请问确定删除此节点吗?删除会删除实体、字段和关联',
+            emptyDescription:'请拖入实体或SQL到此面板',
             menu: {
               basic: '基本信息',
               fields: '字段选择'
@@ -166,10 +177,12 @@ export default {
         name: '数据模型'
       },
       dataModelTree: {
-        empty: '请先选择数据模型或修改过滤条件'
+        placeholder:'输入过滤列',
+        empty: '请选择数据模型'
       }
     },
     widgets: {
+      folderName:'BI 组件',
       utils: {
         baiduMapUtil: {
           notify: '请先设置百度AK(Application Key)'
@@ -189,6 +202,9 @@ export default {
           copyDone: '拷贝完成'
         },
         indexUtil: {
+          '_valueDescription':'值可以是类似50%这样的百分比或类似32这样的数字.',
+          _selectAddDescription:'选择项可直接输入后直接选择.',
+          _show:'显示',
           title: '数据模型',
           filter: '过滤',
           filter_description: '针对本图表设置过滤条件',
@@ -211,9 +227,81 @@ export default {
           refresh: '刷新图表',
           showSQL: '查看SQL',
           showData: '查看数据',
+          'title-left':'左边位置',
+          'title-left_description':'@:bi.widgets.utils.indexUtil._selectAddDescription <br> @:bi.widgets.utils.indexUtil._valueDescription',
+          'title-left_1':'左',
+          'title-left_2':'中间',
+          'title-left_3':'右边',
+          'title-top':'上边位置',
+          'title-top_description':'@:bi.widgets.utils.indexUtil._selectAddDescription <br> @:bi.widgets.utils.indexUtil._valueDescription',
+          'title-top_1':'顶部',
+          'title-top_2':'中间',
+          'title-top_3':'底部',
           'echarts-theme': 'Echarts主题',
+          'echarts-animation':'动画效果',
+          'title_label':'标题',
           'title-text': '标题',
-          'title-subtext': '副标题'
+          'title-subtext': '副标题',
+          'legend_label':'图例',
+          'legend-type':'类型',
+          'legend-type_1':'平面',
+          'legend-type_2':'滚动',
+          'legend-orient':'方向',
+          'legend-orient_1':'水平',
+          'legend-orient_2':'垂直',
+          'legend-icon':'图标',
+          'legend-icon_1':'圆形',
+          'legend-icon_2':'矩形',
+          'legend-icon_3':'圆角矩形',
+          'legend-icon_4':'三角形',
+          'legend-icon_5':'菱形',
+          'legend-icon_6':'别针',
+          'legend-icon_7':'箭头',
+          'legend-icon_8':'无',
+          'grid_label':'绘制区域',
+          'grid-right':'右边',
+          'grid-bottom':'底部',
+          'grid-containLabel':'包含标签',
+          'toolbox_label':'工具栏',
+          'toolbox-orient':'方向',
+          'toolbox-orient_1':'水平',
+          'toolbox-orient_2':'垂直',
+          'toolbox-feature':'特征',
+          'toolbox-feature_saveAsImage':'保存图像',
+          'toolbox-feature_dataView':'显示数据',
+          'toolbox-feature_dataZoom':'数据缩放',
+          'toolbox-feature_restore':'恢复',
+          'toolbox-saveAsImage-backgroundColor':'保存图像背景颜色',
+          'dataZoom_label':'数据缩放',
+          'dataZoom-type':'类型',
+          'dataZoom-type_1':'内部',
+          'dataZoom-type_2':'滑块',
+          'xAxis_label':'X坐标轴',
+          'yAxis_label':'Y坐标轴',
+          'axis-position':'位置',
+          'axis-position_bottom':'底部',
+          'axis-position_top':'顶部',
+          'axis-position_left':'左边',
+          'axis-position_right':'右边',
+          'axis-type':'类型',
+          'axis-type_value':'数值轴，适用于连续数据',
+          'axis-type_category':'类目轴，适用于离散的类目数据',
+          'axis-type_time':'时间轴，适用于连续的时序数据',
+          'axis-type_log':'对数轴',
+          'axis-nameLocation':'名称位置',
+          'axis-nameLocation_start':'开始',
+          'axis-nameLocation_middle':'中间',
+          'axis-nameLocation_end':'结尾',
+          'axis-axisLabel-show':'显示标签',
+          'axis-axisLine-show': '显示轴线',
+          'axis-axisTick-show': '显示刻度',
+          'axis-splitLine-show': '显示分割线',
+          'axis-splitArea-show': '显示分割区域',
+          'axis-axisPointer-show': '显示指示器',
+          'axis-axisPointer-type':'指示器类型',
+          'axis-axisPointer-type_line':'直线',
+          'axis-axisPointer-type_shadow':'阴影区域',
+          'axis-axisPointer-type_none':'无',
         },
         transformPrecheck: {
           chooseModel: '请选择数据模型',
@@ -326,7 +414,7 @@ export default {
       bar: {
         name: 'BI 柱状图',
         stack: '堆叠',
-        reverse: 'X/Y坐标切换'
+        barWidth: '柱体宽度'
       },
       boxplot: {
         name: 'BI盒须图',
@@ -365,7 +453,11 @@ export default {
       },
       gauge: {
         name: 'BI仪表盘',
-        metric_description: '给出仪表盘显示的数据值.'
+        metric_description: '给出仪表盘显示的数据值.',
+        radius: '半径',
+        startAngle: '开始角度',
+        endAngle: '结束角度',
+        clockwise: '顺时针'
       },
       heatBaiduMap: {
         name: 'BI地图热力图',
@@ -400,6 +492,10 @@ export default {
       line: {
         name: 'BI折线图',
         smooth: '平滑曲线',
+        step:'阶梯图',
+        step_start:'开始',
+        step_middle:'中间',
+        step_end:'结束',
         areaMode: '面积填充',
         stack: '堆叠',
         reverse: '坐标切换'
@@ -422,7 +518,11 @@ export default {
       radar: {
         name: 'BI雷达图',
         dimension_description: '给出比较项目',
-        metric_description: '给出比较数值.'
+        metric_description: '给出比较数值.',
+        radius:'半径',
+        shape:'形状',
+        shape_1:'多边形',
+        shape_2:'圆形',
       },
       sankey: {
         name: 'BI桑基图',
@@ -459,13 +559,17 @@ export default {
         border:'显示边框',
         stripe:'显示斑马条纹',
         showIndex:'显示序号',
+        showSummary: '显示汇总',
+        mergeSameColumn: '合并相同列',
+        sortable: '列显示排序标记',
+        summary:'合计',
       },
-      crossTable: {
-        name: 'BI交叉表',
-        dimension_description:'第一个参数是竖向显示的值,第二个参数是横向显示值',
-        metric_description:'横线显示值下的具体指标参数',
-        border:'显示边框',
-        stripe:'显示斑马条纹',
+      pivotTable: {
+        name: 'BI透视表',
+        dimensionCol:'水平维度',
+        dimension_description:'多个维度时从层级高到层级低设置',
+        dimensionRow:'垂直维度',
+        emptyValue:'空值显示成',
       },
       themeRiver: {
         name: 'BI河流图',

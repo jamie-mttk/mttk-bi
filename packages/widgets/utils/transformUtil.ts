@@ -1,17 +1,16 @@
 import VChart from 'vue-echarts'
 import { useIntervalFn } from '@vueuse/core'
-import { wrapResult } from '../../utils/biTool'
+import { wrapResult } from './shareUtil'
 
 import { buildFilters, buildFilterSingle } from '../filter/buildFilters'
 import buildDrilling from './buildDrilling'
 import { tools } from 'mttk-lowcode-engine'
-import { unref, ref } from 'vue'
+import { unref, ref, nextTick } from 'vue'
 import { countTitle } from './transformTools'
-import {preValidate,precheck} from './transformPrecheck'
+import { preValidate, precheck } from './transformPrecheck'
 //
-
 import { showSQL, showData, showLoadDataError } from './chartActionUtil'
-
+import { checkPassed } from './shareUtil'
 //
 export function buildTransform(
   buildResult: Function,
@@ -19,13 +18,14 @@ export function buildTransform(
   validate?: Function
 ) {
   return function ({ config, data, context, key, contextWrap, fullConfig }) {
+    //  console.log('BUIDL TRANSFORM IS CALLED',key,context.mode.value,JSON.stringify(unref(data)))
     //
     const drilling = buildDrilling({ context, fullConfig })
 
     //load data from remove
     //reset pagination page to 1
-    function reload({ reset = false, showError = true, resetPagination = true } = {}) {
-      //check
+    function reload({ reset = false, showError = true } = {}) {
+      // console.log('RELOAD IS CALLED',key,context.mode.value,JSON.stringify(unref(data)))
 
       //
       if (
@@ -36,7 +36,6 @@ export function buildTransform(
           showError
         )
       ) {
-
         return
       }
 
@@ -69,9 +68,14 @@ export function buildTransform(
           showLoadDataError(context.appContext.globalContext, response, fullConfig)
         } else {
           //
+          // console.log(key,fullConfig.config.data.dataKey, response)
           context.d.s(fullConfig.config.data.dataKey, response)
+          //
+          //Here we need to reset choosed to make it take affect... I did not find the reason so far
+          // const choosed = context.choosedManager.get()
+          // context.choosedManager.set(undefined)
+          // nextTick(() => context.choosedManager.set(choosed))
         }
-        // console.log(config.dataName, response.data)
       })
     }
 
@@ -79,12 +83,13 @@ export function buildTransform(
     const result = buildResult({ config, data, context, key, contextWrap, fullConfig })
 
     result['^onMounted'] = function () {
+      //check
+
+
       //
-      reload({ reset: true, showError: false })
-      //
-      context.mitt.on('bi-chart-reload-' + key, function ({ reset }) {
+      context.mitt.on('bi-chart-reload-' + key, function ({ reset, showError = true }) {
         //reload({ data: fullConfig, reset }, true)
-        reload({ reset, showError: true })
+        reload({ reset, showError })
       })
       //
       context.mitt.on('bi-chart-action-' + key, function ({ action }) {
@@ -109,6 +114,7 @@ export function buildTransform(
       context.mitt.off('bi_filter_reload')
       //
       resetInterval()
+
     }
     //Used to clean the interval created during onMounted
     //Please note reload will not trigger onMounted again, so a funciton level variable is OK
@@ -144,11 +150,11 @@ export function buildTransform(
         pauseSaved()
       }
     }
-    //
 
     //
     //wrap inside a div
-    return wrapResult(context, result, drilling.buildFooter())
+
+    return wrapResult({ context, result, footer: drilling.buildFooter(), fullConfig })
   }
 }
 
@@ -160,19 +166,38 @@ export function buildTransformEcharts(
 ) {
   return buildTransform(
     function ({ config, data, context, key, contextWrap, fullConfig }) {
-      const chechResult=precheck({ config, data, context, key, contextWrap, fullConfig },validateRules,validate)
-      if(chechResult){
+      //
+    //  console.log('build',data,data.value,config,fullConfig.model,fullConfig)
+      const chechResult = precheck(
+        { config, data, context, key, contextWrap, fullConfig },
+        validateRules,
+        validate
+      )
+      //
+      if(!unref(data).data){
+          data.value={init:true,data:[]}
+      }
+      //
+            // console.log('~~~~~~~~~~',unref(data),chechResult)
+      //We SHOULD check and return checkResult here
+      //Otherwise chart will be refreshed for the below situation
+      //1. Create an empty chart without any configuration
+      //2. Save and close page
+      //3. Reenter page and config chart
+      if (chechResult) {
         return chechResult
       }
+      //
+      if(unref(data)?.init){
+        //data is empty
+        context.mitt.emit('bi-chart-reload-' + fullConfig.key, { reset: true, showError: false })
+       }
       //
       const option = ref({})
 
       const result = buildOption({ config, data, context, key, contextWrap, fullConfig })
-      //
-      // console.log('####',unref(data),JSON.stringify(result))
-      //
-
-      // console.log('REBUILD!',result)
+      
+      // console.log('Option build is called',result)
       if (tools.isPromise(result)) {
         //
         result.then((resp) => {
@@ -194,20 +219,23 @@ export function buildTransformEcharts(
         }
         //
         option.value = result
+        
       }
+
       //Locale
       //enUS,zhCN
-      let locale=context.appContext.globalContext.i18n.global.locale.value
+      let locale = context.appContext.globalContext.i18n.global.locale.value
       //change to ZH or EN
-      locale=locale && locale=='zhCN'?'ZH':'EN'
-    
+      locale = locale && locale == 'zhCN' ? 'ZH' : 'EN'
+
       //
       return {
         '~component': VChart,
         autoresize: true,
         option: option,
+
         theme: config['echarts-theme'] || 'default',
-        'init-options': { renderer: 'canvas',locale },
+        'init-options': { renderer: 'canvas', locale },
         // 'manual-update': false, //do not set to true otherwise baidu map does not work
         '@click': function (ctx, para) {
           const drilling = buildDrilling({ context, fullConfig })
@@ -221,52 +249,144 @@ export function buildTransformEcharts(
     validate
   )
 }
-
+function formatBool(config, key, defaultVal = false) {
+  return config[key] == undefined ? defaultVal : !!config[key]
+}
 
 export function buildBaseOption({
   config = {},
-  skipLegend = false,
-  skipToolbox = false,
-  skipGrid = false
+  options = {}, //
+  includeList = undefined,
+  excludeList = undefined
 } = {}) {
   const result = {} as any
-  result.title = {
-    text: config['title-text'] || '',
-    subtext: config['title-subtext'] || '',
-    left: '2%',
-    top: '2%'
+  //
+  let topDefault = 0
+  let bottomDefault = 16
+  //
+
+  if (checkPassed('echarts', includeList, excludeList)) {
+    result.animation = formatBool(config, 'echarts-animation', true)
   }
-  if (!skipGrid) {
-    result.grid = {
-      left: '32',
-      right: '64',
-      top: (countTitle(config) == 2 ? 96 : 72) + 'px', //Set top height dependson whether title and sutitle  setting
-      bottom: '32',
-      containLabel: true
+  //title
+  if (
+    checkPassed('title', includeList, excludeList) &&
+    (config['title-text'] || config['title-subtext'])
+  ) {
+    result.title = {
+      text: config['title-text'] || '',
+      subtext: config['title-subtext'] || '',
+      left: config['title-left'] || 'left',
+      top: config['title-top'] || 'top'
     }
+    //
+    topDefault += countTitle(config) == 2 ? 48 : 32
   }
-  if (!skipLegend) {
+
+  if (checkPassed('legend', includeList, excludeList)) {
     result.legend = {
-      // orient: 'horizontal',
-      orient: 'vertical',
-      right: '48px',
-      top: '4px'
+      //If not set ,default show
+      show: config['legend-show'] == undefined ? true : !!config['legend-show'],
+      left: config['legend-left'] || 'center',
+      top: config['legend-top'] || '' + topDefault,
+      type: config['legend-type'] || 'scroll',
+      orient: config['legend-orient'] || 'horizontal',
+      icon: config['legend-icon'] || ''
     }
+    //
+    topDefault += 32
   }
-  if (!skipToolbox) {
+  if (checkPassed('toolbox', includeList, excludeList)) {
     result.toolbox = {
       show: true,
-      showTitle: false, //Hide default text to avoid overlap
+      left: config['toolbox-left'] || 'right',
+      top: config['toolbox-top'] || 'top',
+      orient: config['toolbox-orient'] || 'horizontal',
       feature: {
         saveAsImage: {
-          show: true
+          show: config['toolbox-feature'] && config['toolbox-feature'].includes('saveAsImage'),
+          backgroundColor: config['toolbox-saveAsImage-backgroundColor'] || 'transparent'
         },
         dataView: {
-          show: true
+          show: config['toolbox-feature'] && config['toolbox-feature'].includes('dataView')
+        },
+        dataZoom: {
+          show: config['toolbox-feature'] && config['toolbox-feature'].includes('dataZoom')
+        },
+        restore: {
+          show: config['toolbox-feature'] && config['toolbox-feature'].includes('restore')
         }
       }
     }
   }
+  if (checkPassed('dataZoom', includeList, excludeList)) {
+    result.dataZoom = []
+    const dataZoomConfig = config['dataZoom-type'] || []
+    for (const c of dataZoomConfig) {
+      if (c == 'slider') {
+        bottomDefault += 32
+      }
+      result.dataZoom.push({ type: c })
+    }
+  }
+
+  if (checkPassed('xAxis', includeList, excludeList)) {
+    const nameLocation = config['xAxis-nameLocation'] || 'end'
+    result.xAxis = {
+      show: formatBool(config, 'xAxis-show', true),
+      name: options['xAxis-name'] || '',
+      position: config['xAxis-position'] || 'bottom',
+      type: config['xAxis-type'] || 'category',
+      nameLocation: nameLocation,
+      nameGap: nameLocation == 'middle' ? 24 : 16,
+      axisLabel: { show: formatBool(config, 'xAxis-axisLabel-show', true) },
+      axisLine: { show: formatBool(config, 'xAxis-axisLine-show', true) },
+      axisTick: { show: formatBool(config, 'xAxis-axisTick-show', true) },
+      splitLine: { show: formatBool(config, 'xAxis-splitLine-show', false) },
+      splitArea: { show: formatBool(config, 'xAxis-splitArea-show', false) }
+    }
+    //axisPointer can NOT be created if it is not shown,otherwise the tooltip of  line chart will not display
+    const axisPointerShow = formatBool(config, 'xAxis-axisPointer-show', false)
+    if (axisPointerShow) {
+      result.xAxis.axisPointer = {
+        show: axisPointerShow,
+        type: config['xAxis-axisPointer-type'] || 'line'
+      }
+    }
+    if (nameLocation == 'middle') {
+      bottomDefault += 16
+    }
+  }
+  if (checkPassed('yAxis', includeList, excludeList)) {
+    result.yAxis = {
+      show: formatBool(config, 'yAxis-show', true),
+      name: options['yAxis-name'] || '',
+      position: config['yAxis-position'] || 'left',
+      type: config['yAxis-type'] || 'value',
+      nameLocation: config['yAxis-nameLocation'] || 'end',
+      axisLabel: { show: formatBool(config, 'yAxis-axisLabel-show', true) },
+      axisLine: { show: formatBool(config, 'yAxis-axisLine-show', false) },
+      axisTick: { show: formatBool(config, 'yAxis-axisTick-show', false) },
+      splitLine: { show: formatBool(config, 'yAxis-splitLine-show', false) },
+      splitArea: { show: formatBool(config, 'yAxis-splitArea-show', false) },
+      axisPointer: {
+        show: formatBool(config, 'yAxis-axisPointer-show', false),
+        type: config['yAxis-axisPointer-type'] || 'shadow'
+      }
+    }
+  }
+  if (checkPassed('grid', includeList, excludeList)) {
+    result.grid = {
+      show: !!config['grid-show'],
+      left: config['grid-left'] || '8%',
+      top: config['grid-top'] || '' + topDefault, //Set top height dependson whether title and sutitle  setting
+      right: config['grid-right'] || '12%',
+      bottom: config['grid-bottom'] || '' + bottomDefault,
+      containLabel: config['grid-containLabel'] == undefined ? true : !!config['grid-containLabel']
+    }
+  }
+  //
+
   //
   return result
 }

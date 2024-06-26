@@ -1,6 +1,8 @@
 import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
 import {safeGetArrayItem} from '../utils/transformTools'
 import { createTooltip } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
+
 const validateRules = [
   { key: 'dimension',  min: 1 },
   { key: 'metric', min: 1 }
@@ -11,7 +13,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   const metricConfig=safeGetArrayItem(fullConfig.config.model,'metric',0)
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({config, ...baseConfigList}),
 
     tooltip: {
       trigger: 'item',

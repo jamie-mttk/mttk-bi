@@ -4,6 +4,7 @@
 <div class="entitity-tree" id="entityTreePanel" @dragover="allowDrop" @drop="handleDrop">
     <EntityNode v-for="node in treeNodes" :key="node.entity?.key" :modelValue="node" :id="'pn_' + node.entity?.key"
       :style="nodeStyle(node)" @nodeCommand="handleNodeCommand"></EntityNode>
+      <el-empty  v-if="treeNodes.length==0" :image-size="100" :description="locale.t('bi.plugin.modelEditor.single.entityTree.emptyDescription')" />
 
   </div>
   <NodeEditDialog ref="nodeEditDialogRef"></NodeEditDialog>

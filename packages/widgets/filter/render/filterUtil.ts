@@ -28,9 +28,9 @@ export default function build(modelValue, config, fullConfig, context) {
     '~': 'el-form',
     model: modelValue,
     inline: true,
-    'label-position':config.labelPosition || "left",
+    'label-position':config.labelPosition || "right",
     // size: 'small',
-    'label-width': config.labelWidth || '120px',
+    'label-width': config.labelWidth || '80px',
     class: 'el-row bi-filter-form',
     '#': []
   } as any
@@ -40,6 +40,7 @@ export default function build(modelValue, config, fullConfig, context) {
       '~': 'el-form-item',
       label: c.label,
       class: 'el-col el-col-' + calColSpan(colSpan, c),
+      style:{},
       '#': buildController(modelValue, config, c)
     }
     //

@@ -15,7 +15,7 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   const yConfig = safeGetArrayItem(modelConfig, 'dimension', 1)
   //
   const option = {
-    ...buildBaseOption({ config }),
+    ...buildBaseOption({ config,options:{'xAxis-name':safeGetArrayItem(modelConfig,'dimension',0)?.label,'yAxis-name':safeGetArrayItem(modelConfig,'dimension',1)?.label} }),
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -41,12 +41,12 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
         return result
       }
     },
-    xAxis: {
-      name: safeGetArrayItem(modelConfig, 'dimension', 0)?.label
-    },
-    yAxis: {
-      name: safeGetArrayItem(modelConfig, 'dimension', 1)?.label
-    },
+    // xAxis: {
+    //   name: safeGetArrayItem(modelConfig, 'dimension', 0)?.label
+    // },
+    // yAxis: {
+    //   name: safeGetArrayItem(modelConfig, 'dimension', 1)?.label
+    // },
     dataset: [],
     series: []
   }

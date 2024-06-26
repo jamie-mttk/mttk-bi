@@ -1,6 +1,8 @@
 import { biFunnelTransform } from './transform'
 import {buildModelFull,buildEchartsBaseUI,buildOtherProp,commonMoldelConfig} from '../utils/indexUtil'
 import {locale} from 'mttk-lowcode-engine'
+export const baseConfigList={excludeList:['xAxis','yAxis','dataZoom','grid']}
+
 //
 const biFunnelConfig = {
   key: '_bi_funnel',
@@ -20,7 +22,7 @@ const biFunnelConfig = {
     basic: {
       init: {},
       ui: [
-        ...buildEchartsBaseUI(),
+        ...buildEchartsBaseUI(baseConfigList),
       ]
     },
     ... buildOtherProp()

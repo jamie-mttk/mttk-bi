@@ -3,7 +3,7 @@ import { unref, ref, computed } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
 import { dynamicRender } from 'mttk-vue-wrap'
-import ExtendTableColumn from '../../components/ExtendTableColumn.vue'
+import {ExtendTableColumn} from 'element-pivot'
 import {locale} from 'mttk-lowcode-engine'
 //
 const { copy, isSupported } = useClipboard()

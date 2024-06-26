@@ -9,6 +9,8 @@ export const filterIndexOptions = function (mode=false){
   checkDrop: function (dropList, dropped, toDrop) {
 
     //Set default value
+    //
+    toDrop._ui_hide_match=true
     //Choose default value if not set
     if (dropped.dataType == 'string') {
       toDrop._ui_mode = 'input'
@@ -41,8 +43,8 @@ const biFilterConfig = {
         type: 'filter',
         showButtonReset: true,
         qtyPerRow: 4,
-        labelWidth:'120px',
-        lablePosition:'left',
+        labelWidth:'80px',
+        labelPosition:'right',
       },
       [
         {
@@ -101,7 +103,7 @@ const biFilterConfig = {
       ]
     ),
 
-    ...buildOtherProp({ initDisplay: false })
+    ... buildOtherProp({initStyle:{height:'auto'}})
   }
 }
 

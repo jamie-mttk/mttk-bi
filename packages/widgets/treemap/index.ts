@@ -1,7 +1,7 @@
 import { biTreemapTransform } from './transform'
 import {buildModelFull,buildEchartsBaseUI,buildOtherProp,commonMoldelConfig} from '../utils/indexUtil'
 import { widgetUtil,locale } from 'mttk-lowcode-engine'
-
+export const baseConfigList={excludeList:['xAxis','yAxis','dataZoom','grid','legend']}
 //
 const biTreemapConfig = {
   key: '_bi_treemap',
@@ -29,9 +29,17 @@ const biTreemapConfig = {
     basic: {
       init: { 'leaf-depth': 1,'upper-label':false },
       ui: [
-        ...buildEchartsBaseUI(),
-        widgetUtil.createInputNumber('leaf-depth', locale.t('bi.widgets.treemap.leaf-depth'),{min:0}),
-        widgetUtil.createSwitch('upper-label', locale.t('bi.widgets.treemap.upper-label')),
+        {
+          '~component': 'el-collapse',
+          '~label': locale.t('bi.widgets.treemap.name'),
+          '~default':true,
+          _children: [
+            widgetUtil.createInputNumber('leaf-depth', locale.t('bi.widgets.treemap.leaf-depth'),{min:0}),
+            widgetUtil.createSwitch('upper-label', locale.t('bi.widgets.treemap.upper-label')),
+          ]
+        },
+        ...buildEchartsBaseUI(baseConfigList),
+
       ]
     },
     ...buildOtherProp()

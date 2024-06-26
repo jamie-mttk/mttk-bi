@@ -1,8 +1,10 @@
 import { unref } from 'vue'
-import {buildBaseOption,buildTransformEcharts} from '../utils/transformUtil'
+import { buildBaseOption, buildTransformEcharts } from '../utils/transformUtil'
 import { getDistinctColumns, arrayToIndexMap } from '../utils/dataUtil'
-import {safeGetArrayItem} from '../utils/transformTools'
-import {formatData} from '../utils/tooltipUtil'
+import { safeGetArrayItem } from '../utils/transformTools'
+import { formatData } from '../utils/tooltipUtil'
+import { baseConfigList } from './index'
+
 const validateRules = [
   { key: 'dimension', min: 2 },
   { key: 'metric', min: 1 }
@@ -15,63 +17,44 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
   //
   const dataX = getDistinctColumns(sourceData, 0)
   const dataY = getDistinctColumns(sourceData, 1)
-  const dataFinal = buildData(sourceData,dataX, dataY)
-  const maxVal=calMaxValue(sourceData)
+  const dataFinal = buildData(sourceData, dataX, dataY)
+  const maxVal = calMaxValue(sourceData)
   //
   const option = {
-    ...buildBaseOption({config}),
+    ...buildBaseOption({
+      config,
+      ...baseConfigList,
+      options:{'xAxis-name': safeGetArrayItem(modelConfig, 'dimension', 0)?.label,
+      'yAxis-name': safeGetArrayItem(modelConfig, 'dimension', 1)?.label}
+    }),
     tooltip: {
-
-      formatter:function(params){
+      formatter: function (params) {
         //
-        const metricConfig=modelConfig.metric[0]
+        const metricConfig = modelConfig.metric[0]
         //
-        let result='<div style="font-weight:700;">' + (dataY[params.value[1]] || '') + '</div>'
-        result+=`<div style="display:grid;grid-template-columns: auto auto auto;grid-gap: 4px 8px;">`
-         result+='<div>' + (params.marker || '') + '</div>'
-         result+='<div>' + (dataX[params.value[0]] || '') + '</div>'
-         result+='<div>' + (formatData(params.value[2],metricConfig) || '') + '</div>'
-        result+='</div>';
+        let result = '<div style="font-weight:700;">' + (dataY[params.value[1]] || '') + '</div>'
+        result += `<div style="display:grid;grid-template-columns: auto auto auto;grid-gap: 4px 8px;">`
+        result += '<div>' + (params.marker || '') + '</div>'
+        result += '<div>' + (dataX[params.value[0]] || '') + '</div>'
+        result += '<div>' + (formatData(params.value[2], metricConfig) || '') + '</div>'
+        result += '</div>'
 
-    
         //
         return result
       }
     },
-    xAxis: {
-      type: 'category',
-      name:safeGetArrayItem(modelConfig,'dimension',0)?.label,
-      boundaryGap: false,
-      data: dataX,
-      splitLine: {
-        show: config['split-line-mode']=='x'||config['split-line-mode']=='both'
-      },
-      axisLine: {
-        show: false
-      }
-    },
-    yAxis: {
-      type: 'category',
-      name:safeGetArrayItem(modelConfig,'dimension',1)?.label,
-      splitLine: {
-        show: config['split-line-mode']=='y'||config['split-line-mode']=='both'
-      },
-      axisLine: {
-        show: false
-      },
-      data: dataY
-    },
+
     series: [
       {
         name: '',
         type: 'scatter',
         symbolSize: function (val) {
-          const symboSize=config['symbol-size']||40
-          let symboSizeBase=config['symbol-size-base']||5
-          if(symboSizeBase>=symboSize){
-            symboSizeBase=symboSize/2
+          const symboSize = config['symbol-size'] || 40
+          let symboSizeBase = config['symbol-size-base'] || 5
+          if (symboSizeBase >= symboSize) {
+            symboSizeBase = symboSize / 2
           }
-          return Math.abs(val[2])/maxVal*(symboSize-symboSizeBase)+symboSizeBase
+          return (Math.abs(val[2]) / maxVal) * (symboSize - symboSizeBase) + symboSizeBase
         },
         data: dataFinal,
         animationDelay: function (idx) {
@@ -80,7 +63,9 @@ function buildOption({ config, data, context, key, contextWrap, fullConfig }) {
       }
     ]
   }
-
+  //
+  option.xAxis.data=dataX
+  option.yAxis.data=dataY
   // console.log(JSON.stringify(option))
   return option
 }
@@ -95,7 +80,7 @@ export const biBubbleTransform = buildTransformEcharts(buildOption, validateRule
 //dataX ['c0','c1']
 //dataY ['g0','g1','g2']
 //the result is like [['Company name','Goods name','Amount'],[0,0,12],[0,1,23],[1,0,22],[1,1,32],[1,2,25]]
-//The 
+//The
 function buildData(data, dataX, dataY) {
   //Conver to map structure for quick finding
   const mapX = arrayToIndexMap(dataX)
@@ -104,13 +89,13 @@ function buildData(data, dataX, dataY) {
   //
   const result = []
   //
-  let isFirstRow=true
+  let isFirstRow = true
   for (const item of data) {
-    if(isFirstRow){
+    if (isFirstRow) {
       //First row is title,just copy
       result.push(item)
-      isFirstRow=false
-      continue;
+      isFirstRow = false
+      continue
     }
 
     const r = []
@@ -121,23 +106,22 @@ function buildData(data, dataX, dataY) {
     r.push(mapY[item[1]])
     //value
     r.push(item[2])
-
   }
-// console.log(JSON.stringify(result,null,2))
+  // console.log(JSON.stringify(result,null,2))
   //
   return result
 }
 
-function calMaxValue(data){
-    //Calculate the max of abs value column(col 2),this is used to calcuate symbol/Funnel size
-    let maxVal=0
-    let isFirstRow=true
-    for (const item of data) {
-      if(isFirstRow){
-        isFirstRow=false
-        continue;
-      }
-      maxVal=Math.max(maxVal,Math.abs(item[2]))
+function calMaxValue(data) {
+  //Calculate the max of abs value column(col 2),this is used to calcuate symbol/Funnel size
+  let maxVal = 0
+  let isFirstRow = true
+  for (const item of data) {
+    if (isFirstRow) {
+      isFirstRow = false
+      continue
     }
-    return maxVal
+    maxVal = Math.max(maxVal, Math.abs(item[2]))
+  }
+  return maxVal
 }

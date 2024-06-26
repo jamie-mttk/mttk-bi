@@ -1,5 +1,5 @@
 <template>
-    <el-select v-model="model" size="default" @change="dataChanged">
+    <el-select v-model="model" @change="dataChanged">
         <el-option v-for="item in dataModelList" :key="item['_id']" :label="item.name" :value="item['_id']" />
     </el-select>
 </template>

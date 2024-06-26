@@ -1,8 +1,8 @@
 export default {
   bi: {
-    sys:{
-      jdbcConnection:'JDBC connection',
-      dataModel:'Data model',
+    sys: {
+      jdbcConnection: 'JDBC connection',
+      dataModel: 'Data model'
     },
     data: {
       dataTypeList: {
@@ -26,11 +26,21 @@ export default {
       connectionEditor: {
         name: 'JDBC Connection',
         description: '',
+        trial:'Trial',
+        trialSuccess:'Trial successed',
+        trialFail:'Trial failed',
         data: {
+          basic:'Basic',
           driverClass: 'Driver class',
           user: 'User name',
           password: 'Pasword',
-          readonly: 'Read only'
+          readonly: 'Read only',
+          pool:'Pool',
+          minimumIdle:'Minimum idle',
+          maximumPoolSize:'Maximum pool size',
+          connectionTimeout:'Connection timeout',
+          idleTimeout:'Idle timeout',
+          maxLifetime:'Max life time',
         },
         deleteConfirm: 'Confirm to delete data connection?'
       },
@@ -40,7 +50,8 @@ export default {
         data: {
           connection: 'JDBC Connection'
         },
-        deleteConfirm:'Confirm to delete data model: {0} ?The operation will cause pages used this data model error!',
+        deleteConfirm:
+          'Confirm to delete data model: {0} ?The operation will cause pages used this data model error!',
         single: {
           field: 'Field config',
           preview: 'Data preview',
@@ -56,7 +67,9 @@ export default {
             emptyText: 'No data,press refresh data button'
           },
           entityTree: {
-            deleteConfirm:'Do you confirm to delete this node?This operation will delete entity, fields and relations',
+            deleteConfirm:
+              'Do you confirm to delete this node?This operation will delete entity, fields and relations',
+              emptyDescription:'Please drag and drop entities or SQL into this panel',
             menu: {
               basic: 'Basic info',
               fields: 'Field choose'
@@ -167,10 +180,12 @@ export default {
         name: 'Data model'
       },
       dataModelTree: {
-        empty: 'Please choose data model or change filter'
+        placeholder:'Input to filter columns',
+        empty: 'Please choose data model'
       }
     },
     widgets: {
+      folderName:'BI component',
       utils: {
         baiduMapUtil: {
           notify: 'Please set Baidu AK(Application Key)'
@@ -190,6 +205,9 @@ export default {
           copyDone: 'Copy done'
         },
         indexUtil: {
+          _valueDescription: 'Value can be percentage like 50% or value like 32.',
+         _selectAddDescription:'Select options can be added by input and then choose directly.',
+         _show:'Show',
           title: 'Data model',
           filter: 'Filter',
           filter_description: 'Set filter for this chart',
@@ -214,9 +232,81 @@ export default {
           refresh: 'Refresh',
           showSQL: 'Show SQL',
           showData: 'Show data',
+          'title-left':'Left',
+          'title-left_description':'@:bi.widgets.utils.indexUtil._selectAddDescription <br> @:bi.widgets.utils.indexUtil._valueDescription',
+          'title-left_1':'Left',
+          'title-left_2':'Center',
+          'title-left_3':'Right',
+          'title-top':'Top',
+          'title-top_description':'@:bi.widgets.utils.indexUtil._selectAddDescription <br> @:bi.widgets.utils.indexUtil._valueDescription',
+          'title-top_1':'Top',
+          'title-top_2':'Middle',
+          'title-top_3':'Bottom',
+          'echarts-animation':'Animation',
           'echarts-theme': 'Echarts theme',
+          'title_label':'Title',
           'title-text': 'Title',
-          'title-subtext': 'Sub-title'
+          'title-subtext': 'Sub-title',
+          'legend_label':'Legend',
+          'legend-type':'Type',
+          'legend-type_1':'Plain',
+          'legend-type_2':'Scroll',
+          'legend-orient':'Orient',
+          'legend-orient_1':'Horizontal',
+          'legend-orient_2':'Vertical',
+          'legend-icon':'Icon',
+          'legend-icon_1':'Circle',
+          'legend-icon_2':'Rectangle',
+          'legend-icon_3':'Round rectangle',
+          'legend-icon_4':'Triangle',
+          'legend-icon_5':'Diamond',
+          'legend-icon_6':'Pin',
+          'legend-icon_7':'Arrow',
+          'legend-icon_8':'None',
+          'grid_label':'Drawing area',
+          'grid-right':'Rright',
+          'grid-bottom':'Bottom',
+          'grid-containLabel':'Contain lable',
+          'toolbox_label':'Toolbox',
+          'toolbox-orient':'Orient',
+          'toolbox-orient_1':'Horizontal',
+          'toolbox-orient_2':'Vertical',
+          'toolbox-feature':'Feature',
+          'toolbox-feature_saveAsImage':'Save as image',
+          'toolbox-feature_dataView':'Data view',
+          'toolbox-feature_dataZoom':'Data zoom',
+          'toolbox-feature_restore':'Restore',
+          'toolbox-saveAsImage-backgroundColor':'Save as image background color',
+          'dataZoom_label':'Data zoom',
+          'dataZoom-type':'Type',
+          'dataZoom-type_1':'Inside',
+          'dataZoom-type_2':'Slider',
+          'xAxis_label':'X axis',
+          'yAxis_label':'Y axis',
+          'axis-position':'Position',
+          'axis-position_bottom':'Bottom',
+          'axis-position_top':'Top',
+          'axis-position_left':'Left',
+          'axis-position_right':'Right',
+          'axis-type':'Type',
+          'axis-type_value':'Value',
+          'axis-type_category':'Category',
+          'axis-type_time':'Time',
+          'axis-type_log':'Logarithm',
+          'axis-nameLocation':'Name location',
+          'axis-nameLocation_start':'Start',
+          'axis-nameLocation_middle':'Middle',
+          'axis-nameLocation_end':'End',
+          'axis-axisLabel-show':'Show label',
+          'axis-axisLine-show': 'Show axis line',
+          'axis-axisTick-show': 'Show axis tick',
+          'axis-splitLine-show': 'Show split line',
+          'axis-splitArea-show': 'Show split area',
+          'axis-axisPointer-show': 'Show axis pointer',
+          'axis-axisPointer-type':'Axis pointer type',
+          'axis-axisPointer-type_line':'Line',
+          'axis-axisPointer-type_shadow':'Shadow',
+          'axis-axisPointer-type_none':'None',
         },
         transformPrecheck: {
           chooseModel: 'Please choose data model',
@@ -236,16 +326,16 @@ export default {
         }
       },
       filter: {
-        name:'BI filter',
-        filter_label:'Filter',
-        filter_description:'Drag field into here',
-        showButtonReset:'Show reset button',
-        qtyPerRow:'Qty per row',
-        labelWidth:'Label width',
-        labelPosition:'Label position',
-        labelPosition_left:'Left',
-        labelPosition_right:'Right',
-        labelPosition_top:'Top',
+        name: 'BI filter',
+        filter_label: 'Filter',
+        filter_description: 'Drag field into here',
+        showButtonReset: 'Show reset button',
+        qtyPerRow: 'Qty per row',
+        labelWidth: 'Label width',
+        labelPosition: 'Label position',
+        labelPosition_left: 'Left',
+        labelPosition_right: 'Right',
+        labelPosition_top: 'Top',
         criteriaSelect: {
           placeholder1: 'Input filter and then load list remotely',
           placeholder2: 'Choose'
@@ -295,43 +385,44 @@ export default {
           timeInitOptions1: 'Current',
           timeInitOptions2: 'Zero point',
           timeInitOptions3: 'Noon',
-          timeInitOptions4: 'Early morning',
+          timeInitOptions4: 'Early morning'
         },
-        edit:{
-          title:"Label",
-          uiMode:'UI mode',
-          uiModeInput:'Input',
-          uiModeSelect:'Select',
-          uiModeInputNumber:'Input number',
-          uiModeDatetime:'Date time',
-          uiModeTime:'Time',
-          colSpan:'Col span',
-          uiHideMatch:'Hide UI mode',
-          matchMode:'Match mode',
-          selectMultiple:'Multiple select',
-          selectSource:'Options source',
-          selectSourceAuto:'Auto',
-          selectSourceDatamodel:'Other data model',
-          selectSourceManual:'Manual input',
-          sourceDatamodel:'From data model',
-          datamodelValue:'Value field',
-          datamodelLabel:'Label field',
-          manual:'Manual input',
-          manual_description:'Each line represents an option. Use the separator tilde (~) to separate the content and value of the options. The front is the value, and the back is the label; If there is no~, it is considered that the label and value are the same.',
-          to:'to',
-          value:'value',
-          initValue:'init value',          
+        edit: {
+          title: 'Label',
+          uiMode: 'UI mode',
+          uiModeInput: 'Input',
+          uiModeSelect: 'Select',
+          uiModeInputNumber: 'Input number',
+          uiModeDatetime: 'Date time',
+          uiModeTime: 'Time',
+          colSpan: 'Col span',
+          uiHideMatch: 'Hide UI mode',
+          matchMode: 'Match mode',
+          selectMultiple: 'Multiple select',
+          selectSource: 'Options source',
+          selectSourceAuto: 'Auto',
+          selectSourceDatamodel: 'Other data model',
+          selectSourceManual: 'Manual input',
+          sourceDatamodel: 'From data model',
+          datamodelValue: 'Value field',
+          datamodelLabel: 'Label field',
+          manual: 'Manual input',
+          manual_description:
+            'Each line represents an option. Use the separator tilde (~) to separate the content and value of the options. The front is the value, and the back is the label; If there is no~, it is considered that the label and value are the same.',
+          to: 'to',
+          value: 'value',
+          initValue: 'init value'
         },
-        render:{
-          empty:'No filter is choosed, please edit in right panel',
-          query:'Query',
-          reset:'Reset',
-        },
+        render: {
+          empty: 'No filter is choosed, please edit in right panel',
+          query: 'Query',
+          reset: 'Reset'
+        }
       },
       bar: {
         name: 'BI Bar',
         stack: 'Stack',
-        reverse: 'X/Y axis reverse'
+        barWidth: 'Bar width'
       },
       boxplot: {
         name: 'BI boxplot',
@@ -363,47 +454,56 @@ export default {
         'symbol-size': 'Symbol size max',
         'symbol-size-base': 'Symbol size base'
       },
-      funnel:{
+      funnel: {
         name: 'BI funnel',
-        dimension_description:'Funnel data item.',
-        metric_description:'Funnel data value.',
+        dimension_description: 'Funnel data item.',
+        metric_description: 'Funnel data value.'
       },
-      gauge:{
+      gauge: {
         name: 'BI gauge',
-        metric_description:'The value shown in guage.',
+        metric_description: 'The value shown in guage.',
+        radius: 'Radius',
+        startAngle: 'Start angle',
+        endAngle: 'End angle',
+        clockwise: 'Clockwise'
       },
-      heatBaiduMap:{
+      heatBaiduMap: {
         name: 'BI heat baidu map',
-        dimension_description:'The first is longitude, the seocnd is latitude.The third is the value to show(Can also set in metric)..',
-        metric_description:'Value to show,can also set in dimension.',
+        dimension_description:
+          'The first is longitude, the seocnd is latitude.The third is the value to show(Can also set in metric)..',
+        metric_description: 'Value to show,can also set in dimension.',
         'baidu-map-ak': 'Baidu map AK',
         'center-longitude': 'Center longitude',
         'center-latitude': 'Center latitude',
         zoom: 'Zoom rate',
-        'point-size':'Point size',
-        'blur-size':'Blur size',
+        'point-size': 'Point size',
+        'blur-size': 'Blur size'
       },
-      heatmap:{
+      heatmap: {
         name: 'BI heat map',
         dimension_description: 'The value of x axis and y axis.',
         metric_description: 'The value of the cross of X axis and Y axis.',
-        'split-area-mode':'Split area mode',
-        'split-area-mode_none':'None',
-        'split-area-mode_x':'X axis',
-        'split-area-mode_y':'Y axis',
-        'split-area-mode_both':'Both',
+        'split-area-mode': 'Split area mode',
+        'split-area-mode_none': 'None',
+        'split-area-mode_x': 'X axis',
+        'split-area-mode_y': 'Y axis',
+        'split-area-mode_both': 'Both',
         'show-label': 'Show value on box'
       },
-      indicatorKanban:{
+      indicatorKanban: {
         name: 'BI indicator kanban',
-        metric:'Metric',
+        metric: 'Metric',
         'title-text': 'Title',
         'title-subtext': 'Sub-title',
-        'qtyPerRow': 'Qty per row',
+        qtyPerRow: 'Qty per row'
       },
       line: {
         name: 'BI line',
         smooth: 'Smooth',
+        step:'Step chart',
+        step_start:'Start',
+        step_middle:'Middle',
+        step_end:'End',
         areaMode: 'Area fill',
         stack: 'Stack',
         reverse: 'X/Y axis reverse'
@@ -411,34 +511,39 @@ export default {
       pie: {
         name: 'BI pie',
         metric: 'metric',
-        'series-roseType':'Rose type',
-        'series-roseType_radius':'Radius present value',
-        'series-roseType_area':'Area present value',
+        'series-roseType': 'Rose type',
+        'series-roseType_radius': 'Radius present value',
+        'series-roseType_area': 'Area present value',
         'border-radius': 'Border radius',
-        'series-radius':'Radius shape',
-        'series-radius_1':'Big circle',
-        'series-radius_2':'Middle circle',
-        'series-radius_3':'Small circle',
-        'series-radius_4':'Thin ring',
-        'series-radius_5':'Middle ring',
-        'series-radius_6':'Thick ring',
+        'series-radius': 'Radius shape',
+        'series-radius_1': 'Big circle',
+        'series-radius_2': 'Middle circle',
+        'series-radius_3': 'Small circle',
+        'series-radius_4': 'Thin ring',
+        'series-radius_5': 'Middle ring',
+        'series-radius_6': 'Thick ring'
       },
       radar: {
         name: 'BI radar',
         dimension_description: 'Item to compare',
         metric_description: 'The value of the items.',
+        radius: 'Radius',
+        shape: 'Shape',
+        shape_1: 'Polygon',
+        shape_2: 'Circle'
       },
       sankey: {
         name: 'BI sankey',
-        dimension_description: 'The first two are the source and ttarget, the third is the value(Can also provide in metric).',
+        dimension_description:
+          'The first two are the source and ttarget, the third is the value(Can also provide in metric).',
         metric_description: 'Value,can also provide in dimension.',
-        orient:'Orient',
-        orient_horizontal:'Horizontal',
-        orient_vertical:'Vertical',
-        'node-align':'Node align',
-        'node-align_justify':'Justify',
-        'node-align_left':'Left',
-        'node-align_right':'Right',
+        orient: 'Orient',
+        orient_horizontal: 'Horizontal',
+        orient_vertical: 'Vertical',
+        'node-align': 'Node align',
+        'node-align_justify': 'Justify',
+        'node-align_left': 'Left',
+        'node-align_right': 'Right'
       },
       scatter: {
         name: 'BI scatter',
@@ -453,54 +558,61 @@ export default {
         'symbol-size': 'Symbol size',
         'show-range-area': 'Show range area',
         'show-average-line': 'Show average line',
-        'highlight-min-max': 'Highlight min/max',
+        'highlight-min-max': 'Highlight min/max'
       },
       table: {
         name: 'BI table',
-        dimension:'Dimension',
-        metric:'Metric',
-        title:'Title',
-        border:'Show border',
-        stripe:'Show stripe',
-        showIndex:'Show index',
+        dimension: 'Dimension',
+        metric: 'Metric',
+        title: 'Title',
+        border: 'Show border',
+        stripe: 'Show stripe',
+        showIndex: 'Show index',
+        showSummary: 'Show summary',
+        mergeSameColumn: 'Merge same column',
+        sortable: 'Column show sortable tag',
+        summary:'Summary',
       },
-      crossTable: {
-        name: 'BI cross table',
-        dimension_description:'The first parameter is the value displayed vertically, and the second parameter is the value displayed horizontally',
-        metric_description:'The specific indicator parameters under the horizontal dimension to display values',
-        border:'Show border',
-        stripe:'Show stripe',
+      pivotTable: {
+        name: 'BI pivot',
+        dimensionCol:'X dimension',
+        dimensionRow:'Y dimension',
+        dimension_description:'Set from high to low levels when multiple dimensions are present',
+        emptyValue:'Empty value show as',
       },
       themeRiver: {
         name: 'BI theme river',
-        dimension_description: 'The first is time and second one is subject,the thrid is the value(Can also provide in metric).',
-        metric_description: 'The value of the cross of X axis and Y axis.',
+        dimension_description:
+          'The first is time and second one is subject,the thrid is the value(Can also provide in metric).',
+        metric_description: 'The value of the cross of X axis and Y axis.'
       },
       treemap: {
         name: 'BI tree map',
-        dimension_description: 'Provide the hierachies,the last one is the value(Can also provide in metric).And hierachy columns should be sorted!',
+        dimension_description:
+          'Provide the hierachies,the last one is the value(Can also provide in metric).And hierachy columns should be sorted!',
         metric_description: 'Value,can also provide in dimension.',
         'leaf-depth': 'Depth of leaf',
-        'upper-label': 'Show upper label',
+        'upper-label': 'Show upper label'
       },
       waterfall: {
         name: 'BI waterfall',
-        metric_description: 'Value,can be positive or negative.',
+        metric_description: 'Value,can be positive or negative.'
       },
       wordCloud: {
         name: 'BI word cloud',
-        dimension_description: 'The first is the word,the second is the value(Can also provide in metric).',
+        dimension_description:
+          'The first is the word,the second is the value(Can also provide in metric).',
         metric_description: 'Value,can also provide in dimension.',
-        shape:'Shape',
-        shape_circle:'Circle',
-        shape_cardioid:'Cardioid',
-        shape_diamond:'Diamond',
-        'shape_triangle-forward':'Triangle forward',
-        shape_triangle:'Triangle',
-        shape_pentagon:'Pentagon',
-        shape_star:'Strat',
-        'rotate': 'Rotate',
-      },
+        shape: 'Shape',
+        shape_circle: 'Circle',
+        shape_cardioid: 'Cardioid',
+        shape_diamond: 'Diamond',
+        'shape_triangle-forward': 'Triangle forward',
+        shape_triangle: 'Triangle',
+        shape_pentagon: 'Pentagon',
+        shape_star: 'Strat',
+        rotate: 'Rotate'
+      }
     }
   }
 }
